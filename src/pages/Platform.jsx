@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BookOpen, Lightbulb, Cpu, CheckSquare, Calculator, Wrench, Newspaper, Zap, Menu, X } from 'lucide-react'
+import { BookOpen, Lightbulb, Cpu, CheckSquare, Calculator, Wrench, Newspaper, Zap, Menu, X, PanelLeft, PanelRight } from 'lucide-react'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import ChapterContent from '../components/ChapterContent'
@@ -37,6 +37,8 @@ export default function Platform({ user, profile, onAdminClick }) {
   const [currentChapter, setCurrentChapter] = useState(0)
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [leftPanelOpen, setLeftPanelOpen] = useState(true)
+  const [rightPanelOpen, setRightPanelOpen] = useState(true)
   const [rightPanelTab, setRightPanelTab] = useState('notes')
   const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem('welcomeSeen'))
 
@@ -126,7 +128,9 @@ export default function Platform({ user, profile, onAdminClick }) {
 
       <div className="flex flex-1 pt-16">
         {/* Desktop sidebar */}
-        <div className="hidden lg:flex flex-col w-56 xl:w-64 shrink-0 fixed left-0 top-16 bottom-0 border-r border-gray-200 dark:border-gray-700">
+        <div className={`hidden lg:flex flex-col shrink-0 fixed left-0 top-16 bottom-0 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 overflow-hidden ${
+          leftPanelOpen ? 'w-56 xl:w-64' : 'w-0 border-r-0'
+        }`}>
           <Sidebar
             currentChapter={currentChapter}
             onSelect={handleChapterSelect}
@@ -153,30 +157,45 @@ export default function Platform({ user, profile, onAdminClick }) {
         </div>
 
         {/* Main content */}
-        <main className="flex-1 lg:ml-56 xl:ml-64 lg:mr-64 xl:mr-72">
-          {/* Tab bar (mobile bottom, desktop top) */}
-          <div className="hidden lg:flex items-center gap-1 px-6 pt-4 pb-0 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] sticky top-16 z-30">
-            {TABS.map(tab => {
-              const Icon = tab.icon
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium border-b-2 -mb-px transition-all ${
-                    activeTab === tab.id
-                      ? 'border-[#1B6B3A] text-[#1B6B3A] dark:text-green-400'
-                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400'
-                  }`}
-                >
-                  <Icon size={13} /> {tab.label}
-                </button>
-              )
-            })}
+        <main className={`flex-1 transition-all duration-300 ${leftPanelOpen ? 'lg:ml-56 xl:ml-64' : 'lg:ml-0'} ${rightPanelOpen ? 'lg:mr-64 xl:mr-72' : 'lg:mr-0'}`}>
+          {/* Tab bar (desktop) */}
+          <div className="hidden lg:flex items-center gap-1 px-3 pt-4 pb-0 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] sticky top-16 z-30">
+            {/* Toggle sidebar esquerda */}
             <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="ml-auto lg:hidden p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+              onClick={() => setLeftPanelOpen(o => !o)}
+              title={leftPanelOpen ? 'Recolher sumário' : 'Expandir sumário'}
+              className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0 mr-1"
             >
-              <Menu size={16} />
+              <PanelLeft size={15} />
+            </button>
+
+            {/* Tabs — scroll horizontal para não quebrar */}
+            <div className="flex items-center gap-0.5 overflow-x-auto scrollbar-hide flex-1">
+              {TABS.map(tab => {
+                const Icon = tab.icon
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-1.5 px-2.5 py-2.5 text-xs font-medium border-b-2 -mb-px transition-all whitespace-nowrap shrink-0 ${
+                      activeTab === tab.id
+                        ? 'border-[#1B6B3A] text-[#1B6B3A] dark:text-green-400'
+                        : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400'
+                    }`}
+                  >
+                    <Icon size={13} /> {tab.label}
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Toggle painel direito */}
+            <button
+              onClick={() => setRightPanelOpen(o => !o)}
+              title={rightPanelOpen ? 'Recolher painel' : 'Expandir painel'}
+              className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0 ml-1"
+            >
+              <PanelRight size={15} />
             </button>
           </div>
 
@@ -245,7 +264,7 @@ export default function Platform({ user, profile, onAdminClick }) {
         </main>
 
         {/* Right panel (desktop) */}
-        <div className="hidden lg:flex flex-col w-64 xl:w-72 shrink-0 fixed right-0 top-16 bottom-0 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] overflow-y-auto scrollbar-thin">
+        <div className={`hidden lg:flex flex-col w-64 xl:w-72 shrink-0 fixed right-0 top-16 bottom-0 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] overflow-y-auto scrollbar-thin transition-transform duration-300 ${rightPanelOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="flex border-b border-gray-100 dark:border-gray-700 shrink-0">
             {[
               { id: 'notes', label: 'Anotações' },
