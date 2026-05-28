@@ -54,7 +54,7 @@ export default function Login() {
             Hub Vibe Coding
           </h1>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            TFA Soluções com IA — Thayane Fidelis
+            TFA Soluções com IA
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-500 mt-1 italic font-playfair">
             "Vibe Coding e IA com visão humanizada"
