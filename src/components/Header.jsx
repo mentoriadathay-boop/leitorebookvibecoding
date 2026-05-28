@@ -24,7 +24,7 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
           </div>
           <div className="hidden sm:block">
             <div className="font-playfair font-bold text-[#0F4A28] dark:text-green-400 text-sm leading-tight">
-              Vibe Coding
+              Hub Vibe Coding
             </div>
             <div className="text-[10px] text-gray-500 dark:text-gray-400 leading-tight">
               TFA Soluções com IA
