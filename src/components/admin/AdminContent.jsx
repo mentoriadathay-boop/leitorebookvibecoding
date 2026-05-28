@@ -5,7 +5,7 @@ import UnderlineExt from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import {
   Plus, Pencil, Trash2, ChevronUp, ChevronDown,
-  Eye, EyeOff, X, Save, Database, BookOpen
+  Eye, EyeOff, X, Save, Database, BookOpen, RefreshCw
 } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 import { chapters as staticChapters, chapterGroups as staticGroups } from '../../data/chapters'
@@ -282,6 +282,7 @@ export default function AdminContent() {
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(null)
   const [seeding, setSeeding] = useState(false)
+  const [resyncing, setResyncing] = useState(false)
   const [confirmDel, setConfirmDel] = useState(null)
 
   const load = async () => {
@@ -293,11 +294,10 @@ export default function AdminContent() {
 
   useEffect(() => { load() }, [])
 
-  const seed = async () => {
-    setSeeding(true)
+  const buildRows = () => {
     const indexToGroup = {}
     staticGroups.forEach(g => g.chapters.forEach(idx => { indexToGroup[idx] = g.label }))
-    const rows = staticChapters.map((ch, idx) => ({
+    return staticChapters.map((ch, idx) => ({
       title: ch.title,
       content: ch.content || '',
       page: ch.page || idx + 1,
@@ -308,10 +308,25 @@ export default function AdminContent() {
       group_label: indexToGroup[idx] || 'Geral',
       published: true,
     }))
-    const { error } = await supabase.from('chapters').insert(rows)
+  }
+
+  const seed = async () => {
+    setSeeding(true)
+    const { error } = await supabase.from('chapters').insert(buildRows())
     if (error) console.error('Seed error:', error)
     await load()
     setSeeding(false)
+  }
+
+  const resync = async () => {
+    setResyncing(true)
+    // Apaga tudo e reinserere com conteúdo atualizado do arquivo estático
+    await supabase.from('chapters').delete().neq('id', 0)
+    await supabase.from('chapters').delete().eq('id', 0)
+    const { error } = await supabase.from('chapters').insert(buildRows())
+    if (error) console.error('Resync error:', error)
+    await load()
+    setResyncing(false)
   }
 
   const saveChapter = async (id, payload) => {
@@ -352,11 +367,19 @@ export default function AdminContent() {
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <h2 className="font-playfair text-xl font-bold text-gray-900 dark:text-white">Gestão de Conteúdo</h2>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {chapters.length === 0 && !loading && (
             <button onClick={seed} disabled={seeding}
               className="flex items-center gap-2 px-4 py-2 border border-[#1B6B3A] text-[#1B6B3A] hover:bg-[#E8F5EE] dark:hover:bg-[#0F4A28]/20 text-sm rounded-xl font-medium transition-colors disabled:opacity-50">
               <Database size={14} /> {seeding ? 'Importando...' : 'Importar capítulos estáticos'}
+            </button>
+          )}
+          {chapters.length > 0 && (
+            <button onClick={resync} disabled={resyncing}
+              className="flex items-center gap-2 px-4 py-2 border border-orange-400 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 text-sm rounded-xl font-medium transition-colors disabled:opacity-50"
+              title="Apaga os capítulos do banco e reimporta do arquivo chapters.js atualizado">
+              <RefreshCw size={14} className={resyncing ? 'animate-spin' : ''} />
+              {resyncing ? 'Ressincronizando...' : 'Ressincronizar com arquivo'}
             </button>
           )}
           <button onClick={() => setEditing({})}
