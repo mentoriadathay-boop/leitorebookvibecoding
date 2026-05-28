@@ -49,7 +49,7 @@ export default function Login() {
       <div className="w-full max-w-sm">
         {/* Logo + Brand */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-[#0F4A28] flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <div className="w-16 h-16 rounded-2xl bg-red-600 flex items-center justify-center mx-auto mb-4 shadow-lg">
             <BookOpen size={28} className="text-white" />
           </div>
           <h1 className="font-playfair text-2xl font-bold text-[#0F4A28] dark:text-green-300">
