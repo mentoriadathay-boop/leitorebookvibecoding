@@ -13,21 +13,21 @@ export default function Sidebar({ currentChapter, onSelect, completed, onClose, 
       <aside className="w-full h-full overflow-y-auto scrollbar-thin bg-white dark:bg-[#1A1A1A] flex flex-col">
 
         {/* Capa do ebook */}
-        <button
-          onClick={() => setShowCover(true)}
-          className="group w-full text-left p-3 border-b border-gray-100 dark:border-gray-700 hover:bg-[#E8F5EE] dark:hover:bg-[#0F4A28]/20 transition-colors"
-        >
+        <div className="p-3 border-b border-gray-100 dark:border-gray-700">
           <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-1.5">Ebook</p>
-          <p className="text-xs font-bold text-[#0F4A28] dark:text-green-400 leading-snug group-hover:underline">
+          <p className="text-xs font-bold text-[#0F4A28] dark:text-green-400 leading-snug">
             20 Passos para Criar seu App SaaS com Vibe Coding
           </p>
           <p className="text-[10px] text-gray-400 mt-0.5 leading-snug">
             Do Planejamento à Monetização sem Frustração
           </p>
-          <p className="text-[10px] text-[#1B6B3A] dark:text-green-500 mt-1.5 font-medium">
+          <button
+            onClick={() => setShowCover(true)}
+            className="text-[10px] text-[#1B6B3A] dark:text-green-500 mt-1.5 font-medium hover:underline"
+          >
             Ver capa →
-          </p>
-        </button>
+          </button>
+        </div>
 
         <div className="p-3 border-b border-gray-100 dark:border-gray-700">
           <p className="text-[11px] uppercase tracking-wider text-gray-400 font-semibold">Sumário</p>
