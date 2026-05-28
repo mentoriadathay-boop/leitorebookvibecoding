@@ -3,6 +3,7 @@ import { Clock, FileText, Focus, ChevronLeft, ChevronRight } from 'lucide-react'
 import AudioPlayer from './AudioPlayer'
 import QuoteShare from './QuoteShare'
 import Quiz from './Quiz'
+import ChapterChat from './ChapterChat'
 import { glossary } from '../data/glossary'
 
 function injectGlossary(html, terms) {
@@ -195,6 +196,9 @@ export default function ChapterContent({ chapter, onNext, onPrev, hasNext, hasPr
           <Quiz questions={chapter.quizQuestions} onClose={() => setShowQuiz(false)} />
         </div>
       )}
+
+      {/* Chapter Chat */}
+      <ChapterChat chapter={chapter} />
 
       {/* Navigation */}
       <div className="flex items-center justify-between mt-8 pt-4 border-t border-gray-100 dark:border-gray-700">
