@@ -1,5 +1,6 @@
 import { CheckCircle, Circle, ChevronDown, ChevronRight, Download, X } from 'lucide-react'
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { chapters as defaultChapters, chapterGroups as defaultGroups } from '../data/chapters'
 
 export default function Sidebar({ currentChapter, onSelect, completed, onClose, chapters = defaultChapters, chapterGroups = defaultGroups }) {
@@ -87,10 +88,10 @@ export default function Sidebar({ currentChapter, onSelect, completed, onClose, 
         </div>
       </aside>
 
-      {/* Modal da capa */}
-      {showCover && (
+      {/* Modal da capa — renderizado no body via portal para escapar do stacking context */}
+      {showCover && createPortal(
         <div
-          className="fixed inset-0 z-[70] bg-black/80 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-4"
           onClick={() => setShowCover(false)}
         >
           <div
@@ -109,7 +110,8 @@ export default function Sidebar({ currentChapter, onSelect, completed, onClose, 
               className="w-full rounded-2xl shadow-2xl"
             />
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   )
