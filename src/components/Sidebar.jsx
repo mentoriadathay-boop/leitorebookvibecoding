@@ -1,8 +1,8 @@
 import { CheckCircle, Circle, ChevronDown, ChevronRight, Download } from 'lucide-react'
 import { useState } from 'react'
-import { chapters, chapterGroups } from '../data/chapters'
+import { chapters as defaultChapters, chapterGroups as defaultGroups } from '../data/chapters'
 
-export default function Sidebar({ currentChapter, onSelect, completed, onClose }) {
+export default function Sidebar({ currentChapter, onSelect, completed, onClose, chapters = defaultChapters, chapterGroups = defaultGroups }) {
   const [collapsed, setCollapsed] = useState({})
 
   const toggle = (label) => setCollapsed(p => ({ ...p, [label]: !p[label] }))

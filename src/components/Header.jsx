@@ -1,8 +1,8 @@
-import { Moon, Sun, BookOpen, Menu, X } from 'lucide-react'
+import { Moon, Sun, BookOpen, Menu, X, Shield } from 'lucide-react'
 import { useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 
-export default function Header({ darkMode, toggleDark, progress, user, onMenuToggle }) {
+export default function Header({ darkMode, toggleDark, progress, user, onMenuToggle, onAdminClick }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const handleLogout = async () => {
@@ -34,6 +34,12 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
 
         {/* Nav links (desktop) */}
         <nav className="hidden md:flex items-center gap-2">
+          {onAdminClick && (
+            <button onClick={onAdminClick}
+              className="flex items-center gap-1.5 text-xs bg-[#0F4A28] hover:bg-[#1B6B3A] text-white px-3 py-1.5 rounded-full transition-colors font-medium">
+              <Shield size={12} /> Admin
+            </button>
+          )}
           <a
             href="https://thayanefidelis.com/"
             target="_blank"

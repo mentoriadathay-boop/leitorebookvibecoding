@@ -9,7 +9,7 @@ import Checklist from '../components/Checklist'
 import RevenueCalculator from '../components/RevenueCalculator'
 import IdeasSection from '../components/IdeasSection'
 import IdeaGenerator from '../components/IdeaGenerator'
-import { chapters } from '../data/chapters'
+import { useChapters } from '../hooks/useChapters'
 import { useProgress } from '../hooks/useProgress'
 import { useNotes } from '../hooks/useNotes'
 import { useBookmarks } from '../hooks/useBookmarks'
@@ -24,7 +24,7 @@ const TABS = [
   { id: 'calculator', label: 'Calculadora', icon: Calculator },
 ]
 
-export default function Platform({ user }) {
+export default function Platform({ user, profile, onAdminClick }) {
   const [activeTab, setActiveTab] = useState('reading')
   const [currentChapter, setCurrentChapter] = useState(0)
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true')
@@ -32,6 +32,7 @@ export default function Platform({ user }) {
   const [rightPanelTab, setRightPanelTab] = useState('notes')
   const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem('welcomeSeen'))
 
+  const { chapters, chapterGroups } = useChapters()
   const { completed, completedCount, markCompleted } = useProgress(user?.id)
   const { notes, saveNote, noteCount } = useNotes(user?.id)
   const { bookmarks, toggleBookmark } = useBookmarks(user?.id)
@@ -69,6 +70,7 @@ export default function Platform({ user }) {
         toggleDark={() => setDarkMode(d => !d)}
         progress={readingProgress}
         user={user}
+        onAdminClick={onAdminClick}
       />
 
       {/* Welcome modal */}
@@ -119,6 +121,8 @@ export default function Platform({ user }) {
             currentChapter={currentChapter}
             onSelect={handleChapterSelect}
             completed={completed}
+            chapters={chapters}
+            chapterGroups={chapterGroups}
           />
         </div>
 
@@ -133,6 +137,8 @@ export default function Platform({ user }) {
             onSelect={handleChapterSelect}
             completed={completed}
             onClose={() => setSidebarOpen(false)}
+            chapters={chapters}
+            chapterGroups={chapterGroups}
           />
         </div>
 
