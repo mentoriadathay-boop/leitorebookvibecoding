@@ -1,0 +1,70 @@
+import { CheckCircle, Circle, ChevronDown, ChevronRight, Download } from 'lucide-react'
+import { useState } from 'react'
+import { chapters, chapterGroups } from '../data/chapters'
+
+export default function Sidebar({ currentChapter, onSelect, completed, onClose }) {
+  const [collapsed, setCollapsed] = useState({})
+
+  const toggle = (label) => setCollapsed(p => ({ ...p, [label]: !p[label] }))
+
+  return (
+    <aside className="w-full h-full overflow-y-auto scrollbar-thin bg-white dark:bg-[#1A1A1A] flex flex-col">
+      <div className="p-3 border-b border-gray-100 dark:border-gray-700">
+        <p className="text-[11px] uppercase tracking-wider text-gray-400 font-semibold">Sumário</p>
+      </div>
+
+      <nav className="flex-1 py-2">
+        {chapterGroups.map(group => (
+          <div key={group.label} className="mb-1">
+            <button
+              onClick={() => toggle(group.label)}
+              className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors uppercase tracking-wide"
+            >
+              {group.label}
+              {collapsed[group.label] ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+            </button>
+
+            {!collapsed[group.label] && group.chapters.map(chIdx => {
+              const ch = chapters[chIdx]
+              const isActive = currentChapter === chIdx
+              const isDone = completed[chIdx]
+              return (
+                <button
+                  key={chIdx}
+                  onClick={() => { onSelect(chIdx); onClose?.() }}
+                  className={`w-full flex items-center gap-2 px-4 py-2 text-left transition-colors text-xs ${
+                    isActive
+                      ? 'bg-[#E8F5EE] dark:bg-[#0F4A28]/40 text-[#0F4A28] dark:text-green-300 font-semibold'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  <span className="shrink-0">
+                    {isDone
+                      ? <CheckCircle size={13} className="text-[#1B6B3A] dark:text-green-400" />
+                      : <Circle size={13} className="text-gray-300 dark:text-gray-600" />
+                    }
+                  </span>
+                  <span className="truncate leading-snug">
+                    <span className="block font-medium">{ch.title}</span>
+                    <span className="text-[10px] text-gray-400">p. {ch.page}</span>
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        ))}
+      </nav>
+
+      <div className="p-3 border-t border-gray-100 dark:border-gray-700 shrink-0">
+        <a
+          href="/ebook-vibe-coding.pdf"
+          download="Vibe Coding — 20 Passos para Criar seu SaaS.pdf"
+          className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white text-xs font-semibold rounded-xl transition-colors"
+        >
+          <Download size={13} />
+          Baixar PDF do Ebook
+        </a>
+      </div>
+    </aside>
+  )
+}
