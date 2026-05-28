@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BookOpen, Lightbulb, Cpu, CheckSquare, Calculator, Menu, X } from 'lucide-react'
+import { BookOpen, Lightbulb, Cpu, CheckSquare, Calculator, Wrench, Menu, X } from 'lucide-react'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import ChapterContent from '../components/ChapterContent'
@@ -7,6 +7,7 @@ import NotesPanel from '../components/NotesPanel'
 import AISupportChat from '../components/AISupportChat'
 import Checklist from '../components/Checklist'
 import RevenueCalculator from '../components/RevenueCalculator'
+import ToolsSection from '../components/ToolsSection'
 import IdeasSection from '../components/IdeasSection'
 import IdeaGenerator from '../components/IdeaGenerator'
 import { useChapters } from '../hooks/useChapters'
@@ -22,6 +23,7 @@ const TABS = [
   { id: 'generator', label: 'Gerador', icon: Cpu },
   { id: 'checklist', label: 'Checklist', icon: CheckSquare },
   { id: 'calculator', label: 'Calculadora', icon: Calculator },
+  { id: 'tools', label: 'Ferramentas', icon: Wrench },
 ]
 
 export default function Platform({ user, profile, onAdminClick }) {
@@ -217,6 +219,10 @@ export default function Platform({ user, profile, onAdminClick }) {
 
             {activeTab === 'calculator' && (
               <RevenueCalculator />
+            )}
+
+            {activeTab === 'tools' && (
+              <ToolsSection />
             )}
           </div>
         </main>
