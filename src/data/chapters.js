@@ -810,9 +810,44 @@ export const chapters = [
       }
 ],
   },
+  {
+    id: 28,
+    tag: "Introdução",
+    title: "O que Aprendi e o que Me Diferencia Hoje",
+    page: 18,
+    readingTime: 4,
+    glossaryTerms: ["SaaS","Vibe Coding"],
+    content: `<blockquote>"Desenvolvi visão de negócio aplicada ao produto. Penso em monetização, em planos, em conversão e em retenção desde o primeiro prompt. Um app sem modelo de negócio claro é só um projeto."</blockquote>
+<h3>O que aprendi depois de tudo isso</h3>
+<p><strong>Aprendizados reais de quem errou, insistiu e chegou lá</strong></p>
+<p><strong>Aprendizado 01 — Escolher melhor as ferramentas de trabalho</strong><br/>Isso foi fundamental para avançar nos projetos e alcançar resultados em menos tempo, com menos investimento e menos estresse.</p>
+<p><strong>Aprendizado 02 — Ter um método antes de criar o prompt</strong><br/>Existe uma jornada até chegar a um prompt eficiente. Solicitar a IA sem método é o caminho mais rápido para o retrabalho.</p>
+<p><strong>Aprendizado 03 — Ver um SaaS como um ecossistema de negócio</strong><br/>Um SaaS não é só um app funcional. É um produto que precisa ser planejado com visão estratégica e maestria desde o início.</p>
+<p><strong>Aprendizado 04 — Validar cada etapa antes de avançar</strong><br/>Validar o que foi construído antes de partir para o próximo passo economiza muito mais tempo do que corrigir tudo no final.</p>
+<p><strong>Aprendizado 05 — Transformar problemas reais em soluções funcionais</strong><br/>Não parto de uma ideia genérica. Parto de uma dor que conheço profundamente porque vivi ou atendi quem viveu.</p>
+<p><strong>Aprendizado 06 — Visão de negócio aplicada ao produto desde o início</strong><br/>Penso em monetização, planos, conversão e retenção desde o primeiro prompt. Um app sem modelo de negócio claro é só um projeto.</p>
+<p><strong>Aprendizado 07 — Conduzir a IA com clareza e disciplina</strong><br/>Sei quando fracionar, quando mostrar, quando limitar e quando recomeçar do zero. Essa habilidade é tão importante quanto a ideia em si.</p>
+<p><strong>Aprendizado 08 — Construir pensando no usuário desde o primeiro rascunho</strong><br/>Onboarding, experiência do primeiro acesso, clareza nas instruções. O produto precisa funcionar para quem nunca viu antes.</p>
+<p><strong>Aprendizado 09 — Integrar experiência estratégica a soluções digitais</strong><br/>30 anos de visão humanizada de negócios integrados a soluções digitais que resolvem problemas reais. Isso não se aprende em um curso.</p>
+<p><strong>Aprendizado 10 — O processo é o produto</strong><br/>O maior ativo que desenvolvi não é nenhum app específico. É o método. Saber transformar uma ideia em solução funcional, do planejamento à monetização, com clareza, velocidade e muito menos frustração.</p>
+<blockquote>"Continuo aprendendo a cada novo projeto. O Vibe Coding evolui rápido e quem para de testar fica para trás. O compromisso de seguir aprendendo é o que mantém os resultados crescendo."</blockquote>`,
+    quizQuestions: [
+      {
+        "question": "Qual é o maior ativo desenvolvido após criar mais de 30 apps com Vibe Coding?",
+        "options": [
+          "Um app específico de sucesso",
+          "O método — saber transformar uma ideia em solução funcional do planejamento à monetização",
+          "A habilidade técnica de codificar",
+          "Uma rede de contatos no mercado"
+        ],
+        "correctIndex": 1,
+        "explanation": "O maior ativo não é nenhum app específico — é o método. Saber transformar uma ideia em solução funcional com clareza, velocidade e menos frustração."
+      }
+    ],
+  },
 ]
 
 export const chapterGroups = [
-  { label: 'Introdução', chapters: [0, 1, 2, 3, 4, 5, 6] },
+  { label: 'Introdução', chapters: [0, 1, 2, 3, 28, 4, 5, 6] },
   { label: 'Os 20 Passos', chapters: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27] },
 ]
