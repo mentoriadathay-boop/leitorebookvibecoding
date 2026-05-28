@@ -51,7 +51,7 @@ export default function Login() {
             <BookOpen size={28} className="text-white" />
           </div>
           <h1 className="font-playfair text-2xl font-bold text-[#0F4A28] dark:text-green-300">
-            Vibe Coding
+            Hub Vibe Coding
           </h1>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
             TFA Soluções com IA — Thayane Fidelis
