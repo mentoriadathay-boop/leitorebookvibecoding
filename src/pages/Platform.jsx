@@ -12,6 +12,7 @@ import VibeNews from '../components/VibeNews'
 import PromptLibrary from '../components/PromptLibrary'
 import PDFReader from '../components/PDFReader'
 import MySaas from '../components/MySaas'
+import Onboarding from '../components/Onboarding'
 import IdeasSection from '../components/IdeasSection'
 import { useStreak } from '../hooks/useStreak'
 import IdeaGenerator from '../components/IdeaGenerator'
@@ -87,38 +88,8 @@ export default function Platform({ user, profile, onAdminClick }) {
         onAdminClick={onAdminClick}
       />
 
-      {/* Welcome modal */}
-      {showWelcome && (
-        <div className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-2xl max-w-md w-full p-6 fade-in">
-            <div className="text-center mb-5">
-              <div className="w-12 h-12 rounded-xl bg-[#0F4A28] flex items-center justify-center mx-auto mb-3">
-                <BookOpen size={22} className="text-white" />
-              </div>
-              <h2 className="font-playfair font-bold text-xl text-gray-900 dark:text-white mb-2">
-                Bem-vinda à plataforma!
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                Você tem acesso ao ebook interativo <strong>"20 Passos para Criar seu App SaaS com Vibe Coding"</strong>.
-                Explore os capítulos, anote suas reflexões, use o suporte IA e gere ideias de SaaS personalizadas.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400 mb-5">
-              {['Áudio em PT-BR', 'Anotações salvas', 'Suporte IA', 'Gerador de SaaS', 'Modo foco', 'Calculadora'].map(f => (
-                <div key={f} className="flex items-center gap-1.5 bg-[#E8F5EE] dark:bg-[#0F4A28]/20 rounded-lg px-2.5 py-2">
-                  <span className="text-[#1B6B3A]">✓</span> {f}
-                </div>
-              ))}
-            </div>
-            <button
-              onClick={dismissWelcome}
-              className="w-full py-2.5 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white rounded-xl font-semibold text-sm transition-colors"
-            >
-              Começar a ler
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Onboarding */}
+      {showWelcome && <Onboarding onClose={dismissWelcome} />}
 
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
