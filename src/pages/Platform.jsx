@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BookOpen, Lightbulb, Cpu, CheckSquare, Calculator, Wrench, Newspaper, Zap, FileText, Menu, X, PanelLeft, PanelRight } from 'lucide-react'
+import { BookOpen, Lightbulb, Cpu, CheckSquare, Calculator, Wrench, Newspaper, Zap, FileText, Menu, X, PanelLeft, PanelRight, Maximize2, Minimize2 } from 'lucide-react'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import ChapterContent from '../components/ChapterContent'
@@ -43,6 +43,7 @@ export default function Platform({ user, profile, onAdminClick }) {
   const [leftPanelOpen, setLeftPanelOpen] = useState(true)
   const [rightPanelOpen, setRightPanelOpen] = useState(true)
   const [rightPanelTab, setRightPanelTab] = useState('notes')
+  const [focusMode, setFocusMode] = useState(false)
   const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem('welcomeSeen'))
 
   const { chapters, chapterGroups } = useChapters()
@@ -75,6 +76,19 @@ export default function Platform({ user, profile, onAdminClick }) {
   const dismissWelcome = () => {
     localStorage.setItem('welcomeSeen', 'true')
     setShowWelcome(false)
+  }
+
+  const toggleFocusMode = () => {
+    setFocusMode(f => {
+      const next = !f
+      if (next) {
+        setLeftPanelOpen(false)
+        setRightPanelOpen(false)
+      } else {
+        setLeftPanelOpen(true)
+      }
+      return next
+    })
   }
 
   return (
@@ -130,47 +144,60 @@ export default function Platform({ user, profile, onAdminClick }) {
         </div>
 
         {/* Main content */}
-        <main className={`flex-1 transition-all duration-300 ${leftPanelOpen ? 'lg:ml-56 xl:ml-64' : 'lg:ml-0'} ${rightPanelOpen ? 'lg:mr-64 xl:mr-72' : 'lg:mr-0'}`}>
+        <main className={`flex-1 transition-all duration-300 ${leftPanelOpen ? 'lg:ml-56 xl:ml-64' : 'lg:ml-0'}`}>
           {/* Tab bar (desktop) */}
-          <div className="hidden lg:flex items-center gap-1 px-3 pt-4 pb-0 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] sticky top-16 z-30">
-            {/* Toggle sidebar esquerda */}
-            <button
-              onClick={() => setLeftPanelOpen(o => !o)}
-              title={leftPanelOpen ? 'Recolher sumário' : 'Expandir sumário'}
-              className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0 mr-1"
-            >
-              <PanelLeft size={15} />
-            </button>
+          {!focusMode && (
+            <div className="hidden lg:flex items-center gap-1 px-3 pt-4 pb-0 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] sticky top-16 z-30">
+              {/* Toggle sidebar esquerda */}
+              <button
+                onClick={() => setLeftPanelOpen(o => !o)}
+                title={leftPanelOpen ? 'Recolher sumário' : 'Expandir sumário'}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0 mr-1"
+              >
+                <PanelLeft size={15} />
+              </button>
 
-            {/* Tabs — scroll horizontal para não quebrar */}
-            <div className="flex items-center gap-0.5 overflow-x-auto scrollbar-hide flex-1">
-              {TABS.map(tab => {
-                const Icon = tab.icon
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-1.5 px-2.5 py-2.5 text-xs font-medium border-b-2 -mb-px transition-all whitespace-nowrap shrink-0 ${
-                      activeTab === tab.id
-                        ? 'border-[#1B6B3A] text-[#1B6B3A] dark:text-green-400'
-                        : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400'
-                    }`}
-                  >
-                    <Icon size={13} /> {tab.label}
-                  </button>
-                )
-              })}
+              {/* Tabs — scroll horizontal para não quebrar */}
+              <div className="flex items-center gap-0.5 overflow-x-auto scrollbar-hide flex-1">
+                {TABS.map(tab => {
+                  const Icon = tab.icon
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`flex items-center gap-1.5 px-2.5 py-2.5 text-xs font-medium border-b-2 -mb-px transition-all whitespace-nowrap shrink-0 ${
+                        activeTab === tab.id
+                          ? 'border-[#1B6B3A] text-[#1B6B3A] dark:text-green-400'
+                          : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400'
+                      }`}
+                    >
+                      <Icon size={13} /> {tab.label}
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Toggle painel direito */}
+              <button
+                onClick={() => setRightPanelOpen(o => !o)}
+                title={rightPanelOpen ? 'Recolher painel' : 'Expandir painel'}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0 ml-1"
+              >
+                <PanelRight size={15} />
+              </button>
+
+              {/* Modo foco (só na aba de leitura) */}
+              {activeTab === 'reading' && (
+                <button
+                  onClick={toggleFocusMode}
+                  title="Modo foco (tela cheia)"
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0 ml-1"
+                >
+                  <Maximize2 size={15} />
+                </button>
+              )}
             </div>
-
-            {/* Toggle painel direito */}
-            <button
-              onClick={() => setRightPanelOpen(o => !o)}
-              title={rightPanelOpen ? 'Recolher painel' : 'Expandir painel'}
-              className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0 ml-1"
-            >
-              <PanelRight size={15} />
-            </button>
-          </div>
+          )}
 
           <div className="p-4 md:p-6 pb-20 lg:pb-6">
             {/* Mobile menu button */}
@@ -185,6 +212,18 @@ export default function Platform({ user, profile, onAdminClick }) {
                 {chapters[currentChapter]?.title}
               </span>
             </div>
+
+            {activeTab === 'reading' && focusMode && (
+              <div className="hidden lg:flex justify-end mb-3">
+                <button
+                  onClick={toggleFocusMode}
+                  title="Sair do modo foco"
+                  className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 border border-gray-200 dark:border-gray-600 px-3 py-1.5 rounded-lg hover:border-[#1B6B3A] transition-colors"
+                >
+                  <Minimize2 size={13} /> Sair do foco
+                </button>
+              </div>
+            )}
 
             {activeTab === 'reading' && (
               <ChapterContent
@@ -240,8 +279,16 @@ export default function Platform({ user, profile, onAdminClick }) {
           </div>
         </main>
 
+        {/* Backdrop do painel direito */}
+        {rightPanelOpen && (
+          <div
+            className="hidden lg:block fixed inset-0 z-20 bg-black/20"
+            onClick={() => setRightPanelOpen(false)}
+          />
+        )}
+
         {/* Right panel (desktop) */}
-        <div className={`hidden lg:flex flex-col w-64 xl:w-72 shrink-0 fixed right-0 top-16 bottom-0 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] overflow-y-auto scrollbar-thin transition-transform duration-300 ${rightPanelOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className={`hidden lg:flex flex-col w-64 xl:w-80 shrink-0 fixed right-0 top-16 bottom-0 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] overflow-y-auto scrollbar-thin transition-transform duration-300 z-30 shadow-xl ${rightPanelOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="flex border-b border-gray-100 dark:border-gray-700 shrink-0">
             {[
               { id: 'notes', label: 'Anotações' },
