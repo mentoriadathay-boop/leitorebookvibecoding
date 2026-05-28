@@ -41,7 +41,7 @@ export default function ChapterChat({ chapter }) {
     if (messages.length === 0) {
       setMessages([{
         role: 'assistant',
-        content: `Olá! Estou aqui para tirar suas dúvidas sobre **${chapter.title}**. O que você quer aprofundar ou entender melhor?`,
+        content: `Olá! Pode perguntar o que quiser — sobre "${chapter.title}", sobre o seu SaaS, tecnologia, negócios ou qualquer outra dúvida. Estou aqui para ajudar!`,
       }])
     }
     setTimeout(() => inputRef.current?.focus(), 100)
@@ -58,7 +58,11 @@ export default function ChapterChat({ chapter }) {
 
     try {
       const snippet = stripHtml(chapter.content || '')
-      const systemPrompt = `Você é um assistente especializado no capítulo "${chapter.title}" do ebook "20 Passos para Criar seu App SaaS com Vibe Coding" de Thayane Fidelis (TFA Soluções com IA). Responda de forma clara, prática e direta em português brasileiro. Máximo 4 frases por resposta. Use o conteúdo do capítulo como referência principal. Contexto do capítulo: ${snippet}`
+      const systemPrompt = `Você é um assistente de inteligência artificial especialista em SaaS, Vibe Coding, empreendedorismo digital e desenvolvimento de produtos com IA. Está integrado à plataforma do ebook "20 Passos para Criar seu App SaaS com Vibe Coding" de Thayane Fidelis (TFA Soluções com IA).
+
+O usuário está lendo o capítulo "${chapter.title}". Use esse contexto para orientar suas respostas, mas não se limite a ele — responda qualquer dúvida sobre tecnologia, negócios, IA, programação, marketing, monetização ou qualquer outro tema que o usuário quiser explorar.
+
+Seja como um mentor próximo: direto, prático, com exemplos reais quando possível, sempre em português brasileiro. Adapte o tamanho da resposta à complexidade da pergunta. Contexto do capítulo atual: ${snippet}`
 
       const history = messages
         .filter((_, i) => i > 0)
@@ -181,7 +185,7 @@ export default function ChapterChat({ chapter }) {
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKey}
-              placeholder="Sua dúvida sobre este capítulo..."
+              placeholder="Pergunte qualquer coisa..."
               className="flex-1 text-sm border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
             />
             <button
