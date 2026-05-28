@@ -4,7 +4,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
 import {
   ChevronLeft, ChevronRight, ZoomIn, ZoomOut,
-  Highlighter, X, Bookmark, BookOpen, List, Search
+  Highlighter, X, Bookmark, BookOpen, Maximize2, Minimize2
 } from 'lucide-react'
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -27,6 +27,7 @@ export default function PDFReader() {
   const [highlights, setHighlights]   = useState(getHl)
   const [tooltip, setTooltip]         = useState(null)        // { x, y, text }
   const [showHl, setShowHl]           = useState(false)
+  const [fullscreen, setFullscreen]   = useState(false)
   const [pageInput, setPageInput]     = useState('')
   const [loading, setLoading]         = useState(true)
   const containerRef                  = useRef(null)
@@ -107,9 +108,12 @@ export default function PDFReader() {
 
   // ── Render ─────────────────────────────────────────────────────
   return (
-    <div className="max-w-5xl mx-auto px-2">
+    <div className={fullscreen
+      ? 'fixed inset-0 z-[60] bg-white dark:bg-[#111] flex flex-col'
+      : 'max-w-5xl mx-auto px-2'
+    }>
       {/* Header toolbar */}
-      <div className="sticky top-16 z-30 bg-white dark:bg-[#1A1A1A] border-b border-gray-200 dark:border-gray-700 flex items-center gap-2 px-3 py-2 flex-wrap shadow-sm rounded-t-xl mt-2">
+      <div className={`${fullscreen ? 'sticky top-0' : 'sticky top-16 mt-2'} z-30 bg-white dark:bg-[#1A1A1A] border-b border-gray-200 dark:border-gray-700 flex items-center gap-2 px-3 py-2 flex-wrap shadow-sm rounded-t-xl`}>
 
         {/* Navegação */}
         <button onClick={() => goTo(page - 1)} disabled={page <= 1}
@@ -170,47 +174,66 @@ export default function PDFReader() {
           <Highlighter size={12} />
           Grifos {totalHighlights > 0 && `(${totalHighlights})`}
         </button>
+
+        {/* Fullscreen */}
+        <button
+          onClick={() => setFullscreen(f => !f)}
+          title={fullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
+          className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+        >
+          {fullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+        </button>
       </div>
 
-      {/* Painel de grifos */}
+      {/* Overlay de grifos */}
       {showHl && (
-        <div className="bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800/40 rounded-xl p-4 mt-3">
-          <p className="text-xs font-bold text-yellow-700 dark:text-yellow-400 mb-3 flex items-center gap-1.5">
-            <Highlighter size={12} /> Meus grifos — {totalHighlights} no total
-          </p>
-          {totalHighlights === 0 ? (
-            <p className="text-xs text-gray-400 italic">Selecione texto no PDF e clique "Grifar" para destacar trechos.</p>
-          ) : (
-            <div className="space-y-4 max-h-60 overflow-y-auto scrollbar-thin">
-              {Object.entries(highlights).sort(([a], [b]) => Number(a) - Number(b)).map(([pg, items]) => (
-                <div key={pg}>
-                  <button onClick={() => goTo(Number(pg))}
-                    className="text-[10px] font-bold text-yellow-600 dark:text-yellow-500 uppercase tracking-wider mb-1.5 hover:underline">
-                    Página {pg}
-                  </button>
-                  <div className="space-y-1.5">
-                    {items.map((h, i) => (
-                      <div key={i} className="flex items-start gap-2 group">
-                        <span className="flex-1 text-xs text-gray-700 dark:text-gray-300 bg-yellow-100 dark:bg-yellow-900/30 px-2.5 py-1.5 rounded-lg border-l-2 border-yellow-400 leading-relaxed">
-                          "{h.text}"
-                        </span>
-                        <button onClick={() => removeHighlight(Number(pg), i)}
-                          className="shrink-0 mt-1.5 text-gray-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all">
-                          <X size={12} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
+        <>
+          <div className="fixed inset-0 z-40 bg-black/20" onClick={() => setShowHl(false)} />
+          <div className="fixed right-0 top-16 bottom-0 z-50 w-72 bg-white dark:bg-[#1A1A1A] border-l border-yellow-200 dark:border-yellow-800/40 shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-yellow-100 dark:border-yellow-800/30">
+              <p className="text-xs font-bold text-yellow-700 dark:text-yellow-400 flex items-center gap-1.5">
+                <Highlighter size={12} /> Meus grifos — {totalHighlights}
+              </p>
+              <button onClick={() => setShowHl(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                <X size={14} />
+              </button>
             </div>
-          )}
-        </div>
+            <div className="flex-1 overflow-y-auto p-4 scrollbar-thin">
+              {totalHighlights === 0 ? (
+                <p className="text-xs text-gray-400 italic">Selecione texto no PDF e clique "Grifar" para destacar trechos.</p>
+              ) : (
+                <div className="space-y-4">
+                  {Object.entries(highlights).sort(([a], [b]) => Number(a) - Number(b)).map(([pg, items]) => (
+                    <div key={pg}>
+                      <button onClick={() => { goTo(Number(pg)); setShowHl(false) }}
+                        className="text-[10px] font-bold text-yellow-600 dark:text-yellow-500 uppercase tracking-wider mb-1.5 hover:underline">
+                        Página {pg}
+                      </button>
+                      <div className="space-y-1.5">
+                        {items.map((h, i) => (
+                          <div key={i} className="flex items-start gap-2 group">
+                            <span className="flex-1 text-xs text-gray-700 dark:text-gray-300 bg-yellow-100 dark:bg-yellow-900/30 px-2.5 py-1.5 rounded-lg border-l-2 border-yellow-400 leading-relaxed">
+                              "{h.text}"
+                            </span>
+                            <button onClick={() => removeHighlight(Number(pg), i)}
+                              className="shrink-0 mt-1.5 text-gray-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all">
+                              <X size={12} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </>
       )}
 
-      {/* Grifos desta página */}
+      {/* Grifos desta página (badges compactos, não empurram o PDF) */}
       {!showHl && pageHighlights.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-1.5 px-1">
+        <div className="flex flex-wrap gap-1.5 px-1 py-1.5">
           {pageHighlights.map((h, i) => (
             <span key={i} className="flex items-center gap-1 text-[11px] bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-400 px-2.5 py-1 rounded-full">
               <Highlighter size={10} />
@@ -227,8 +250,8 @@ export default function PDFReader() {
       <div
         ref={containerRef}
         onMouseUp={handleMouseUp}
-        className="relative mt-3 bg-gray-100 dark:bg-gray-900 rounded-xl overflow-auto flex flex-col items-center py-6 px-4 min-h-[70vh]"
-        style={{ maxHeight: 'calc(100vh - 200px)' }}
+        className={`relative bg-gray-100 dark:bg-gray-900 rounded-xl overflow-auto flex flex-col items-center py-6 px-4 ${fullscreen ? 'flex-1' : 'mt-3 min-h-[70vh]'}`}
+        style={fullscreen ? undefined : { maxHeight: 'calc(100vh - 200px)' }}
       >
         {/* Tooltip de grifo */}
         {tooltip && (
@@ -267,21 +290,23 @@ export default function PDFReader() {
       </div>
 
       {/* Rodapé de navegação */}
-      <div className="flex items-center justify-between py-4 px-2">
-        <button onClick={() => goTo(page - 1)} disabled={page <= 1}
-          className="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#1B6B3A] hover:text-[#1B6B3A] disabled:opacity-30 disabled:cursor-not-allowed transition-all">
-          <ChevronLeft size={15} /> Anterior
-        </button>
+      {!fullscreen && (
+        <div className="flex items-center justify-between py-4 px-2">
+          <button onClick={() => goTo(page - 1)} disabled={page <= 1}
+            className="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#1B6B3A] hover:text-[#1B6B3A] disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+            <ChevronLeft size={15} /> Anterior
+          </button>
 
-        <span className="text-xs text-gray-400">
-          Use ← → para navegar
-        </span>
+          <span className="text-xs text-gray-400">
+            Use ← → para navegar
+          </span>
 
-        <button onClick={() => goTo(page + 1)} disabled={!numPages || page >= numPages}
-          className="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-[#1B6B3A] hover:bg-[#0F4A28] text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all">
-          Próxima <ChevronRight size={15} />
-        </button>
-      </div>
+          <button onClick={() => goTo(page + 1)} disabled={!numPages || page >= numPages}
+            className="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-[#1B6B3A] hover:bg-[#0F4A28] text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+            Próxima <ChevronRight size={15} />
+          </button>
+        </div>
+      )}
     </div>
   )
 }
