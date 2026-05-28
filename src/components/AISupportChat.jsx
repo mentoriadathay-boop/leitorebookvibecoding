@@ -6,6 +6,16 @@ function stripHtml(html) {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 500)
 }
 
+function stripMarkdown(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/__(.*?)__/g, '$1')
+    .replace(/_(.*?)_/g, '$1')
+    .replace(/`(.*?)`/g, '$1')
+    .replace(/^#{1,6}\s/gm, '')
+}
+
 export default function AISupportChat({ chapter }) {
   const [messages, setMessages] = useState([
     {
@@ -76,7 +86,7 @@ export default function AISupportChat({ chapter }) {
                 : 'bg-[#1B6B3A] text-white ml-auto'
             }`}
           >
-            {msg.content}
+            {stripMarkdown(msg.content)}
           </div>
         ))}
         {loading && (

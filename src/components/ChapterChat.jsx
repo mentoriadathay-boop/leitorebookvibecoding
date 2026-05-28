@@ -2,6 +2,16 @@ import { useState, useRef, useEffect } from 'react'
 import { Send, Bot, ChevronDown, ChevronUp, Sparkles } from 'lucide-react'
 import { askAI } from '../lib/anthropicClient'
 
+function stripMarkdown(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/__(.*?)__/g, '$1')
+    .replace(/_(.*?)_/g, '$1')
+    .replace(/`(.*?)`/g, '$1')
+    .replace(/^#{1,6}\s/gm, '')
+}
+
 function stripHtml(html) {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 800)
 }
@@ -128,7 +138,7 @@ export default function ChapterChat({ chapter }) {
                       : 'bg-[#E8F5EE] dark:bg-[#0F4A28]/30 text-gray-800 dark:text-gray-200 rounded-bl-sm'
                   }`}
                 >
-                  {msg.content}
+                  {stripMarkdown(msg.content)}
                 </div>
               </div>
             ))}
