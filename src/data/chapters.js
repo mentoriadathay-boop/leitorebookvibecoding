@@ -105,15 +105,21 @@ export const chapters = [
   {
     id: 3,
     tag: "Introdução",
-    title: "Erros que Cometi",
+    title: “Erros que Eu Cometi e Que Você Não Precisa Cometer”,
     page: 17,
     readingTime: 4,
-    glossaryTerms: ["MVP","Deploy"],
-    content: `<blockquote>“ Cada erro aqui custou tempo, dinheiro e energia . aprender neste ebook existe para que você não precise pagar o mesmo preço para chegar ao</blockquote>
-<p>mesmo lugar. ”</p>
-<blockquote>“ Desenvolvi visão de negócio aplicada ao produto. Penso em monetização, em planos , em conversão e em retenção desde o primeiro</blockquote>
-<p>prompt. Um app sem modelo de negócio claro é só um projeto. ”</p>
-<blockquote>“ Continuo aprendendo a cada novo projeto O Vibe Coding evolui rápido e quem para de testar fica para trás. O compromisso de seguir aprendendo é o que mantém os resultados crescendo. ”</blockquote>`,
+    glossaryTerms: [“MVP”,”Deploy”],
+    content: `<blockquote>”Cada erro aqui custou tempo, dinheiro e energia. O processo que você vai aprender neste ebook existe para que você não precise pagar o mesmo preço para chegar ao mesmo lugar.”</blockquote>
+<h3>Os erros que eu cometi — e que você não precisa repetir</h3>
+<p><strong>Aprendizados reais de quem criou mais de 30 apps com Vibe Coding</strong></p>
+<p><strong>Erro 01 — Construir sem planejar o fluxo</strong><br/>O resultado foi um app que funcionava em partes, mas não funcionava como um todo.</p>
+<p><strong>Erro 02 — Pedir muitas coisas ao mesmo tempo para a IA</strong><br/>Quanto mais complexo o pedido, maior a chance de ela alterar o que já estava funcionando.</p>
+<p><strong>Erro 03 — Não documentar o que foi aprovado</strong><br/>Sem registro do que estava certo, a IA desfez progresso em correções posteriores.</p>
+<p><strong>Erro 04 — Escolher a plataforma pela popularidade</strong><br/>Nem toda plataforma famosa entrega o que promete para todos os tipos de projeto.</p>
+<p><strong>Erro 05 — Querer lançar antes de testar o suficiente</strong><br/>Os bugs que eu não encontrei no teste foram encontrados pelos primeiros usuários.</p>
+<p><strong>Erro 06 — Não pensar no onboarding</strong><br/>Perdi usuários nos primeiros dias simplesmente porque eles não sabiam como usar o produto.</p>
+<p><strong>Erro 07 — Não planejar a estrutura de domínios antes de começar</strong><br/>Mudar depois causou problemas nas integrações já configuradas.</p>
+<p><strong>Erro 08 — Subestimar o tempo e o custo de manutenção</strong><br/>Um SaaS no ar exige atenção, atualização e investimento contínuo. Não acaba no lançamento.</p>`,
     quizQuestions: [
       {
             "question": "Qual foi o erro mais frequente de Thayane?",
