@@ -7,7 +7,10 @@ import {
   Highlighter, X, Bookmark, BookOpen, List, Search
 } from 'lucide-react'
 
-pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url,
+).toString()
 
 const PAGE_KEY    = 'pdf_reader_page'
 const HL_KEY      = 'pdf_reader_highlights'
