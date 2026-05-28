@@ -21,11 +21,6 @@ export default function Login() {
       if (mode === 'login') {
         const { error: e } = await supabase.auth.signInWithPassword({ email, password })
         if (e) throw e
-      } else if (mode === 'signup') {
-        const { error: e } = await supabase.auth.signUp({ email, password })
-        if (e) throw e
-        setSuccess('Conta criada! Verifique seu email para confirmar o cadastro.')
-        setMode('login')
       } else {
         const { error: e } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: window.location.origin,
@@ -36,9 +31,11 @@ export default function Login() {
       }
     } catch (e) {
       const msg = e?.message || 'Ocorreu um erro. Tente novamente.'
-      if (msg.includes('Invalid login')) setError('Email ou senha incorretos.')
-      else if (msg.includes('already registered')) setError('Este email já está cadastrado. Faça login.')
-      else setError(msg)
+      if (msg.includes('Invalid login') || msg.includes('invalid_credentials')) {
+        setError('Email ou senha incorretos.')
+      } else {
+        setError(msg)
+      }
     } finally {
       setLoading(false)
     }
@@ -47,6 +44,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#E8F5EE] dark:bg-[#0a1a0f] px-4 py-8">
       <div className="w-full max-w-sm">
+
         {/* Logo + Brand */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 rounded-2xl bg-red-600 flex items-center justify-center mx-auto mb-4 shadow-lg">
@@ -66,13 +64,11 @@ export default function Login() {
         {/* Form card */}
         <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6">
           <h2 className="font-playfair font-semibold text-xl text-gray-900 dark:text-white mb-1">
-            {mode === 'login' ? 'Entrar na plataforma' : mode === 'signup' ? 'Criar sua conta' : 'Recuperar senha'}
+            {mode === 'login' ? 'Entrar na plataforma' : 'Recuperar senha'}
           </h2>
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-5">
             {mode === 'login'
-              ? 'Use o email e senha do seu cadastro.'
-              : mode === 'signup'
-              ? 'Crie sua conta para acessar o ebook interativo.'
+              ? 'Use o email e senha enviados após sua compra.'
               : 'Informe seu email para receber o link de recuperação.'}
           </p>
 
@@ -100,7 +96,7 @@ export default function Login() {
               />
             </div>
 
-            {mode !== 'forgot' && (
+            {mode === 'login' && (
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1.5">Senha</label>
                 <div className="relative">
@@ -109,12 +105,12 @@ export default function Login() {
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     required
-                    placeholder="Mínimo 6 caracteres"
+                    placeholder="Sua senha"
                     className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 pr-10 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPass(!showPass)}
+                    onClick={() => setShowPass(s => !s)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
                     {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
@@ -128,37 +124,22 @@ export default function Login() {
               disabled={loading}
               className="w-full py-3 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white rounded-xl font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading
-                ? 'Aguarde...'
-                : mode === 'login'
-                ? 'Entrar'
-                : mode === 'signup'
-                ? 'Criar conta'
-                : 'Enviar link de recuperação'}
+              {loading ? 'Aguarde...' : mode === 'login' ? 'Entrar' : 'Enviar link de recuperação'}
             </button>
           </form>
 
-          <div className="mt-4 space-y-2 text-center">
-            {mode === 'login' && (
-              <>
-                <button
-                  onClick={() => { setMode('signup'); setError(''); setSuccess('') }}
-                  className="block w-full text-xs text-[#1B6B3A] hover:text-[#0F4A28] transition-colors"
-                >
-                  Não tem conta? Criar agora
-                </button>
-                <button
-                  onClick={() => { setMode('forgot'); setError(''); setSuccess('') }}
-                  className="block w-full text-xs text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  Esqueci minha senha
-                </button>
-              </>
-            )}
-            {mode !== 'login' && (
+          <div className="mt-4 text-center">
+            {mode === 'login' ? (
+              <button
+                onClick={() => { setMode('forgot'); setError(''); setSuccess('') }}
+                className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              >
+                Esqueci minha senha
+              </button>
+            ) : (
               <button
                 onClick={() => { setMode('login'); setError(''); setSuccess('') }}
-                className="block w-full text-xs text-[#1B6B3A] hover:text-[#0F4A28] transition-colors"
+                className="text-xs text-[#1B6B3A] hover:text-[#0F4A28] dark:text-green-400 transition-colors"
               >
                 ← Voltar ao login
               </button>
@@ -166,10 +147,16 @@ export default function Login() {
           </div>
         </div>
 
+        {/* Link de compra */}
         <p className="text-center text-[11px] text-gray-400 dark:text-gray-500 mt-6">
-          Acesso exclusivo para compradores do ebook.{' '}
-          <a href="https://thayanefidelis.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#1B6B3A]">
-            Saiba mais
+          Ainda não tem acesso?{' '}
+          <a
+            href="https://thayanefidelis.store/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-[#1B6B3A] dark:hover:text-green-400 transition-colors"
+          >
+            Adquira o ebook
           </a>
         </p>
       </div>
