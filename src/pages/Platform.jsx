@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BookOpen, Lightbulb, Cpu, CheckSquare, Calculator, Wrench, Newspaper, Zap, Menu, X, PanelLeft, PanelRight } from 'lucide-react'
+import { BookOpen, Lightbulb, Cpu, CheckSquare, Calculator, Wrench, Newspaper, Zap, FileText, Menu, X, PanelLeft, PanelRight } from 'lucide-react'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import ChapterContent from '../components/ChapterContent'
@@ -10,6 +10,7 @@ import RevenueCalculator from '../components/RevenueCalculator'
 import ToolsSection from '../components/ToolsSection'
 import VibeNews from '../components/VibeNews'
 import PromptLibrary from '../components/PromptLibrary'
+import PDFReader from '../components/PDFReader'
 import MySaas from '../components/MySaas'
 import IdeasSection from '../components/IdeasSection'
 import { useStreak } from '../hooks/useStreak'
@@ -30,6 +31,7 @@ const TABS = [
   { id: 'tools', label: 'Ferramentas', icon: Wrench },
   { id: 'news', label: 'Vibe News', icon: Newspaper },
   { id: 'prompts', label: 'Prompts', icon: Zap },
+  { id: 'pdf', label: 'Ler PDF', icon: FileText },
 ]
 
 export default function Platform({ user, profile, onAdminClick }) {
@@ -259,6 +261,10 @@ export default function Platform({ user, profile, onAdminClick }) {
 
             {activeTab === 'prompts' && (
               <PromptLibrary />
+            )}
+
+            {activeTab === 'pdf' && (
+              <PDFReader />
             )}
           </div>
         </main>
