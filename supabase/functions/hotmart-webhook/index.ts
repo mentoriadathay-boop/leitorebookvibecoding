@@ -112,7 +112,7 @@ Deno.serve(async (req: Request) => {
     // Tenta criar via convite (envia email automaticamente ao comprador)
     const { data: invited, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email, {
       data: { display_name: buyerName },
-      redirectTo: 'https://leitorebookvibecoding.vercel.app',
+      redirectTo: 'https://hubvibecoding.vercel.app',
     })
 
     let userId: string | null = invited?.user?.id || null
