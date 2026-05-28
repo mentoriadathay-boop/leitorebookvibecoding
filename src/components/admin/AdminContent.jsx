@@ -368,13 +368,7 @@ export default function AdminContent() {
       <div className="flex items-center justify-between flex-wrap gap-3">
         <h2 className="font-playfair text-xl font-bold text-gray-900 dark:text-white">Gestão de Conteúdo</h2>
         <div className="flex gap-2 flex-wrap">
-          {chapters.length === 0 && !loading && (
-            <button onClick={seed} disabled={seeding}
-              className="flex items-center gap-2 px-4 py-2 border border-[#1B6B3A] text-[#1B6B3A] hover:bg-[#E8F5EE] dark:hover:bg-[#0F4A28]/20 text-sm rounded-xl font-medium transition-colors disabled:opacity-50">
-              <Database size={14} /> {seeding ? 'Importando...' : 'Importar capítulos estáticos'}
-            </button>
-          )}
-          {chapters.length > 0 && (
+          {!loading && (
             <button onClick={resync} disabled={resyncing}
               className="flex items-center gap-2 px-4 py-2 border border-orange-400 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 text-sm rounded-xl font-medium transition-colors disabled:opacity-50"
               title="Apaga os capítulos do banco e reimporta do arquivo chapters.js atualizado">
