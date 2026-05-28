@@ -43,7 +43,15 @@ export default function AISupportChat({ chapter }) {
 
     try {
       const contextSnippet = stripHtml(chapter?.content || '')
+      const saasCtx = (() => {
+        try {
+          const d = JSON.parse(localStorage.getItem('mysaas') || '{}')
+          return d.name ? `O usuário está desenvolvendo: "${d.name}" — ${d.problem || ''} para ${d.audience || ''}.` : ''
+        } catch { return '' }
+      })()
       const systemPrompt = `Você é um assistente de inteligência artificial especialista em SaaS, Vibe Coding, empreendedorismo digital e desenvolvimento de produtos com IA. Está integrado à plataforma do ebook "20 Passos para Criar seu App SaaS com Vibe Coding" de Thayane Fidelis (TFA Soluções com IA).
+
+${saasCtx ? `Contexto do projeto do usuário: ${saasCtx}` : ''}
 
 Responda qualquer pergunta do usuário — sobre tecnologia, negócios, IA, programação, marketing, monetização ou qualquer outro tema. Não se limite ao ebook. Seja prático, direto e use exemplos reais quando ajudar. Sempre em português brasileiro. O usuário está no capítulo "${chapter?.title}". Contexto: ${contextSnippet}`
 

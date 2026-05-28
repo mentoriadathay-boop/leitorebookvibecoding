@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect } from 'react'
-import { Clock, FileText, Focus, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useState, useRef, useEffect, useCallback } from 'react'
+import { Clock, FileText, Focus, ChevronLeft, ChevronRight, Highlighter, X } from 'lucide-react'
 import AudioPlayer from './AudioPlayer'
 import QuoteShare from './QuoteShare'
 import Quiz from './Quiz'
 import ChapterChat from './ChapterChat'
 import { glossary } from '../data/glossary'
+import { useHighlights } from '../hooks/useHighlights'
 
 function injectGlossary(html, terms) {
   if (!terms?.length) return html
@@ -72,22 +73,46 @@ function ContentRenderer({ html, terms, focusMode, focusIndex }) {
   )
 }
 
-export default function ChapterContent({ chapter, onNext, onPrev, hasNext, hasPrev, onChapterRead }) {
+export default function ChapterContent({ chapter, chapterIndex = 0, onNext, onPrev, hasNext, hasPrev, onChapterRead }) {
   const [focusMode, setFocusMode] = useState(false)
   const [focusIndex, setFocusIndex] = useState(0)
   const [showQuiz, setShowQuiz] = useState(false)
   const [paraCount, setParaCount] = useState(0)
+  const [tooltip, setTooltip] = useState(null) // { x, y, text }
   const contentRef = useRef(null)
+  const { highlights, add: addHighlight, remove: removeHighlight } = useHighlights(chapterIndex)
 
   useEffect(() => {
     setFocusMode(false)
     setFocusIndex(0)
     setShowQuiz(false)
-    // Count paras
+    setTooltip(null)
     const div = document.createElement('div')
     div.innerHTML = chapter.content
     setParaCount(div.querySelectorAll('p').length)
   }, [chapter.id])
+
+  const handleMouseUp = useCallback((e) => {
+    const selection = window.getSelection()
+    const text = selection?.toString().trim()
+    if (!text || text.length < 5) { setTooltip(null); return }
+    const range = selection.getRangeAt(0)
+    const rect = range.getBoundingClientRect()
+    const containerRect = contentRef.current?.getBoundingClientRect()
+    if (!containerRect) return
+    setTooltip({
+      x: rect.left - containerRect.left + rect.width / 2,
+      y: rect.top - containerRect.top - 8,
+      text,
+    })
+  }, [])
+
+  const handleHighlight = () => {
+    if (!tooltip) return
+    addHighlight(tooltip.text)
+    setTooltip(null)
+    window.getSelection()?.removeAllRanges()
+  }
 
   const advanceFocus = () => {
     setFocusIndex(i => {
@@ -98,6 +123,20 @@ export default function ChapterContent({ chapter, onNext, onPrev, hasNext, hasPr
       }
       return next
     })
+  }
+
+  // Apply highlights to html
+  const applyHighlights = (html) => {
+    let result = html
+    highlights.forEach(text => {
+      if (!text || text.length < 5) return
+      const esc = text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      result = result.replace(
+        new RegExp(`(${esc})`, 'g'),
+        '<mark class="chapter-highlight">$1</mark>'
+      )
+    })
+    return result
   }
 
   // Process content with glossary spans
@@ -122,8 +161,10 @@ export default function ChapterContent({ chapter, onNext, onPrev, hasNext, hasPr
     }
   )
 
+  const finalContent = applyHighlights(processedContent)
+
   return (
-    <article className="max-w-2xl mx-auto px-1" ref={contentRef}>
+    <article className="max-w-2xl mx-auto px-1" ref={contentRef} onMouseUp={handleMouseUp}>
       {/* Chapter header */}
       <div className="mb-6">
         <span className="inline-block text-[11px] uppercase tracking-widest font-bold text-[#B91C1C] dark:text-red-400 mb-2">
@@ -168,13 +209,50 @@ export default function ChapterContent({ chapter, onNext, onPrev, hasNext, hasPr
         )}
       </div>
 
+      {/* Highlight tooltip */}
+      {tooltip && (
+        <div
+          className="absolute z-40 -translate-x-1/2 -translate-y-full"
+          style={{ left: tooltip.x, top: tooltip.y }}
+        >
+          <button
+            onMouseDown={e => { e.preventDefault(); handleHighlight() }}
+            className="flex items-center gap-1.5 text-xs bg-[#C9A84C] hover:bg-yellow-600 text-white px-3 py-1.5 rounded-full shadow-lg font-medium whitespace-nowrap"
+          >
+            <Highlighter size={11} /> Destacar
+          </button>
+        </div>
+      )}
+
       {/* Chapter body */}
       <ContentRenderer
-        html={processedContent}
+        html={finalContent}
         terms={chapter.glossaryTerms}
         focusMode={focusMode}
         focusIndex={focusIndex}
       />
+
+      {/* Highlights panel */}
+      {highlights.length > 0 && (
+        <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800/40 rounded-xl">
+          <p className="text-xs font-semibold text-yellow-700 dark:text-yellow-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <Highlighter size={12} /> Meus destaques ({highlights.length})
+          </p>
+          <div className="space-y-2">
+            {highlights.map((h, i) => (
+              <div key={i} className="flex items-start gap-2 group">
+                <span className="flex-1 text-xs text-gray-700 dark:text-gray-300 bg-yellow-100 dark:bg-yellow-900/20 px-2.5 py-1.5 rounded-lg leading-relaxed border-l-2 border-yellow-400">
+                  "{h}"
+                </span>
+                <button onClick={() => removeHighlight(h)}
+                  className="shrink-0 mt-1.5 text-gray-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all">
+                  <X size={12} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Quiz button */}
       {chapter.quizQuestions?.length > 0 && !showQuiz && (

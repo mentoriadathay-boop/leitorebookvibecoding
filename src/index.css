@@ -20,6 +20,9 @@
   .scrollbar-thin::-webkit-scrollbar-thumb { @apply bg-gray-300 dark:bg-gray-600 rounded-full; }
 }
 
+.chapter-highlight { background-color: #fef08a; color: #713f12; border-radius: 2px; padding: 0 2px; }
+.dark .chapter-highlight { background-color: #713f12; color: #fef08a; }
+
 .chapter-content p { @apply mb-4; line-height: 1.85; }
 .chapter-content ul { @apply list-disc pl-6 mb-4 space-y-1; }
 .chapter-content ol { @apply list-decimal pl-6 mb-4 space-y-1; }

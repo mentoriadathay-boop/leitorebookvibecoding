@@ -2,7 +2,7 @@ import { Moon, Sun, BookOpen, Menu, X, Shield } from 'lucide-react'
 import { useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 
-export default function Header({ darkMode, toggleDark, progress, user, onMenuToggle, onAdminClick }) {
+export default function Header({ darkMode, toggleDark, progress, user, onMenuToggle, onAdminClick, streak }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const handleLogout = async () => {
@@ -69,6 +69,12 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
 
         {/* Actions */}
         <div className="flex items-center gap-2">
+          {streak > 0 && (
+            <div title={`${streak} dia${streak !== 1 ? 's' : ''} seguido${streak !== 1 ? 's' : ''} de leitura`}
+              className="hidden sm:flex items-center gap-1 text-xs bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 px-2.5 py-1 rounded-full border border-orange-200 dark:border-orange-800/40 font-semibold">
+              🔥 {streak}
+            </div>
+          )}
           <button
             onClick={toggleDark}
             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"

@@ -58,7 +58,15 @@ export default function ChapterChat({ chapter }) {
 
     try {
       const snippet = stripHtml(chapter.content || '')
+      const saasCtx = (() => {
+        try {
+          const d = JSON.parse(localStorage.getItem('mysaas') || '{}')
+          return d.name ? `O usuário está desenvolvendo: "${d.name}" — ${d.problem || ''} para ${d.audience || ''} (nicho: ${d.niche || ''}).` : ''
+        } catch { return '' }
+      })()
       const systemPrompt = `Você é um assistente de inteligência artificial especialista em SaaS, Vibe Coding, empreendedorismo digital e desenvolvimento de produtos com IA. Está integrado à plataforma do ebook "20 Passos para Criar seu App SaaS com Vibe Coding" de Thayane Fidelis (TFA Soluções com IA).
+
+${saasCtx ? `Contexto do projeto do usuário: ${saasCtx}` : ''}
 
 O usuário está lendo o capítulo "${chapter.title}". Use esse contexto para orientar suas respostas, mas não se limite a ele — responda qualquer dúvida sobre tecnologia, negócios, IA, programação, marketing, monetização ou qualquer outro tema que o usuário quiser explorar.
 

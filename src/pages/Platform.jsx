@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BookOpen, Lightbulb, Cpu, CheckSquare, Calculator, Wrench, Newspaper, Menu, X } from 'lucide-react'
+import { BookOpen, Lightbulb, Cpu, CheckSquare, Calculator, Wrench, Newspaper, Zap, Menu, X } from 'lucide-react'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import ChapterContent from '../components/ChapterContent'
@@ -9,7 +9,10 @@ import Checklist from '../components/Checklist'
 import RevenueCalculator from '../components/RevenueCalculator'
 import ToolsSection from '../components/ToolsSection'
 import VibeNews from '../components/VibeNews'
+import PromptLibrary from '../components/PromptLibrary'
+import MySaas from '../components/MySaas'
 import IdeasSection from '../components/IdeasSection'
+import { useStreak } from '../hooks/useStreak'
 import IdeaGenerator from '../components/IdeaGenerator'
 import { useChapters } from '../hooks/useChapters'
 import { useProgress } from '../hooks/useProgress'
@@ -26,6 +29,7 @@ const TABS = [
   { id: 'calculator', label: 'Calculadora', icon: Calculator },
   { id: 'tools', label: 'Ferramentas', icon: Wrench },
   { id: 'news', label: 'Vibe News', icon: Newspaper },
+  { id: 'prompts', label: 'Prompts', icon: Zap },
 ]
 
 export default function Platform({ user, profile, onAdminClick }) {
@@ -37,6 +41,7 @@ export default function Platform({ user, profile, onAdminClick }) {
   const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem('welcomeSeen'))
 
   const { chapters, chapterGroups } = useChapters()
+  const streak = useStreak()
   const { completed, completedCount, markCompleted } = useProgress(user?.id)
   const { notes, saveNote, noteCount } = useNotes(user?.id)
   const { bookmarks, toggleBookmark } = useBookmarks(user?.id)
@@ -74,6 +79,7 @@ export default function Platform({ user, profile, onAdminClick }) {
         toggleDark={() => setDarkMode(d => !d)}
         progress={readingProgress}
         user={user}
+        streak={streak}
         onAdminClick={onAdminClick}
       />
 
@@ -191,6 +197,7 @@ export default function Platform({ user, profile, onAdminClick }) {
             {activeTab === 'reading' && (
               <ChapterContent
                 chapter={chapters[currentChapter]}
+                chapterIndex={currentChapter}
                 hasNext={currentChapter < chapters.length - 1}
                 hasPrev={currentChapter > 0}
                 onNext={() => { setCurrentChapter(i => i + 1); handleChapterRead(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
@@ -230,29 +237,37 @@ export default function Platform({ user, profile, onAdminClick }) {
             {activeTab === 'news' && (
               <VibeNews />
             )}
+
+            {activeTab === 'prompts' && (
+              <PromptLibrary />
+            )}
           </div>
         </main>
 
         {/* Right panel (desktop) */}
         <div className="hidden lg:flex flex-col w-64 xl:w-72 shrink-0 fixed right-0 top-16 bottom-0 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] overflow-y-auto scrollbar-thin">
           <div className="flex border-b border-gray-100 dark:border-gray-700 shrink-0">
-            {['notes', 'ai'].map(t => (
+            {[
+              { id: 'notes', label: 'Anotações' },
+              { id: 'ai', label: 'Suporte IA' },
+              { id: 'saas', label: 'Meu SaaS' },
+            ].map(t => (
               <button
-                key={t}
-                onClick={() => setRightPanelTab(t)}
+                key={t.id}
+                onClick={() => setRightPanelTab(t.id)}
                 className={`flex-1 py-2.5 text-xs font-medium transition-colors ${
-                  rightPanelTab === t
+                  rightPanelTab === t.id
                     ? 'text-[#1B6B3A] dark:text-green-400 border-b-2 border-[#1B6B3A]'
                     : 'text-gray-500 dark:text-gray-400'
                 }`}
               >
-                {t === 'notes' ? 'Anotações' : 'Suporte IA'}
+                {t.label}
               </button>
             ))}
           </div>
 
           <div className="flex-1 p-3 overflow-y-auto scrollbar-thin">
-            {rightPanelTab === 'notes' ? (
+            {rightPanelTab === 'notes' && (
               <NotesPanel
                 chapterIndex={currentChapter}
                 notes={notes}
@@ -264,9 +279,9 @@ export default function Platform({ user, profile, onAdminClick }) {
                 noteCount={noteCount}
                 ideasCount={ideas.length}
               />
-            ) : (
-              <AISupportChat chapter={chapters[currentChapter]} />
             )}
+            {rightPanelTab === 'ai' && <AISupportChat chapter={chapters[currentChapter]} />}
+            {rightPanelTab === 'saas' && <MySaas />}
           </div>
         </div>
       </div>
