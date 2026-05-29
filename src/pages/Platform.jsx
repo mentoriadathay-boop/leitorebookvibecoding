@@ -268,14 +268,7 @@ export default function Platform({ user, profile, onAdminClick }) {
             )}
 
             {activeTab === 'news' && (
-              <VibeNews
-                user={user}
-                savedNews={savedNews}
-                onSaveNews={saveNews}
-                onUnsaveNews={unsaveNews}
-                isNewsSaved={isNewsSaved}
-                getSavedId={getSavedId}
-              />
+              <VibeNews />
             )}
 
             {activeTab === 'prompts' && (

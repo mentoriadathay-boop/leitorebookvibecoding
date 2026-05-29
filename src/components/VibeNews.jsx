@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { ExternalLink, RefreshCw, Newspaper, Clock, Bookmark } from 'lucide-react'
 import AISupportChat from './AISupportChat'
@@ -43,15 +43,13 @@ function ArticleCard({ article, newsDate, isSaved, savedId, onSave, onUnsave }) 
           <span className="text-[10px] text-gray-400 dark:text-gray-500">{article.source}</span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          {(onSave || onUnsave) && (
-            <button
-              onClick={handleBookmark}
-              title={isSaved ? 'Remover dos salvos' : 'Salvar notícia'}
-              className={`transition-colors ${isSaved ? 'text-[#C9A84C]' : 'text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300 hover:text-[#C9A84C]'}`}
-            >
-              <Bookmark size={13} className={isSaved ? 'fill-[#C9A84C]' : ''} />
-            </button>
-          )}
+          <button
+            onClick={handleBookmark}
+            title={isSaved ? 'Remover dos salvos' : 'Salvar notícia'}
+            className={`transition-colors ${isSaved ? 'text-[#C9A84C]' : 'text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300 hover:text-[#C9A84C]'}`}
+          >
+            <Bookmark size={13} className={isSaved ? 'fill-[#C9A84C]' : ''} />
+          </button>
           <ExternalLink size={13} className="text-gray-300 group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 shrink-0 transition-colors" />
         </div>
       </div>
@@ -63,11 +61,31 @@ function ArticleCard({ article, newsDate, isSaved, savedId, onSave, onUnsave }) 
   )
 }
 
-export default function VibeNews({ user, savedNews = [], onSaveNews, onUnsaveNews, isNewsSaved, getSavedId }) {
+export default function VibeNews() {
   const [news, setNews] = useState(null)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [view, setView] = useState('today')
+  const [userId, setUserId] = useState(null)
+  const [savedNews, setSavedNews] = useState([])
+
+  // Busca o usuário atual diretamente do Supabase
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUserId(session?.user?.id ?? null)
+    })
+  }, [])
+
+  // Busca notícias salvas quando o userId estiver disponível
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from('saved_news')
+      .select('*')
+      .eq('user_id', userId)
+      .order('saved_at', { ascending: false })
+      .then(({ data }) => { if (data) setSavedNews(data) })
+  }, [userId])
 
   const fetchNews = async () => {
     const now = new Date()
@@ -92,6 +110,30 @@ export default function VibeNews({ user, savedNews = [], onSaveNews, onUnsaveNew
     setRefreshing(true)
     fetchNews()
   }
+
+  const saveNews = useCallback(async (newsDate, article) => {
+    if (!userId) return
+    const { data } = await supabase.from('saved_news').insert({
+      user_id: userId,
+      news_date: newsDate,
+      article,
+    }).select().single()
+    if (data) setSavedNews(prev => [data, ...prev])
+  }, [userId])
+
+  const unsaveNews = useCallback(async (id) => {
+    if (!userId) return
+    setSavedNews(prev => prev.filter(n => n.id !== id))
+    await supabase.from('saved_news').delete().eq('id', id)
+  }, [userId])
+
+  const isNewsSaved = useCallback((articleTitle) => {
+    return savedNews.some(n => n.article?.title === articleTitle)
+  }, [savedNews])
+
+  const getSavedId = useCallback((articleTitle) => {
+    return savedNews.find(n => n.article?.title === articleTitle)?.id
+  }, [savedNews])
 
   const savedByDate = savedNews.reduce((acc, entry) => {
     const date = entry.news_date
@@ -142,41 +184,39 @@ export default function VibeNews({ user, savedNews = [], onSaveNews, onUnsaveNew
         )}
       </div>
 
-      {/* Sub-tabs (só para usuários logados) */}
-      {user && (
-        <div className="flex gap-1 border-b border-gray-200 dark:border-gray-700">
-          <button
-            onClick={() => setView('today')}
-            className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 -mb-px transition-all ${
-              view === 'today'
-                ? 'border-[#1B6B3A] text-[#1B6B3A] dark:text-green-400'
-                : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400'
-            }`}
-          >
-            <Newspaper size={12} />
-            Hoje
-          </button>
-          <button
-            onClick={() => setView('saved')}
-            className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 -mb-px transition-all ${
-              view === 'saved'
-                ? 'border-[#C9A84C] text-[#C9A84C]'
-                : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#C9A84C]'
-            }`}
-          >
-            <Bookmark
-              size={12}
-              className={savedNews.length > 0 ? 'fill-[#C9A84C] text-[#C9A84C]' : ''}
-            />
-            Notícias Salvas
-            {savedNews.length > 0 && (
-              <span className="bg-[#C9A84C] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold leading-none">
-                {savedNews.length}
-              </span>
-            )}
-          </button>
-        </div>
-      )}
+      {/* Sub-tabs */}
+      <div className="flex gap-1 border-b border-gray-200 dark:border-gray-700">
+        <button
+          onClick={() => setView('today')}
+          className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 -mb-px transition-all ${
+            view === 'today'
+              ? 'border-[#1B6B3A] text-[#1B6B3A] dark:text-green-400'
+              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400'
+          }`}
+        >
+          <Newspaper size={12} />
+          Hoje
+        </button>
+        <button
+          onClick={() => setView('saved')}
+          className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 -mb-px transition-all ${
+            view === 'saved'
+              ? 'border-[#C9A84C] text-[#C9A84C]'
+              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#C9A84C]'
+          }`}
+        >
+          <Bookmark
+            size={12}
+            className={savedNews.length > 0 ? 'fill-[#C9A84C] text-[#C9A84C]' : ''}
+          />
+          Notícias Salvas
+          {savedNews.length > 0 && (
+            <span className="bg-[#C9A84C] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold leading-none">
+              {savedNews.length}
+            </span>
+          )}
+        </button>
+      </div>
 
       {/* View: Notícias Salvas */}
       {view === 'saved' && (
@@ -207,8 +247,8 @@ export default function VibeNews({ user, savedNews = [], onSaveNews, onUnsaveNew
                       newsDate={entry.news_date}
                       isSaved={true}
                       savedId={entry.id}
-                      onSave={null}
-                      onUnsave={onUnsaveNews}
+                      onSave={saveNews}
+                      onUnsave={unsaveNews}
                     />
                   ))}
                 </div>
@@ -264,10 +304,10 @@ export default function VibeNews({ user, savedNews = [], onSaveNews, onUnsaveNew
                       key={i}
                       article={article}
                       newsDate={news.date}
-                      isSaved={isNewsSaved ? isNewsSaved(article.title) : false}
-                      savedId={getSavedId ? getSavedId(article.title) : null}
-                      onSave={onSaveNews}
-                      onUnsave={onUnsaveNews}
+                      isSaved={isNewsSaved(article.title)}
+                      savedId={getSavedId(article.title)}
+                      onSave={saveNews}
+                      onUnsave={unsaveNews}
                     />
                   ))}
                 </div>
@@ -277,6 +317,7 @@ export default function VibeNews({ user, savedNews = [], onSaveNews, onUnsaveNew
                 Curadoria gerada por IA · Atualiza todo dia às 7h (Brasília) · Verifique as fontes antes de compartilhar
               </p>
 
+              {/* Chat IA */}
               <div>
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
                   Aprofunde com a IA
