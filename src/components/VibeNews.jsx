@@ -46,7 +46,7 @@ function ArticleCard({ article, newsDate, isSaved, savedId, onSave, onUnsave }) 
             <button
               onClick={handleBookmark}
               title={isSaved ? 'Remover dos salvos' : 'Salvar notícia'}
-              className={`transition-colors ${isSaved ? 'text-[#C9A84C]' : 'text-gray-300 hover:text-[#C9A84C]'}`}
+              className={`transition-colors ${isSaved ? 'text-[#C9A84C]' : 'text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300 hover:text-[#C9A84C]'}`}
             >
               <Bookmark size={13} className={isSaved ? 'fill-[#C9A84C]' : ''} />
             </button>
