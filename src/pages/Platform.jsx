@@ -9,6 +9,7 @@ import AISupportChat from '../components/AISupportChat'
 import Checklist from '../components/Checklist'
 import RevenueCalculator from '../components/RevenueCalculator'
 import AIToolsHub from '../components/ai-tools/AIToolsHub'
+import ToolsSection from '../components/ToolsSection'
 import VibeNews from '../components/VibeNews'
 import PromptLibrary from '../components/PromptLibrary'
 import PDFReader from '../components/PDFReader'
@@ -349,6 +350,8 @@ export default function Platform({ user, profile, onAdminClick }) {
             {activeTab === 'generator' && <IdeaGenerator onSaveIdea={saveIdea} />}
 
             {activeTab === 'tools' && <AIToolsHub userId={user?.id} />}
+
+            {activeTab === 'ext-tools' && <ToolsSection />}
 
             {activeTab === 'checklist' && (
               <Checklist

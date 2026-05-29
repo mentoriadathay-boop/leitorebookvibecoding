@@ -1,4 +1,4 @@
-import { Newspaper, BookOpen, Lightbulb, Cpu, Wrench, FolderOpen, Layout, FileText, Users, CheckSquare, Calculator, MessageSquare, Zap, ExternalLink } from 'lucide-react'
+import { Newspaper, BookOpen, Lightbulb, Cpu, Map, Wrench, CheckSquare, Calculator, Zap, FileText, MessageSquare, Layout, FileText as FileText2, Users, FolderOpen, ExternalLink } from 'lucide-react'
 
 const WhatsAppIcon = ({ size = 14 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -6,69 +6,67 @@ const WhatsAppIcon = ({ size = 14 }) => (
   </svg>
 )
 
-const NAV_MAIN = [
-  { id: 'news',      label: 'Vibe News',       icon: Newspaper },
-  { id: 'reading',   label: 'Leitura',          icon: BookOpen },
-  { id: 'ideas',     label: 'Minhas Ideias',    icon: Lightbulb },
-  { id: 'generator', label: 'Gerador de Ideias',icon: Cpu },
-  { id: 'tools',     label: 'Ferramentas IA',   icon: Wrench },
-  { id: 'projects',  label: 'Projetos',         icon: FolderOpen, soon: true },
-  { id: 'templates', label: 'Templates',        icon: Layout,     soon: true },
-  { id: 'articles',  label: 'Artigos',          icon: FileText,   soon: true },
-  { id: 'community', label: 'Comunidade',       icon: Users,      soon: true },
+const NAV_ITEMS = [
+  { id: 'news',         label: 'Vibe News',        icon: Newspaper },
+  { id: 'reading',      label: 'Leitura',           icon: BookOpen },
+  { id: 'ideas',        label: 'Minhas Ideias',     icon: Lightbulb },
+  { id: 'generator',    label: 'Gerador de Ideias', icon: Cpu },
+  { id: 'tools',        label: 'Jornada SaaS',      icon: Map },
+  { id: 'checklist',    label: 'Checklist',         icon: CheckSquare },
+  { id: 'calculator',   label: 'Calculadora',       icon: Calculator },
+  { id: 'prompts',      label: 'Prompts',           icon: Zap },
+  { id: 'pdf',          label: 'Ler PDF',           icon: FileText },
+  { id: 'ai-support',   label: 'Suporte IA',        icon: MessageSquare },
+  { id: 'ext-tools',    label: 'Ferramentas',       icon: Wrench },
 ]
 
-const NAV_TOOLS = [
-  { id: 'checklist',   label: 'Checklist',   icon: CheckSquare },
-  { id: 'calculator',  label: 'Calculadora', icon: Calculator },
-  { id: 'ai-support',  label: 'Suporte IA',  icon: MessageSquare },
-  { id: 'prompts',     label: 'Prompts',     icon: Zap },
-  { id: 'pdf',         label: 'Ler PDF',     icon: FileText },
+const NAV_SOON = [
+  { id: 'templates',  label: 'Templates',   icon: Layout },
+  { id: 'articles',   label: 'Artigos',     icon: FileText2 },
+  { id: 'community',  label: 'Comunidade',  icon: Users },
+  { id: 'projects',   label: 'Projetos',    icon: FolderOpen },
 ]
 
 export default function NavSidebar({ activeTab, onNavigate, onClose }) {
-  const handleClick = (item) => {
-    if (item.soon) return
-    onNavigate(item.id)
+  const handleClick = (id) => {
+    onNavigate(id)
     onClose?.()
   }
 
-  const itemClass = (active, soon) =>
+  const itemClass = (active) =>
     `w-full flex items-center gap-3 px-4 py-2.5 text-left text-xs font-medium transition-colors ${
       active
         ? 'bg-[#E8F5EE] dark:bg-[#0F4A28]/30 text-[#0F4A28] dark:text-green-400'
-        : soon
-        ? 'text-gray-300 dark:text-gray-600 cursor-default'
         : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
     }`
+
+  const soonClass = 'w-full flex items-center gap-3 px-4 py-2.5 text-left text-xs font-medium text-gray-300 dark:text-gray-600 cursor-default'
 
   return (
     <aside className="w-full h-full bg-white dark:bg-[#1A1A1A] flex flex-col">
       <nav className="flex-1 overflow-y-auto scrollbar-thin py-2">
-        {NAV_MAIN.map(item => {
+        {NAV_ITEMS.map(item => {
           const Icon = item.icon
           return (
-            <button key={item.id} onClick={() => handleClick(item)} className={itemClass(activeTab === item.id, item.soon)}>
+            <button key={item.id} onClick={() => handleClick(item.id)} className={itemClass(activeTab === item.id)}>
               <Icon size={15} className="shrink-0" />
               <span className="flex-1 truncate">{item.label}</span>
-              {item.soon && (
-                <span className="text-[9px] bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide shrink-0">
-                  em breve
-                </span>
-              )}
             </button>
           )
         })}
 
         <div className="mx-4 my-2 border-t border-gray-100 dark:border-gray-700" />
 
-        {NAV_TOOLS.map(item => {
+        {NAV_SOON.map(item => {
           const Icon = item.icon
           return (
-            <button key={item.id} onClick={() => handleClick(item)} className={itemClass(activeTab === item.id, false)}>
+            <div key={item.id} className={soonClass}>
               <Icon size={15} className="shrink-0" />
-              {item.label}
-            </button>
+              <span className="flex-1 truncate">{item.label}</span>
+              <span className="text-[9px] bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide shrink-0">
+                em breve
+              </span>
+            </div>
           )
         })}
       </nav>

@@ -128,8 +128,8 @@ export default function AIToolsHub({ userId }) {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
-        <h2 className="font-playfair text-2xl font-bold text-gray-900 dark:text-white mb-1">Ferramentas IA</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">5 ferramentas que conversam entre si para validar, construir e escalar seu SaaS.</p>
+        <h2 className="font-playfair text-2xl font-bold text-gray-900 dark:text-white mb-1">Jornada SaaS</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400">5 passos que conversam entre si para validar, construir e escalar seu SaaS.</p>
       </div>
 
       {/* Project selector */}
