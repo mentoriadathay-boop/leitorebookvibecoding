@@ -16,7 +16,7 @@ function stripMarkdown(text) {
     .replace(/^#{1,6}\s/gm, '')
 }
 
-export default function AISupportChat({ chapter, initialMessage, placeholder }) {
+export default function AISupportChat({ chapter, initialMessage, placeholder, containerClass = 'h-64' }) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -80,7 +80,7 @@ Responda qualquer pergunta do usuário — sobre tecnologia, negócios, IA, prog
   }
 
   return (
-    <div className="bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-200 dark:border-gray-700 flex flex-col h-64">
+    <div className={`bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-200 dark:border-gray-700 flex flex-col ${containerClass}`}>
       <div className="flex items-center gap-2 px-3 py-2 border-b border-gray-100 dark:border-gray-700 shrink-0">
         <Bot size={14} className="text-[#1B6B3A]" />
         <span className="text-xs font-semibold text-gray-600 dark:text-gray-300">Suporte IA</span>

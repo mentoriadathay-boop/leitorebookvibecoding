@@ -47,22 +47,6 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
               <Shield size={12} /> Admin
             </button>
           )}
-          <a
-            href="https://thayanefidelis.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-red-600 hover:text-red-700 font-medium transition-colors"
-          >
-            Thayane Fidelis
-          </a>
-          <a
-            href="https://api.whatsapp.com/message/EQIUEI67M7U2N1?autoload=1&app_absent=0"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-xs bg-[#25D366] text-white px-3 py-1.5 rounded-full hover:bg-[#1ebe5d] transition-colors font-medium"
-          >
-            WhatsApp <WhatsAppIcon size={13} />
-          </a>
         </nav>
 
         {/* Actions */}
@@ -119,22 +103,6 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
       {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden bg-white dark:bg-[#1A1A1A] border-t border-gray-200 dark:border-gray-700 px-4 py-3 flex flex-col gap-2">
-          <a
-            href="https://thayanefidelis.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-red-600 font-medium py-2"
-          >
-            Thayane Fidelis
-          </a>
-          <a
-            href="https://api.whatsapp.com/message/EQIUEI67M7U2N1?autoload=1&app_absent=0"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm text-[#25D366] font-medium py-2"
-          >
-            WhatsApp <WhatsAppIcon size={15} />
-          </a>
           {user && (
             <button
               onClick={handleLogout}

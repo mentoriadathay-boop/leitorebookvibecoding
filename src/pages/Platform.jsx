@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { BookOpen, Lightbulb, Cpu, CheckSquare, Calculator, Wrench, Newspaper, Zap, FileText, Menu, X, PanelLeft, PanelRight, Maximize2, Minimize2 } from 'lucide-react'
+import { BookOpen, FileText, Menu, PanelLeft, PanelRight, Maximize2, Minimize2, ArrowLeft, Clock, CheckCircle2 } from 'lucide-react'
 import Header from '../components/Header'
+import NavSidebar from '../components/NavSidebar'
 import Sidebar from '../components/Sidebar'
 import ChapterContent from '../components/ChapterContent'
 import NotesPanel from '../components/NotesPanel'
@@ -14,36 +15,115 @@ import PDFReader from '../components/PDFReader'
 import MySaas from '../components/MySaas'
 import Onboarding from '../components/Onboarding'
 import IdeasSection from '../components/IdeasSection'
-import { useStreak } from '../hooks/useStreak'
 import IdeaGenerator from '../components/IdeaGenerator'
+import { useStreak } from '../hooks/useStreak'
 import { useChapters } from '../hooks/useChapters'
 import { useProgress } from '../hooks/useProgress'
 import { useNotes } from '../hooks/useNotes'
 import { useBookmarks } from '../hooks/useBookmarks'
 import { useChecklist } from '../hooks/useChecklist'
 import { useIdeas } from '../hooks/useIdeas'
-import { useSavedNews } from '../hooks/useSavedNews'
 
-const TABS = [
-  { id: 'reading', label: 'Leitura', icon: BookOpen },
-  { id: 'ideas', label: 'Minhas Ideias', icon: Lightbulb },
-  { id: 'generator', label: 'Gerador', icon: Cpu },
-  { id: 'checklist', label: 'Checklist', icon: CheckSquare },
-  { id: 'calculator', label: 'Calculadora', icon: Calculator },
-  { id: 'tools', label: 'Ferramentas', icon: Wrench },
-  { id: 'news', label: 'Vibe News', icon: Newspaper },
-  { id: 'prompts', label: 'Prompts', icon: Zap },
-  { id: 'pdf', label: 'Ler PDF', icon: FileText },
-]
+function ComingSoon({ label }) {
+  return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="text-center max-w-sm">
+        <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4">
+          <span className="text-3xl">🚧</span>
+        </div>
+        <h2 className="font-playfair text-xl font-bold text-gray-900 dark:text-white mb-2">{label}</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Esta seção está sendo preparada e chegará em breve.</p>
+      </div>
+    </div>
+  )
+}
+
+function ReadingHub({ chapters, currentChapter, completedCount, onEnterReading, onEnterPDF }) {
+  const total = chapters.length
+  const progress = total > 0 ? Math.round((completedCount / total) * 100) : 0
+  const chapter = chapters[currentChapter]
+
+  return (
+    <div className="max-w-2xl mx-auto space-y-6">
+      <div>
+        <h2 className="font-playfair text-2xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
+          <BookOpen size={22} className="text-[#1B6B3A] dark:text-green-400" />
+          Leitura
+        </h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Escolha como quer ler o ebook.</p>
+      </div>
+
+      {/* Continuar lendo */}
+      {chapter && (
+        <button
+          onClick={onEnterReading}
+          className="w-full text-left bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 p-5 hover:border-[#1B6B3A] dark:hover:border-green-600 hover:shadow-md transition-all group"
+        >
+          <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-2 flex items-center gap-1">
+            <Clock size={10} /> Continuar lendo
+          </p>
+          <h3 className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors mb-3 leading-snug">
+            {chapter.title}
+          </h3>
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{ width: `${progress}%`, background: 'linear-gradient(to right, #1B6B3A, #C9A84C)' }}
+              />
+            </div>
+            <span className="text-[10px] text-gray-400 shrink-0 flex items-center gap-1">
+              <CheckCircle2 size={10} /> {completedCount}/{total}
+            </span>
+          </div>
+        </button>
+      )}
+
+      {/* Dois cards */}
+      <div className="grid sm:grid-cols-2 gap-4">
+        <button
+          onClick={onEnterReading}
+          className="text-left bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:border-[#1B6B3A] dark:hover:border-green-600 hover:shadow-md transition-all group"
+        >
+          <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] dark:bg-[#0F4A28]/30 flex items-center justify-center mb-4">
+            <BookOpen size={18} className="text-[#1B6B3A] dark:text-green-400" />
+          </div>
+          <h3 className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors mb-1">
+            Leitura Interativa
+          </h3>
+          <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            Leia capítulo a capítulo com marcação de progresso, anotações e suporte IA.
+          </p>
+        </button>
+
+        <button
+          onClick={onEnterPDF}
+          className="text-left bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:border-[#1B6B3A] dark:hover:border-green-600 hover:shadow-md transition-all group"
+        >
+          <div className="w-10 h-10 rounded-xl bg-[#FDF6E3] dark:bg-yellow-900/20 flex items-center justify-center mb-4">
+            <FileText size={18} className="text-[#C9A84C]" />
+          </div>
+          <h3 className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors mb-1">
+            Ler em PDF
+          </h3>
+          <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            Acesse o ebook completo em PDF direto no navegador.
+          </p>
+        </button>
+      </div>
+    </div>
+  )
+}
 
 export default function Platform({ user, profile, onAdminClick }) {
-  const [activeTab, setActiveTab] = useState('reading')
+  const [activeTab, setActiveTab] = useState('news')
   const [currentChapter, setCurrentChapter] = useState(0)
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const [leftPanelOpen, setLeftPanelOpen] = useState(true)
-  const [rightPanelOpen, setRightPanelOpen] = useState(true)
+  const [rightPanelOpen, setRightPanelOpen] = useState(false)
   const [rightPanelTab, setRightPanelTab] = useState('notes')
+  const [readingMode, setReadingMode] = useState(false)
   const [focusMode, setFocusMode] = useState(false)
   const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem('welcomeSeen'))
 
@@ -54,25 +134,44 @@ export default function Platform({ user, profile, onAdminClick }) {
   const { bookmarks, toggleBookmark } = useBookmarks(user?.id)
   const { steps: checklistSteps, toggleStep } = useChecklist(user?.id)
   const { ideas, saveIdea, deleteIdea } = useIdeas(user?.id)
-  const { savedNews, saveNews, unsaveNews, isNewsSaved, getSavedId } = useSavedNews(user?.id)
 
-  useEffect(() => {
-    if (darkMode) document.documentElement.classList.add('dark')
-    else document.documentElement.classList.remove('dark')
-    localStorage.setItem('darkMode', darkMode)
-  }, [darkMode])
+  const readingProgress = chapters.length > 0 ? Math.round((completedCount / chapters.length) * 100) : 0
 
-  const readingProgress = Math.round((completedCount / chapters.length) * 100)
+  const handleNavigate = (tab) => {
+    setActiveTab(tab)
+    if (tab !== 'reading') setReadingMode(false)
+    setDrawerOpen(false)
+  }
 
   const handleChapterSelect = (idx) => {
     setCurrentChapter(idx)
+    setReadingMode(true)
     setActiveTab('reading')
-    setSidebarOpen(false)
+    setDrawerOpen(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleChapterRead = () => {
-    markCompleted(currentChapter)
+  const handleChapterRead = () => markCompleted(currentChapter)
+
+  const handleEnterReading = () => {
+    setReadingMode(true)
+    setActiveTab('reading')
+  }
+
+  const handleEnterPDF = () => {
+    setActiveTab('pdf')
+    setReadingMode(false)
+  }
+
+  const handleBackToMenu = () => setReadingMode(false)
+
+  const toggleFocusMode = () => {
+    setFocusMode(f => {
+      const next = !f
+      if (next) { setLeftPanelOpen(false); setRightPanelOpen(false) }
+      else setLeftPanelOpen(true)
+      return next
+    })
   }
 
   const dismissWelcome = () => {
@@ -80,18 +179,36 @@ export default function Platform({ user, profile, onAdminClick }) {
     setShowWelcome(false)
   }
 
-  const toggleFocusMode = () => {
-    setFocusMode(f => {
-      const next = !f
-      if (next) {
-        setLeftPanelOpen(false)
-        setRightPanelOpen(false)
-      } else {
-        setLeftPanelOpen(true)
-      }
-      return next
-    })
-  }
+  useEffect(() => {
+    if (darkMode) document.documentElement.classList.add('dark')
+    else document.documentElement.classList.remove('dark')
+    localStorage.setItem('darkMode', darkMode)
+  }, [darkMode])
+
+  const showChapterSidebar = activeTab === 'reading' && readingMode
+
+  const SidebarContent = ({ onClose }) => showChapterSidebar ? (
+    <div className="flex flex-col h-full bg-white dark:bg-[#1A1A1A]">
+      <button
+        onClick={() => { handleBackToMenu(); onClose?.() }}
+        className="flex items-center gap-2 px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 border-b border-gray-100 dark:border-gray-700 transition-colors shrink-0"
+      >
+        <ArrowLeft size={13} /> Voltar ao menu
+      </button>
+      <div className="flex-1 overflow-hidden">
+        <Sidebar
+          currentChapter={currentChapter}
+          onSelect={handleChapterSelect}
+          completed={completed}
+          onClose={onClose}
+          chapters={chapters}
+          chapterGroups={chapterGroups}
+        />
+      </div>
+    </div>
+  ) : (
+    <NavSidebar activeTab={activeTab} onNavigate={handleNavigate} onClose={onClose} />
+  )
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#111] flex flex-col">
@@ -104,96 +221,62 @@ export default function Platform({ user, profile, onAdminClick }) {
         onAdminClick={onAdminClick}
       />
 
-      {/* Onboarding */}
       {showWelcome && <Onboarding onClose={dismissWelcome} />}
 
-      {/* Mobile sidebar overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+      {/* Mobile overlay */}
+      {drawerOpen && (
+        <div className="fixed inset-0 z-40 bg-black/40 lg:hidden" onClick={() => setDrawerOpen(false)} />
       )}
 
       <div className="flex flex-1 pt-16">
-        {/* Desktop sidebar */}
-        <div className={`hidden lg:flex flex-col shrink-0 fixed left-0 top-16 bottom-0 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 overflow-hidden ${
-          leftPanelOpen ? 'w-56 xl:w-64' : 'w-0 border-r-0'
+        {/* Desktop left sidebar */}
+        <div className={`hidden lg:flex flex-col shrink-0 fixed left-0 top-16 bottom-0 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] transition-all duration-300 overflow-hidden ${
+          leftPanelOpen && !focusMode ? 'w-56 xl:w-64' : 'w-0 border-r-0'
         }`}>
-          <Sidebar
-            currentChapter={currentChapter}
-            onSelect={handleChapterSelect}
-            completed={completed}
-            chapters={chapters}
-            chapterGroups={chapterGroups}
-          />
+          <SidebarContent />
         </div>
 
-        {/* Mobile sidebar drawer */}
-        <div
-          className={`fixed left-0 top-16 bottom-0 z-50 w-72 transition-transform duration-300 lg:hidden border-r border-gray-200 dark:border-gray-700 shadow-xl ${
-            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
-        >
-          <Sidebar
-            currentChapter={currentChapter}
-            onSelect={handleChapterSelect}
-            completed={completed}
-            onClose={() => setSidebarOpen(false)}
-            chapters={chapters}
-            chapterGroups={chapterGroups}
-          />
+        {/* Mobile drawer */}
+        <div className={`fixed left-0 top-16 bottom-0 z-50 w-72 transition-transform duration-300 lg:hidden shadow-xl ${
+          drawerOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}>
+          <SidebarContent onClose={() => setDrawerOpen(false)} />
         </div>
 
         {/* Main content */}
-        <main className={`flex-1 transition-all duration-300 ${leftPanelOpen ? 'lg:ml-56 xl:ml-64' : 'lg:ml-0'}`}>
-          {/* Tab bar (desktop) */}
+        <main className={`flex-1 min-w-0 transition-all duration-300 ${leftPanelOpen && !focusMode ? 'lg:ml-56 xl:ml-64' : 'lg:ml-0'}`}>
+
+          {/* Sticky top bar */}
           {!focusMode && (
-            <div className="hidden lg:flex items-center gap-1 px-3 pt-4 pb-0 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] sticky top-16 z-30">
-              {/* Toggle sidebar esquerda */}
+            <div className="hidden lg:flex items-center gap-2 px-3 py-2 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] sticky top-16 z-30">
               <button
                 onClick={() => setLeftPanelOpen(o => !o)}
-                title={leftPanelOpen ? 'Recolher sumário' : 'Expandir sumário'}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0 mr-1"
+                title={leftPanelOpen ? 'Recolher menu' : 'Expandir menu'}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
               >
                 <PanelLeft size={15} />
               </button>
-
-              {/* Tabs — scroll horizontal para não quebrar */}
-              <div className="flex items-center gap-0.5 overflow-x-auto scrollbar-hide flex-1">
-                {TABS.map(tab => {
-                  const Icon = tab.icon
-                  return (
-                    <button
-                      key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
-                      className={`flex items-center gap-1.5 px-2.5 py-2.5 text-xs font-medium border-b-2 -mb-px transition-all whitespace-nowrap shrink-0 ${
-                        activeTab === tab.id
-                          ? 'border-[#1B6B3A] text-[#1B6B3A] dark:text-green-400'
-                          : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400'
-                      }`}
-                    >
-                      <Icon size={13} /> {tab.label}
-                    </button>
-                  )
-                })}
-              </div>
-
-              {/* Toggle painel direito */}
+              {showChapterSidebar && (
+                <button
+                  onClick={handleBackToMenu}
+                  className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 transition-colors"
+                >
+                  <ArrowLeft size={13} /> Leitura
+                </button>
+              )}
+              <div className="flex-1" />
               <button
                 onClick={() => setRightPanelOpen(o => !o)}
-                title={rightPanelOpen ? 'Recolher painel' : 'Expandir painel'}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0 ml-1"
+                title="Anotações / Meu SaaS"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
               >
                 <PanelRight size={15} />
               </button>
-
-              {/* Modo foco (só na aba de leitura) */}
-              {activeTab === 'reading' && (
+              {showChapterSidebar && (
                 <button
                   onClick={toggleFocusMode}
-                  title="Modo foco (tela cheia)"
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0 ml-1"
+                  title="Modo foco"
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
                 >
                   <Maximize2 size={15} />
                 </button>
@@ -201,25 +284,27 @@ export default function Platform({ user, profile, onAdminClick }) {
             </div>
           )}
 
-          <div className="p-4 md:p-6 pb-20 lg:pb-6">
+          <div className="p-4 md:p-6 pb-24 lg:pb-8">
             {/* Mobile menu button */}
             <div className="lg:hidden flex items-center gap-2 mb-4">
               <button
-                onClick={() => setSidebarOpen(true)}
-                className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 px-3 py-1.5 rounded-lg hover:border-[#1B6B3A]"
+                onClick={() => setDrawerOpen(true)}
+                className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 px-3 py-1.5 rounded-lg hover:border-[#1B6B3A] transition-colors"
               >
-                <Menu size={13} /> Sumário
+                <Menu size={13} /> Menu
               </button>
-              <span className="text-xs text-gray-400 dark:text-gray-500 font-playfair italic truncate">
-                {chapters[currentChapter]?.title}
-              </span>
+              {showChapterSidebar && (
+                <span className="text-xs text-gray-400 dark:text-gray-500 font-playfair italic truncate">
+                  {chapters[currentChapter]?.title}
+                </span>
+              )}
             </div>
 
-            {activeTab === 'reading' && focusMode && (
+            {/* Focus mode exit */}
+            {focusMode && showChapterSidebar && (
               <div className="hidden lg:flex justify-end mb-3">
                 <button
                   onClick={toggleFocusMode}
-                  title="Sair do modo foco"
                   className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 border border-gray-200 dark:border-gray-600 px-3 py-1.5 rounded-lg hover:border-[#1B6B3A] transition-colors"
                 >
                   <Minimize2 size={13} /> Sair do foco
@@ -227,7 +312,21 @@ export default function Platform({ user, profile, onAdminClick }) {
               </div>
             )}
 
-            {activeTab === 'reading' && (
+            {/* ── Content ── */}
+
+            {activeTab === 'news' && <VibeNews />}
+
+            {activeTab === 'reading' && !readingMode && (
+              <ReadingHub
+                chapters={chapters}
+                currentChapter={currentChapter}
+                completedCount={completedCount}
+                onEnterReading={handleEnterReading}
+                onEnterPDF={handleEnterPDF}
+              />
+            )}
+
+            {activeTab === 'reading' && readingMode && (
               <ChapterContent
                 chapter={chapters[currentChapter]}
                 chapterIndex={currentChapter}
@@ -241,47 +340,66 @@ export default function Platform({ user, profile, onAdminClick }) {
 
             {activeTab === 'ideas' && (
               <IdeasSection
-                ideas={ideas.filter(i => i.source !== 'generator' || true)}
+                ideas={ideas}
                 onSaveIdea={saveIdea}
                 onDeleteIdea={deleteIdea}
               />
             )}
 
-            {activeTab === 'generator' && (
-              <IdeaGenerator onSaveIdea={saveIdea} />
-            )}
+            {activeTab === 'generator' && <IdeaGenerator onSaveIdea={saveIdea} />}
+
+            {activeTab === 'tools' && <ToolsSection />}
 
             {activeTab === 'checklist' && (
               <Checklist
                 checklistSteps={checklistSteps}
                 onToggleStep={toggleStep}
-                onNavigate={(idx) => { handleChapterSelect(idx) }}
+                onNavigate={(idx) => handleChapterSelect(idx)}
               />
             )}
 
-            {activeTab === 'calculator' && (
-              <RevenueCalculator />
+            {activeTab === 'calculator' && <RevenueCalculator />}
+
+            {activeTab === 'ai-support' && (
+              <div className="max-w-2xl mx-auto space-y-4">
+                <h2 className="font-playfair text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                  Suporte IA
+                </h2>
+                <AISupportChat
+                  chapter={chapters[currentChapter]}
+                  containerClass="h-[600px]"
+                />
+              </div>
             )}
 
-            {activeTab === 'tools' && (
-              <ToolsSection />
-            )}
+            {activeTab === 'prompts' && <PromptLibrary />}
 
-            {activeTab === 'news' && (
-              <VibeNews />
-            )}
+            {activeTab === 'pdf' && <PDFReader />}
 
-            {activeTab === 'prompts' && (
-              <PromptLibrary />
-            )}
-
-            {activeTab === 'pdf' && (
-              <PDFReader />
+            {['projects', 'templates', 'articles', 'community'].includes(activeTab) && (
+              <ComingSoon label={
+                activeTab === 'projects' ? 'Projetos'
+                : activeTab === 'templates' ? 'Templates'
+                : activeTab === 'articles' ? 'Artigos'
+                : 'Comunidade'
+              } />
             )}
           </div>
+
+          {/* Page footer */}
+          <footer className="border-t border-gray-200 dark:border-gray-700 py-4 px-6 text-center">
+            <a
+              href="https://thayanefidelis.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 transition-colors"
+            >
+              thayanefidelis.com
+            </a>
+          </footer>
         </main>
 
-        {/* Backdrop do painel direito */}
+        {/* Right panel backdrop */}
         {rightPanelOpen && (
           <div
             className="hidden lg:block fixed inset-0 z-20 bg-black/20"
@@ -289,14 +407,10 @@ export default function Platform({ user, profile, onAdminClick }) {
           />
         )}
 
-        {/* Right panel (desktop) */}
+        {/* Right panel — Anotações + Meu SaaS */}
         <div className={`hidden lg:flex flex-col w-64 xl:w-80 shrink-0 fixed right-0 top-16 bottom-0 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] overflow-y-auto scrollbar-thin transition-transform duration-300 z-30 shadow-xl ${rightPanelOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="flex border-b border-gray-100 dark:border-gray-700 shrink-0">
-            {[
-              { id: 'notes', label: 'Anotações' },
-              { id: 'ai', label: 'Suporte IA' },
-              { id: 'saas', label: 'Meu SaaS' },
-            ].map(t => (
+            {[{ id: 'notes', label: 'Anotações' }, { id: 'saas', label: 'Meu SaaS' }].map(t => (
               <button
                 key={t.id}
                 onClick={() => setRightPanelTab(t.id)}
@@ -310,7 +424,6 @@ export default function Platform({ user, profile, onAdminClick }) {
               </button>
             ))}
           </div>
-
           <div className="flex-1 p-3 overflow-y-auto scrollbar-thin">
             {rightPanelTab === 'notes' && (
               <NotesPanel
@@ -325,31 +438,9 @@ export default function Platform({ user, profile, onAdminClick }) {
                 ideasCount={ideas.length}
               />
             )}
-            {rightPanelTab === 'ai' && <AISupportChat chapter={chapters[currentChapter]} />}
             {rightPanelTab === 'saas' && <MySaas />}
           </div>
         </div>
-      </div>
-
-      {/* Mobile bottom navigation */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white dark:bg-[#1A1A1A] border-t border-gray-200 dark:border-gray-700 flex">
-        {TABS.map(tab => {
-          const Icon = tab.icon
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex flex-col items-center py-2 gap-0.5 transition-colors ${
-                activeTab === tab.id
-                  ? 'text-[#1B6B3A] dark:text-green-400'
-                  : 'text-gray-400 dark:text-gray-500'
-              }`}
-            >
-              <Icon size={18} />
-              <span className="text-[9px] leading-tight">{tab.label}</span>
-            </button>
-          )
-        })}
       </div>
     </div>
   )
