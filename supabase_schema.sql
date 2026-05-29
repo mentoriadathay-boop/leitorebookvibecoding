@@ -63,3 +63,15 @@ create table if not exists saved_ideas (
 alter table saved_ideas enable row level security;
 create policy "Users manage own ideas" on saved_ideas
   for all using (auth.uid() = user_id);
+
+-- Saved news
+create table if not exists saved_news (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  news_date date not null,
+  article jsonb not null,
+  saved_at timestamptz default now()
+);
+alter table saved_news enable row level security;
+create policy "Users manage own saved news" on saved_news
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);

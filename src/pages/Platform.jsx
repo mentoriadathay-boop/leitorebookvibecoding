@@ -22,6 +22,7 @@ import { useNotes } from '../hooks/useNotes'
 import { useBookmarks } from '../hooks/useBookmarks'
 import { useChecklist } from '../hooks/useChecklist'
 import { useIdeas } from '../hooks/useIdeas'
+import { useSavedNews } from '../hooks/useSavedNews'
 
 const TABS = [
   { id: 'reading', label: 'Leitura', icon: BookOpen },
@@ -53,6 +54,7 @@ export default function Platform({ user, profile, onAdminClick }) {
   const { bookmarks, toggleBookmark } = useBookmarks(user?.id)
   const { steps: checklistSteps, toggleStep } = useChecklist(user?.id)
   const { ideas, saveIdea, deleteIdea } = useIdeas(user?.id)
+  const { savedNews, saveNews, unsaveNews, isNewsSaved, getSavedId } = useSavedNews(user?.id)
 
   useEffect(() => {
     if (darkMode) document.documentElement.classList.add('dark')
@@ -266,7 +268,14 @@ export default function Platform({ user, profile, onAdminClick }) {
             )}
 
             {activeTab === 'news' && (
-              <VibeNews />
+              <VibeNews
+                user={user}
+                savedNews={savedNews}
+                onSaveNews={saveNews}
+                onUnsaveNews={unsaveNews}
+                isNewsSaved={isNewsSaved}
+                getSavedId={getSavedId}
+              />
             )}
 
             {activeTab === 'prompts' && (
