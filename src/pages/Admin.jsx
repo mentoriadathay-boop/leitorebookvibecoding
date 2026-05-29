@@ -1,13 +1,15 @@
 import { useState } from 'react'
-import { LayoutDashboard, Users, BookOpen, ArrowLeft, Shield } from 'lucide-react'
+import { LayoutDashboard, Users, BookOpen, Bell, ArrowLeft, Shield } from 'lucide-react'
 import AdminDashboard from '../components/admin/AdminDashboard'
 import AdminUsers from '../components/admin/AdminUsers'
 import AdminContent from '../components/admin/AdminContent'
+import AdminNotifications from '../components/admin/AdminNotifications'
 
 const TABS = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'users', label: 'Usuários', icon: Users },
-  { id: 'content', label: 'Conteúdo', icon: BookOpen },
+  { id: 'dashboard',     label: 'Dashboard',     icon: LayoutDashboard },
+  { id: 'users',         label: 'Usuários',       icon: Users },
+  { id: 'content',       label: 'Conteúdo',       icon: BookOpen },
+  { id: 'notifications', label: 'Notificações',   icon: Bell },
 ]
 
 export default function Admin({ profile, onExit }) {
@@ -55,9 +57,10 @@ export default function Admin({ profile, onExit }) {
       </div>
 
       <main className="flex-1 p-4 md:p-6 max-w-7xl mx-auto w-full">
-        {tab === 'dashboard' && <AdminDashboard />}
-        {tab === 'users' && <AdminUsers />}
-        {tab === 'content' && <AdminContent />}
+        {tab === 'dashboard'     && <AdminDashboard />}
+        {tab === 'users'         && <AdminUsers />}
+        {tab === 'content'       && <AdminContent />}
+        {tab === 'notifications' && <AdminNotifications />}
       </main>
     </div>
   )

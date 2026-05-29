@@ -75,3 +75,37 @@ create table if not exists saved_news (
 alter table saved_news enable row level security;
 create policy "Users manage own saved news" on saved_news
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Platform notifications (admin publica, usuários leem)
+create table if not exists platform_notifications (
+  id          uuid primary key default gen_random_uuid(),
+  title       text not null,
+  body        text default '',
+  type        text not null default 'feature' check (type in ('feature', 'update', 'news', 'alert')),
+  published   boolean default true,
+  email_sent  boolean default false,
+  created_at  timestamptz default now()
+);
+alter table platform_notifications enable row level security;
+
+-- Todos os usuários autenticados podem ler notificações publicadas
+create policy "Authenticated read notifications" on platform_notifications
+  for select to authenticated using (published = true);
+
+-- Apenas admins podem criar/editar/deletar
+create policy "Admin manages notifications" on platform_notifications
+  for all to authenticated
+  using (exists (select 1 from profiles where id = auth.uid() and role = 'admin'))
+  with check (exists (select 1 from profiles where id = auth.uid() and role = 'admin'));
+
+-- Registro de notificações lidas por usuário
+create table if not exists notification_reads (
+  id              uuid primary key default gen_random_uuid(),
+  user_id         uuid references auth.users(id) on delete cascade not null,
+  notification_id uuid references platform_notifications(id) on delete cascade not null,
+  read_at         timestamptz default now(),
+  unique(user_id, notification_id)
+);
+alter table notification_reads enable row level security;
+create policy "Users manage own reads" on notification_reads
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);

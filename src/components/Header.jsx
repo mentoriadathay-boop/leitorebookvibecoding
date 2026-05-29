@@ -1,4 +1,5 @@
 import { Moon, Sun, Menu, X, Shield } from 'lucide-react'
+import NotificationBell from './NotificationBell'
 
 const WhatsAppIcon = ({ size = 14 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -72,6 +73,8 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
               🔥 {streak}
             </div>
           )}
+          <NotificationBell user={user} />
+
           <button
             onClick={toggleDark}
             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
