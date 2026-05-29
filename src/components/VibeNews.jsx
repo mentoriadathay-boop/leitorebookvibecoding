@@ -264,10 +264,10 @@ export default function VibeNews({ user, savedNews = [], onSaveNews, onUnsaveNew
                       key={i}
                       article={article}
                       newsDate={news.date}
-                      isSaved={user ? isNewsSaved(article.title) : false}
-                      savedId={user ? getSavedId(article.title) : null}
-                      onSave={user ? onSaveNews : null}
-                      onUnsave={user ? onUnsaveNews : null}
+                      isSaved={isNewsSaved ? isNewsSaved(article.title) : false}
+                      savedId={getSavedId ? getSavedId(article.title) : null}
+                      onSave={onSaveNews}
+                      onUnsave={onUnsaveNews}
                     />
                   ))}
                 </div>
