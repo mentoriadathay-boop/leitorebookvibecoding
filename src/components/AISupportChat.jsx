@@ -16,11 +16,11 @@ function stripMarkdown(text) {
     .replace(/^#{1,6}\s/gm, '')
 }
 
-export default function AISupportChat({ chapter }) {
+export default function AISupportChat({ chapter, initialMessage, placeholder }) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: 'Olá! Sou o assistente do ebook. Tire dúvidas sobre qualquer capítulo ou conceito.',
+      content: initialMessage || 'Olá! Sou o assistente do ebook. Tire dúvidas sobre qualquer capítulo ou conceito.',
     },
   ])
   const [input, setInput] = useState('')
@@ -114,7 +114,7 @@ Responda qualquer pergunta do usuário — sobre tecnologia, negócios, IA, prog
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKey}
-          placeholder="Sua dúvida..."
+          placeholder={placeholder || 'Sua dúvida...'}
           className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
         />
         <button

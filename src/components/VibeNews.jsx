@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { ExternalLink, RefreshCw, Newspaper, Clock, Bookmark } from 'lucide-react'
+import AISupportChat from './AISupportChat'
 
 const CATEGORIES = {
   ferramenta: { label: 'Ferramenta', color: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400' },
@@ -272,9 +273,20 @@ export default function VibeNews({ user, savedNews = [], onSaveNews, onUnsaveNew
                 </div>
               </div>
 
-              <p className="text-center text-[10px] text-gray-400 dark:text-gray-600 pb-4">
+              <p className="text-center text-[10px] text-gray-400 dark:text-gray-600">
                 Curadoria gerada por IA · Atualiza todo dia às 7h (Brasília) · Verifique as fontes antes de compartilhar
               </p>
+
+              <div>
+                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                  Aprofunde com a IA
+                </p>
+                <AISupportChat
+                  chapter={{ title: 'Vibe News', content: news.summary || '' }}
+                  initialMessage="Oi! Pode me perguntar sobre qualquer notícia de hoje, tendências de IA ou como aplicar isso no seu projeto."
+                  placeholder="Pergunte sobre as notícias de hoje..."
+                />
+              </div>
             </>
           )}
         </>
