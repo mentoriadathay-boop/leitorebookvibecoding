@@ -190,10 +190,10 @@ export default function Platform({ user, profile, onAdminClick }) {
   const showChapterSidebar = activeTab === 'reading' && readingMode
 
   const SidebarContent = ({ onClose }) => showChapterSidebar ? (
-    <div className="flex flex-col h-full bg-white dark:bg-[#1A1A1A]">
+    <div className="flex flex-col h-full bg-[#0a0a0a]">
       <button
         onClick={() => { handleBackToMenu(); onClose?.() }}
-        className="flex items-center gap-2 px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 border-b border-gray-100 dark:border-gray-700 transition-colors shrink-0"
+        className="flex items-center gap-2 px-4 py-3 text-xs font-medium text-white/60 hover:text-white border-b border-white/10 transition-colors shrink-0"
       >
         <ArrowLeft size={13} /> Voltar ao menu
       </button>
