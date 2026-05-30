@@ -51,7 +51,7 @@ export default function AdminVibeNews() {
         }
       )
       const json = await res.json()
-      setResult({ ok: res.ok, ...json })
+      setResult({ ok: res.ok, status: res.status, ...json })
       if (res.ok) load()
     } catch (e) {
       setResult({ ok: false, error: e.message })
@@ -111,7 +111,15 @@ export default function AdminVibeNews() {
                   ? `${result.message} (${result.date})`
                   : `✓ ${result.articles} artigos gerados para ${result.date}`
                 }</>
-            : <><AlertCircle size={15} className="shrink-0 mt-0.5" /> Erro: {result.error || result.detail || 'Falha ao gerar'}</>
+            : <div>
+                <div className="flex items-center gap-1.5 font-semibold mb-1">
+                  <AlertCircle size={15} className="shrink-0" />
+                  Erro (status {result.status})
+                </div>
+                <p className="text-xs opacity-80 font-mono break-all">
+                  {result.error || result.detail || result.preview || 'Falha desconhecida'}
+                </p>
+              </div>
           }
         </div>
       )}
