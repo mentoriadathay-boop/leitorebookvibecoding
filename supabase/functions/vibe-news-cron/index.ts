@@ -104,15 +104,18 @@ Inclua entre 5 e 8 artigos. Priorize fontes como TechCrunch, The Verge, Wired, V
   // ── Parse do JSON gerado pela Claude ───────────────────────────
   let newsData: { summary: string; articles: unknown[] }
   try {
-    const clean = textContent.replace(/```json|```/g, '').trim()
-    newsData = JSON.parse(clean)
+    // Tenta extrair JSON de qualquer lugar da resposta
+    const clean = textContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+    const jsonMatch = clean.match(/\{[\s\S]*\}/)
+    newsData = JSON.parse(jsonMatch ? jsonMatch[0] : clean)
   } catch (e) {
     console.error('[vibe-news-cron] Erro ao parsear JSON:', textContent.slice(0, 500))
     return new Response(JSON.stringify({ error: 'JSON inválido na resposta', raw: textContent.slice(0, 500) }), { status: 500 })
   }
 
-  if (!newsData.summary || !Array.isArray(newsData.articles)) {
-    return new Response(JSON.stringify({ error: 'Estrutura de dados inválida' }), { status: 500 })
+  if (!newsData.summary || !Array.isArray(newsData.articles) || newsData.articles.length === 0) {
+    console.error('[vibe-news-cron] Estrutura inválida:', JSON.stringify(newsData).slice(0, 200))
+    return new Response(JSON.stringify({ error: 'Estrutura de dados inválida ou sem artigos' }), { status: 500 })
   }
 
   // ── Salva no Supabase ───────────────────────────────────────────

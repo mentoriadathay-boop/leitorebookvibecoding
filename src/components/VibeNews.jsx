@@ -61,6 +61,13 @@ function ArticleCard({ article, newsDate, isSaved, savedId, onSave, onUnsave }) 
   )
 }
 
+function isToday(dateStr) {
+  const now = new Date()
+  const brasiliaOffset = -3 * 60
+  const brasiliaTime = new Date(now.getTime() + (brasiliaOffset + now.getTimezoneOffset()) * 60000)
+  return brasiliaTime.toISOString().split('T')[0] === dateStr
+}
+
 export default function VibeNews() {
   const [news, setNews] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -93,13 +100,29 @@ export default function VibeNews() {
     const brasiliaTime = new Date(now.getTime() + (brasiliaOffset + now.getTimezoneOffset()) * 60000)
     const today = brasiliaTime.toISOString().split('T')[0]
 
-    const { data } = await supabase
+    // Tenta buscar a notícia de hoje primeiro
+    const { data: todayData } = await supabase
       .from('vibe_news')
       .select('*')
       .eq('date', today)
       .single()
 
-    setNews(data || null)
+    if (todayData) {
+      setNews(todayData)
+      setLoading(false)
+      setRefreshing(false)
+      return
+    }
+
+    // Fallback: exibe a notícia mais recente disponível (máx 7 dias atrás)
+    const { data: latestData } = await supabase
+      .from('vibe_news')
+      .select('*')
+      .order('date', { ascending: false })
+      .limit(1)
+      .single()
+
+    setNews(latestData || null)
     setLoading(false)
     setRefreshing(false)
   }
@@ -296,6 +319,17 @@ export default function VibeNews() {
             </div>
           ) : (
             <>
+              {/* Banner quando não é de hoje */}
+              {!isToday(news.date) && (
+                <div className="flex items-center justify-between gap-3 px-4 py-2.5 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/40 rounded-xl text-xs text-yellow-700 dark:text-yellow-400">
+                  <span>⏳ As notícias de hoje ainda estão sendo preparadas — exibindo a edição mais recente.</span>
+                  <button onClick={handleRefresh} disabled={refreshing}
+                    className="flex items-center gap-1 shrink-0 font-semibold hover:underline disabled:opacity-50">
+                    <RefreshCw size={11} className={refreshing ? 'animate-spin' : ''} /> Atualizar
+                  </button>
+                </div>
+              )}
+
               {/* Resumo do dia */}
               <div className="bg-[#E8F5EE] dark:bg-[#0F4A28]/20 border-l-4 border-[#1B6B3A] rounded-xl p-5">
                 <div className="flex items-center justify-between mb-3">

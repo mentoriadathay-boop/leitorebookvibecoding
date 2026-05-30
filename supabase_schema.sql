@@ -110,6 +110,25 @@ alter table notification_reads enable row level security;
 create policy "Users manage own reads" on notification_reads
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
+-- ── Cron: gerar Vibe News todo dia às 7h Brasília (10h UTC) ────────────────
+-- Execute no SQL Editor do Supabase APÓS habilitar pg_cron e pg_net nas Extensions
+-- (Database → Extensions → pg_cron e pg_net)
+--
+-- select cron.schedule(
+--   'vibe-news-diario',
+--   '0 10 * * *',
+--   $$
+--   select net.http_post(
+--     url     := 'https://libjrqfzxfglztxbjfdb.supabase.co/functions/v1/vibe-news-cron',
+--     headers := jsonb_build_object('Content-Type','application/json','Authorization','Bearer SUA_SERVICE_ROLE_KEY'),
+--     body    := '{}'::jsonb
+--   ) as request_id;
+--   $$
+-- );
+--
+-- Para ver os jobs agendados: select * from cron.job;
+-- Para remover:               select cron.unschedule('vibe-news-diario');
+
 -- Newsletter / Email Marketing
 create table if not exists email_marketing (
   id          uuid primary key default gen_random_uuid(),
