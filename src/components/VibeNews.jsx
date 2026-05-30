@@ -239,18 +239,31 @@ export default function VibeNews() {
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 capitalize">
                   {fmtDate(date)}
                 </p>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {savedByDate[date].map(entry => (
-                    <ArticleCard
-                      key={entry.id}
-                      article={entry.article}
-                      newsDate={entry.news_date}
-                      isSaved={true}
-                      savedId={entry.id}
-                      onSave={saveNews}
-                      onUnsave={unsaveNews}
-                    />
+                <div className="space-y-3">
+                  {savedByDate[date].filter(e => e.article?.type === 'summary').map(entry => (
+                    <div key={entry.id} className="bg-[#E8F5EE] dark:bg-[#0F4A28]/20 border-l-4 border-[#1B6B3A] rounded-xl p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-xs font-bold text-[#1B6B3A] dark:text-green-400 uppercase tracking-wider">Resumo do dia</p>
+                        <button onClick={() => unsaveNews(entry.id)} title="Remover" className="text-[#C9A84C] hover:text-yellow-600 transition-colors">
+                          <Bookmark size={13} className="fill-[#C9A84C]" />
+                        </button>
+                      </div>
+                      <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line line-clamp-4">{entry.article.summary}</p>
+                    </div>
                   ))}
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {savedByDate[date].filter(e => e.article?.type !== 'summary').map(entry => (
+                      <ArticleCard
+                        key={entry.id}
+                        article={entry.article}
+                        newsDate={entry.news_date}
+                        isSaved={true}
+                        savedId={entry.id}
+                        onSave={saveNews}
+                        onUnsave={unsaveNews}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             ))
@@ -285,9 +298,22 @@ export default function VibeNews() {
             <>
               {/* Resumo do dia */}
               <div className="bg-[#E8F5EE] dark:bg-[#0F4A28]/20 border-l-4 border-[#1B6B3A] rounded-xl p-5">
-                <p className="text-xs font-bold text-[#1B6B3A] dark:text-green-400 uppercase tracking-wider mb-3">
-                  Resumo do dia
-                </p>
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-xs font-bold text-[#1B6B3A] dark:text-green-400 uppercase tracking-wider">
+                    Resumo do dia
+                  </p>
+                  <button
+                    onClick={() => {
+                      const summaryTitle = `Resumo — ${news.date}`
+                      if (isNewsSaved(summaryTitle)) unsaveNews(getSavedId(summaryTitle))
+                      else saveNews(news.date, { type: 'summary', title: summaryTitle, summary: news.summary, source: 'Vibe News', category: 'mercado' })
+                    }}
+                    title={isNewsSaved(`Resumo — ${news.date}`) ? 'Remover dos salvos' : 'Salvar resumo'}
+                    className={`transition-colors ${isNewsSaved(`Resumo — ${news.date}`) ? 'text-[#C9A84C]' : 'text-gray-400 hover:text-[#C9A84C]'}`}
+                  >
+                    <Bookmark size={14} className={isNewsSaved(`Resumo — ${news.date}`) ? 'fill-[#C9A84C]' : ''} />
+                  </button>
+                </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
                   {news.summary}
                 </p>
