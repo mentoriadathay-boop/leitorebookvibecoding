@@ -11,7 +11,7 @@ export default function Sidebar({ currentChapter, onSelect, completed, onClose, 
 
   return (
     <>
-      <aside className="w-full h-full overflow-y-auto scrollbar-thin bg-[#0a0a0a] flex flex-col">
+      <aside className="w-full h-full overflow-y-auto scrollbar-thin bg-[#FAFAFA] dark:bg-[#111] flex flex-col">
 
         {/* Capa do ebook */}
         <div className="p-3 border-b border-white/10">

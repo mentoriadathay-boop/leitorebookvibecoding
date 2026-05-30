@@ -17,7 +17,7 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-[#1A1A1A] border-b border-gray-200 dark:border-gray-700 shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#B80E02] shadow-md">
       <div className="flex items-center justify-between px-4 h-14">
         {/* Logo + Brand */}
         <a
@@ -26,14 +26,14 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
           rel="noopener noreferrer"
           className="flex items-center gap-2 shrink-0"
         >
-          <div className="w-8 h-8 rounded-full bg-[#0F4A28] flex items-center justify-center text-white font-playfair font-bold text-sm">
+          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white font-playfair font-bold text-sm border border-white/30">
             T
           </div>
           <div className="hidden sm:block">
-            <div className="font-playfair font-bold text-[#0F4A28] dark:text-green-400 text-sm leading-tight">
+            <div className="font-playfair font-bold text-white text-sm leading-tight">
               Hub Vibe Coding
             </div>
-            <div className="text-[10px] text-gray-500 dark:text-gray-400 leading-tight">
+            <div className="text-[10px] text-white/70 leading-tight">
               TFA Soluções com IA
             </div>
           </div>
@@ -43,7 +43,7 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
         <nav className="hidden md:flex items-center gap-2">
           {onAdminClick && (
             <button onClick={onAdminClick}
-              className="flex items-center gap-1.5 text-xs bg-[#0F4A28] hover:bg-[#1B6B3A] text-white px-3 py-1.5 rounded-full transition-colors font-medium">
+              className="flex items-center gap-1.5 text-xs bg-white/20 hover:bg-white/30 text-white border border-white/30 px-3 py-1.5 rounded-full transition-colors font-medium">
               <Shield size={12} /> Admin
             </button>
           )}
@@ -53,7 +53,7 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
         <div className="flex items-center gap-2">
           {streak > 0 && (
             <div title={`${streak} dia${streak !== 1 ? 's' : ''} seguido${streak !== 1 ? 's' : ''} de leitura`}
-              className="hidden sm:flex items-center gap-1 text-xs bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 px-2.5 py-1 rounded-full border border-orange-200 dark:border-orange-800/40 font-semibold">
+              className="hidden sm:flex items-center gap-1 text-xs bg-white/20 text-white px-2.5 py-1 rounded-full border border-white/30 font-semibold">
               🔥 {streak}
             </div>
           )}
@@ -61,27 +61,27 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
 
           <button
             onClick={toggleDark}
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            className="p-2 rounded-full hover:bg-white/20 transition-colors"
             aria-label="Alternar tema"
           >
             {darkMode ? (
-              <Sun size={16} className="text-yellow-400" />
+              <Sun size={16} className="text-white" />
             ) : (
-              <Moon size={16} className="text-gray-500" />
+              <Moon size={16} className="text-white" />
             )}
           </button>
 
           {user && (
             <button
               onClick={handleLogout}
-              className="hidden sm:block text-xs text-gray-500 dark:text-gray-400 hover:text-red-600 transition-colors px-2 py-1"
+              className="hidden sm:block text-xs text-white/80 hover:text-white transition-colors px-2 py-1"
             >
               Sair
             </button>
           )}
 
           <button
-            className="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            className="md:hidden p-2 rounded-full hover:bg-white/20 transition-colors text-white"
             onClick={() => { setMenuOpen(!menuOpen); onMenuToggle?.(!menuOpen) }}
           >
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -90,13 +90,10 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
       </div>
 
       {/* Progress bar */}
-      <div className="h-0.5 bg-gray-100 dark:bg-gray-800">
+      <div className="h-0.5 bg-white/20">
         <div
           className="h-full transition-all duration-500"
-          style={{
-            width: `${progress}%`,
-            background: 'linear-gradient(to right, #1B6B3A, #C9A84C)',
-          }}
+          style={{ width: `${progress}%`, background: 'linear-gradient(to right, #ffffff, #C9A84C)' }}
         />
       </div>
 

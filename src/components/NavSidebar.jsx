@@ -18,7 +18,7 @@ const NAV_ITEMS = [
   { id: 'pdf',          label: 'Ler PDF',           icon: FileText },
   { id: 'ai-support',   label: 'Suporte IA',        icon: MessageSquare },
   { id: 'ext-tools',    label: 'Ferramentas',       icon: Wrench },
-  { id: 'email',        label: 'Newsletter',         icon: Mail },
+  { id: 'email',        label: 'Newsletter',        icon: Mail },
 ]
 
 const NAV_SOON = [
@@ -34,37 +34,38 @@ export default function NavSidebar({ activeTab, onNavigate, onClose }) {
     onClose?.()
   }
 
-  const itemClass = (active) =>
-    `w-full flex items-center gap-3 px-4 py-2.5 text-left text-xs font-medium transition-colors ${
-      active
-        ? 'bg-white/15 text-white font-semibold'
-        : 'text-white/70 hover:bg-white/10 hover:text-white'
-    }`
-
-  const soonClass = 'w-full flex items-center gap-3 px-4 py-2.5 text-left text-xs font-medium text-white/25 cursor-default'
-
   return (
-    <aside className="w-full h-full bg-[#0a0a0a] flex flex-col">
-      <nav className="flex-1 overflow-y-auto scrollbar-thin py-2">
+    <aside className="w-full h-full bg-[#FAFAFA] dark:bg-[#111] flex flex-col border-r border-gray-200 dark:border-gray-800">
+      <nav className="flex-1 overflow-y-auto scrollbar-thin py-2 px-2 space-y-1">
         {NAV_ITEMS.map(item => {
           const Icon = item.icon
+          const active = activeTab === item.id
           return (
-            <button key={item.id} onClick={() => handleClick(item.id)} className={itemClass(activeTab === item.id)}>
+            <button
+              key={item.id}
+              onClick={() => handleClick(item.id)}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 text-left text-xs font-medium rounded-lg border transition-all ${
+                active
+                  ? 'bg-[#B80E02] border-[#B80E02] text-white shadow-sm'
+                  : 'bg-white dark:bg-[#1A1A1A] border-[#B80E02]/20 dark:border-[#B80E02]/20 text-gray-700 dark:text-gray-300 hover:border-[#B80E02]/60 hover:bg-red-50 dark:hover:bg-[#B80E02]/10 hover:text-[#B80E02] dark:hover:text-red-400'
+              }`}
+            >
               <Icon size={15} className="shrink-0" />
               <span className="flex-1 truncate">{item.label}</span>
             </button>
           )
         })}
 
-        <div className="mx-4 my-2 border-t border-white/10" />
+        <div className="mx-1 my-2 border-t border-gray-200 dark:border-gray-700" />
 
         {NAV_SOON.map(item => {
           const Icon = item.icon
           return (
-            <div key={item.id} className={soonClass}>
+            <div key={item.id}
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium rounded-lg border border-dashed border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600 cursor-default bg-white dark:bg-[#1A1A1A]">
               <Icon size={15} className="shrink-0" />
               <span className="flex-1 truncate">{item.label}</span>
-              <span className="text-[9px] bg-white/10 text-white/40 px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide shrink-0">
+              <span className="text-[9px] bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide shrink-0">
                 em breve
               </span>
             </div>
@@ -72,7 +73,7 @@ export default function NavSidebar({ activeTab, onNavigate, onClose }) {
         })}
       </nav>
 
-      <div className="p-3 border-t border-white/10 space-y-2 shrink-0">
+      <div className="p-3 border-t border-gray-200 dark:border-gray-700 space-y-2 shrink-0 bg-[#FAFAFA] dark:bg-[#111]">
         <a
           href="https://api.whatsapp.com/message/EQIUEI67M7U2N1?autoload=1&app_absent=0"
           target="_blank"
@@ -86,7 +87,7 @@ export default function NavSidebar({ activeTab, onNavigate, onClose }) {
           href="https://thayanefidelis.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-1 text-[10px] text-white/40 hover:text-white transition-colors py-1"
+          className="flex items-center justify-center gap-1 text-[10px] text-gray-400 hover:text-[#B80E02] dark:hover:text-red-400 transition-colors py-1"
         >
           thayanefidelis.com <ExternalLink size={9} />
         </a>

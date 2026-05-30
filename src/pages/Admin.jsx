@@ -1,17 +1,19 @@
 import { useState } from 'react'
-import { LayoutDashboard, Users, BookOpen, Bell, Mail, ArrowLeft, Shield } from 'lucide-react'
+import { LayoutDashboard, Users, BookOpen, Bell, Mail, Newspaper, ArrowLeft, Shield } from 'lucide-react'
 import AdminDashboard from '../components/admin/AdminDashboard'
 import AdminUsers from '../components/admin/AdminUsers'
 import AdminContent from '../components/admin/AdminContent'
 import AdminNotifications from '../components/admin/AdminNotifications'
 import AdminEmailMarketing from '../components/admin/AdminEmailMarketing'
+import AdminVibeNews from '../components/admin/AdminVibeNews'
 
 const TABS = [
   { id: 'dashboard',      label: 'Dashboard',       icon: LayoutDashboard },
   { id: 'users',          label: 'Usuários',         icon: Users },
   { id: 'content',        label: 'Conteúdo',         icon: BookOpen },
   { id: 'notifications',  label: 'Notificações',     icon: Bell },
-  { id: 'email',          label: 'Newsletter',        icon: Mail },
+  { id: 'email',          label: 'Newsletter',       icon: Mail },
+  { id: 'vibenews',       label: 'Vibe News',        icon: Newspaper },
 ]
 
 export default function Admin({ profile, onExit }) {
@@ -64,6 +66,7 @@ export default function Admin({ profile, onExit }) {
         {tab === 'content'       && <AdminContent />}
         {tab === 'notifications' && <AdminNotifications />}
         {tab === 'email'         && <AdminEmailMarketing />}
+        {tab === 'vibenews'      && <AdminVibeNews />}
       </main>
     </div>
   )
