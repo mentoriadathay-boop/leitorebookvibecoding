@@ -38,21 +38,16 @@ export default function AdminVibeNews() {
     setGenerating(true)
     setResult(null)
     try {
-      const session = (await supabase.auth.getSession()).data.session
-      const res = await fetch(
-        'https://libjrqfzxfglztxbjfdb.supabase.co/functions/v1/vibe-news-cron',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session?.access_token}`,
-          },
-          body: '{}',
-        }
-      )
-      const json = await res.json()
-      setResult({ ok: res.ok, status: res.status, ...json })
-      if (res.ok) load()
+      const { data, error } = await supabase.functions.invoke('vibe-news-cron', {
+        method: 'POST',
+        body: {},
+      })
+      if (error) {
+        setResult({ ok: false, error: error.message || JSON.stringify(error) })
+      } else {
+        setResult({ ok: !data?.error, ...data })
+        if (!data?.error) load()
+      }
     } catch (e) {
       setResult({ ok: false, error: e.message })
     } finally {
