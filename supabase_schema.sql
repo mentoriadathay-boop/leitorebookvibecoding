@@ -109,3 +109,24 @@ create table if not exists notification_reads (
 alter table notification_reads enable row level security;
 create policy "Users manage own reads" on notification_reads
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Newsletter / Email Marketing
+create table if not exists email_marketing (
+  id          uuid primary key default gen_random_uuid(),
+  title       text not null,
+  subject     text not null,
+  body        text not null,
+  category    text not null default 'newsletter',
+  published   boolean default true,
+  sent        boolean default false,
+  sent_at     timestamptz,
+  sent_count  integer default 0,
+  created_at  timestamptz default now()
+);
+alter table email_marketing enable row level security;
+create policy "Users read published emails" on email_marketing
+  for select to authenticated using (published = true);
+create policy "Admins manage emails" on email_marketing
+  for all to authenticated
+  using (exists (select 1 from profiles where id = auth.uid() and role = 'admin'))
+  with check (exists (select 1 from profiles where id = auth.uid() and role = 'admin'));
