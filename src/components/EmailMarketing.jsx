@@ -49,7 +49,7 @@ export default function EmailMarketing() {
       <div>
         <h2 className="font-playfair text-2xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
           <Mail size={22} className="text-[#1B6B3A] dark:text-green-400" />
-          Email Marketing
+          Newsletter
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Arquivo dos emails enviados para a audiência — conteúdo, bastidores e estratégias.

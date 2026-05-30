@@ -89,7 +89,7 @@ export default function AdminEmailMarketing() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <Mail size={18} className="text-[#1B6B3A]" /> Email Marketing
+            <Mail size={18} className="text-[#1B6B3A]" /> Newsletter
           </h2>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
             Publique aqui os emails enviados para sua audiência — ficam visíveis na plataforma para os alunos.

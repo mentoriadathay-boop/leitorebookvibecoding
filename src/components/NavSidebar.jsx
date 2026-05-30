@@ -18,7 +18,7 @@ const NAV_ITEMS = [
   { id: 'pdf',          label: 'Ler PDF',           icon: FileText },
   { id: 'ai-support',   label: 'Suporte IA',        icon: MessageSquare },
   { id: 'ext-tools',    label: 'Ferramentas',       icon: Wrench },
-  { id: 'email',        label: 'Email Marketing',   icon: Mail },
+  { id: 'email',        label: 'Newsletter',         icon: Mail },
 ]
 
 const NAV_SOON = [

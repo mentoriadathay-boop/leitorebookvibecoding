@@ -11,7 +11,7 @@ const TABS = [
   { id: 'users',          label: 'Usuários',         icon: Users },
   { id: 'content',        label: 'Conteúdo',         icon: BookOpen },
   { id: 'notifications',  label: 'Notificações',     icon: Bell },
-  { id: 'email',          label: 'Email Marketing',  icon: Mail },
+  { id: 'email',          label: 'Newsletter',        icon: Mail },
 ]
 
 export default function Admin({ profile, onExit }) {
