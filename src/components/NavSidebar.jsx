@@ -73,24 +73,27 @@ export default function NavSidebar({ activeTab, onNavigate, onClose }) {
         })}
       </nav>
 
-      <div className="p-3 border-t border-gray-200 dark:border-gray-700 space-y-2 shrink-0 bg-[#FAFAFA] dark:bg-[#111]">
-        <a
-          href="https://api.whatsapp.com/message/EQIUEI67M7U2N1?autoload=1&app_absent=0"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 w-full py-2 px-3 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-xs font-semibold rounded-xl transition-colors"
-        >
-          <WhatsAppIcon size={13} />
-          WhatsApp / Suporte
-        </a>
-        <a
-          href="https://thayanefidelis.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-1 text-[10px] text-gray-400 hover:text-[#B80E02] dark:hover:text-red-400 transition-colors py-1"
-        >
-          thayanefidelis.com <ExternalLink size={9} />
-        </a>
+      <div className="px-3 py-2.5 border-t border-gray-200 dark:border-gray-700 shrink-0 bg-[#FAFAFA] dark:bg-[#111]">
+        <div className="flex items-center justify-center gap-3">
+          <a
+            href="https://api.whatsapp.com/message/EQIUEI67M7U2N1?autoload=1&app_absent=0"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Suporte WhatsApp"
+            className="text-[#25D366] hover:text-[#1ebe5d] transition-colors"
+          >
+            <WhatsAppIcon size={16} />
+          </a>
+          <span className="text-gray-300 dark:text-gray-600">·</span>
+          <a
+            href="https://thayanefidelis.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-[#B80E02] dark:hover:text-red-400 transition-colors"
+          >
+            thayanefidelis.com <ExternalLink size={9} />
+          </a>
+        </div>
       </div>
     </aside>
   )

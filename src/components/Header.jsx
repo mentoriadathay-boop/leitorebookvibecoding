@@ -39,16 +39,6 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
           </div>
         </a>
 
-        {/* Nav links (desktop) */}
-        <nav className="hidden md:flex items-center gap-2">
-          {onAdminClick && (
-            <button onClick={onAdminClick}
-              className="flex items-center gap-1.5 text-xs bg-white/20 hover:bg-white/30 text-white border border-white/30 px-3 py-1.5 rounded-full transition-colors font-medium">
-              <Shield size={12} /> Admin
-            </button>
-          )}
-        </nav>
-
         {/* Actions */}
         <div className="flex items-center gap-2">
           {streak > 0 && (
@@ -70,6 +60,13 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
               <Moon size={16} className="text-white" />
             )}
           </button>
+
+          {onAdminClick && (
+            <button onClick={onAdminClick}
+              className="hidden sm:flex items-center gap-1.5 text-xs bg-white/20 hover:bg-white/30 text-white border border-white/30 px-3 py-1.5 rounded-full transition-colors font-medium">
+              <Shield size={12} /> Admin
+            </button>
+          )}
 
           {user && (
             <button
