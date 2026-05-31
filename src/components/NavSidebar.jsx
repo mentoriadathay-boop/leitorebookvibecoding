@@ -8,7 +8,7 @@ const WhatsAppIcon = ({ size = 14 }) => (
 
 const NAV_ITEMS = [
   { id: 'news',         label: 'Vibe News',        icon: Newspaper },
-  { id: 'reading',      label: 'Leitura',           icon: BookOpen },
+  { id: 'reading',      label: 'Ebooks',            icon: BookOpen },
   { id: 'ideas',        label: 'Minhas Ideias',     icon: Lightbulb },
   { id: 'generator',    label: 'Gerador de Ideias', icon: Cpu },
   { id: 'tools',        label: 'Jornada SaaS',      icon: Map },
