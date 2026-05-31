@@ -50,68 +50,87 @@ function ReadingHub({ chapters, currentChapter, completedCount, onEnterReading, 
       <div>
         <h2 className="font-playfair text-2xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
           <BookOpen size={22} className="text-[#1B6B3A] dark:text-green-400" />
-          Leitura
+          Ebooks
         </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Escolha como quer ler o ebook.</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Selecione um ebook para começar ou continuar.</p>
       </div>
 
-      {/* Continuar lendo */}
-      {chapter && (
-        <button
-          onClick={onEnterReading}
-          className="w-full text-left bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 p-5 hover:border-[#1B6B3A] dark:hover:border-green-600 hover:shadow-md transition-all group"
-        >
-          <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-2 flex items-center gap-1">
-            <Clock size={10} /> Continuar lendo
-          </p>
-          <h3 className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors mb-3 leading-snug">
-            {chapter.title}
-          </h3>
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all"
-                style={{ width: `${progress}%`, background: 'linear-gradient(to right, #1B6B3A, #C9A84C)' }}
-              />
+      {/* ── Ebook: 20 Passos ── */}
+      <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+        {/* Header do ebook — capa + título */}
+        <div className="flex items-center gap-4 p-5 border-b border-gray-100 dark:border-gray-700">
+          <img
+            src="/ebook-cover.png"
+            alt="Capa do Ebook 20 Passos"
+            className="w-16 h-20 object-cover rounded-xl shadow-md shrink-0"
+            onError={e => { e.target.style.display = 'none' }}
+          />
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-1">Ebook</p>
+            <h3 className="font-playfair font-bold text-sm text-gray-900 dark:text-white leading-snug mb-1">
+              20 Passos para Criar seu App SaaS com Vibe Coding
+            </h3>
+            <p className="text-[10px] text-gray-400 leading-snug">Do Planejamento à Monetização sem Frustração</p>
+
+            {/* Progresso */}
+            {total > 0 && (
+              <div className="flex items-center gap-2 mt-2">
+                <div className="flex-1 h-1 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                  <div className="h-full rounded-full transition-all"
+                    style={{ width: `${progress}%`, background: 'linear-gradient(to right, #1B6B3A, #C9A84C)' }} />
+                </div>
+                <span className="text-[10px] text-gray-400 shrink-0">{completedCount}/{total}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Continuar lendo */}
+        {chapter && (
+          <button onClick={onEnterReading}
+            className="w-full text-left px-5 py-3 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
+            <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-0.5 flex items-center gap-1">
+              <Clock size={9} /> Continuar lendo
+            </p>
+            <p className="text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors truncate">
+              {chapter.title}
+            </p>
+          </button>
+        )}
+
+        {/* Opções */}
+        <div className="grid sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700">
+          <button onClick={onEnterReading}
+            className="flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group text-left">
+            <div className="w-9 h-9 rounded-xl bg-[#E8F5EE] dark:bg-[#0F4A28]/30 flex items-center justify-center shrink-0">
+              <BookOpen size={16} className="text-[#1B6B3A] dark:text-green-400" />
             </div>
-            <span className="text-[10px] text-gray-400 shrink-0 flex items-center gap-1">
-              <CheckCircle2 size={10} /> {completedCount}/{total}
-            </span>
-          </div>
-        </button>
-      )}
+            <div>
+              <p className="text-xs font-semibold text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors">
+                Leitura Interativa
+              </p>
+              <p className="text-[10px] text-gray-400 leading-tight">Progresso, anotações e IA</p>
+            </div>
+          </button>
 
-      {/* Dois cards */}
-      <div className="grid sm:grid-cols-2 gap-4">
-        <button
-          onClick={onEnterReading}
-          className="text-left bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:border-[#1B6B3A] dark:hover:border-green-600 hover:shadow-md transition-all group"
-        >
-          <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] dark:bg-[#0F4A28]/30 flex items-center justify-center mb-4">
-            <BookOpen size={18} className="text-[#1B6B3A] dark:text-green-400" />
-          </div>
-          <h3 className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors mb-1">
-            Leitura Interativa
-          </h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-            Leia capítulo a capítulo com marcação de progresso, anotações e suporte IA.
-          </p>
-        </button>
+          <button onClick={onEnterPDF}
+            className="flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group text-left">
+            <div className="w-9 h-9 rounded-xl bg-[#FDF6E3] dark:bg-yellow-900/20 flex items-center justify-center shrink-0">
+              <FileText size={16} className="text-[#C9A84C]" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors">
+                Ler em PDF
+              </p>
+              <p className="text-[10px] text-gray-400 leading-tight">Versão completa em PDF</p>
+            </div>
+          </button>
+        </div>
+      </div>
 
-        <button
-          onClick={onEnterPDF}
-          className="text-left bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:border-[#1B6B3A] dark:hover:border-green-600 hover:shadow-md transition-all group"
-        >
-          <div className="w-10 h-10 rounded-xl bg-[#FDF6E3] dark:bg-yellow-900/20 flex items-center justify-center mb-4">
-            <FileText size={18} className="text-[#C9A84C]" />
-          </div>
-          <h3 className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors mb-1">
-            Ler em PDF
-          </h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-            Acesse o ebook completo em PDF direto no navegador.
-          </p>
-        </button>
+      {/* Placeholder para futuros ebooks */}
+      <div className="text-center py-6 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-2xl">
+        <p className="text-xs text-gray-400 dark:text-gray-500">Mais ebooks em breve</p>
       </div>
     </div>
   )
