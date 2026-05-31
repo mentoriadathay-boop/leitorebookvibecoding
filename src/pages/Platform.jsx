@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { BookOpen, FileText, Menu, PanelLeft, PanelRight, Maximize2, Minimize2, ArrowLeft, Clock, CheckCircle2, Volume2, Square, Headphones, Loader2 } from 'lucide-react'
-import { hasOpenAI, speakWithOpenAI, OPENAI_VOICES } from '../lib/ttsService'
+import {
+  hasOpenAI, speakWithOpenAI, OPENAI_VOICES,
+  hasElevenLabs, speakWithElevenLabs, ELEVENLABS_VOICES,
+  speakWithKokoro, KOKORO_VOICES,
+} from '../lib/ttsService'
 import Header from '../components/Header'
 import NavSidebar from '../components/NavSidebar'
 import Sidebar from '../components/Sidebar'
@@ -162,8 +166,11 @@ export default function Platform({ user, profile, onAdminClick }) {
   const [audioMode, setAudioMode] = useState(false)
   const [audioPlaying, setAudioPlaying] = useState(false)
   const [audioLoading, setAudioLoading] = useState(false)
-  const [audioEngine, setAudioEngine] = useState(hasOpenAI() ? 'openai' : 'browser')
+  const [audioLoadMsg, setAudioLoadMsg] = useState('')
+  const [audioEngine, setAudioEngine] = useState(hasElevenLabs() ? 'elevenlabs' : hasOpenAI() ? 'openai' : 'kokoro')
   const [openaiVoice, setOpenaiVoice] = useState('nova')
+  const [elevenlabsVoice, setElevenlabsVoice] = useState('EXAVITQu4vr4xnSDxMaL')
+  const [kokoroVoice, setKokoroVoice] = useState('pf_dora')
   const [browserVoices, setBrowserVoices] = useState([])
   const [selectedBrowserVoice, setSelectedBrowserVoice] = useState(null)
   const [audioRate, setAudioRate] = useState(1.0)
@@ -236,31 +243,47 @@ export default function Platform({ user, profile, onAdminClick }) {
     if (!chapter?.content) return
     const text = chapter.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 
-    if (audioEngine === 'openai') {
-      setAudioLoading(true)
-      try {
-        const url = await speakWithOpenAI(text, openaiVoice, audioRate)
-        const audio = new Audio(url)
-        audio.onended = () => { setAudioPlaying(false); URL.revokeObjectURL(url) }
-        audio.onerror = () => { setAudioPlaying(false); setAudioLoading(false) }
-        audioElRef.current = audio
-        await audio.play()
-        setAudioLoading(false)
-        setAudioPlaying(true)
-      } catch (e) {
-        setAudioLoading(false)
-        console.error('[TTS]', e.message)
-      }
-    } else {
-      const utt = new SpeechSynthesisUtterance(text)
-      utt.lang = selectedBrowserVoice?.lang || 'pt-BR'
-      utt.rate = audioRate
-      if (selectedBrowserVoice) utt.voice = selectedBrowserVoice
-      utt.onend = () => setAudioPlaying(false)
-      utt.onerror = () => setAudioPlaying(false)
-      audioUttRef.current = utt
-      window.speechSynthesis.speak(utt)
+    const playUrl = async (url) => {
+      const audio = new Audio(url)
+      audio.onended = () => { setAudioPlaying(false); URL.revokeObjectURL(url) }
+      audio.onerror = () => { setAudioPlaying(false); setAudioLoading(false) }
+      audioElRef.current = audio
+      await audio.play()
+      setAudioLoading(false)
       setAudioPlaying(true)
+    }
+
+    setAudioLoading(true)
+    setAudioLoadMsg('')
+    try {
+      if (audioEngine === 'openai') {
+        const url = await speakWithOpenAI(text, openaiVoice, audioRate)
+        await playUrl(url)
+      } else if (audioEngine === 'elevenlabs') {
+        const url = await speakWithElevenLabs(text, elevenlabsVoice, audioRate)
+        await playUrl(url)
+      } else if (audioEngine === 'kokoro') {
+        setAudioLoadMsg('Carregando modelo...')
+        await speakWithKokoro(text, kokoroVoice, audioRate, msg => setAudioLoadMsg(msg || ''))
+        setAudioLoading(false)
+        setAudioPlaying(false) // Kokoro é síncrono — onended interno
+      } else {
+        // browser
+        setAudioLoading(false)
+        const utt = new SpeechSynthesisUtterance(text)
+        utt.lang = selectedBrowserVoice?.lang || 'pt-BR'
+        utt.rate = audioRate
+        if (selectedBrowserVoice) utt.voice = selectedBrowserVoice
+        utt.onend = () => setAudioPlaying(false)
+        utt.onerror = () => setAudioPlaying(false)
+        audioUttRef.current = utt
+        window.speechSynthesis.speak(utt)
+        setAudioPlaying(true)
+      }
+    } catch (e) {
+      setAudioLoading(false)
+      setAudioLoadMsg('')
+      console.error('[TTS]', e.message)
     }
   }
 
@@ -444,8 +467,9 @@ export default function Platform({ user, profile, onAdminClick }) {
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     {audioLoading ? (
-                      <button disabled className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-400 text-white rounded-lg">
-                        <Loader2 size={12} className="animate-spin" /> Gerando...
+                      <button disabled className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-400 text-white rounded-lg max-w-[160px] truncate">
+                        <Loader2 size={12} className="animate-spin shrink-0" />
+                        <span className="truncate">{audioLoadMsg || 'Gerando...'}</span>
                       </button>
                     ) : !audioPlaying ? (
                       <button onClick={() => playChapterAudio(chapters[currentChapter])}
@@ -468,35 +492,55 @@ export default function Platform({ user, profile, onAdminClick }) {
                 {/* Controles */}
                 <div className="flex flex-wrap items-center gap-3 px-4 pb-3 border-t border-purple-100 dark:border-purple-800/40 pt-2">
 
-                  {/* Engine toggle */}
-                  <div className="flex items-center gap-1 rounded-lg border border-purple-200 dark:border-purple-700 overflow-hidden text-[10px] font-semibold">
+                  {/* Engine selector */}
+                  <div className="flex items-center gap-0.5 rounded-lg border border-purple-200 dark:border-purple-700 overflow-hidden text-[10px] font-semibold">
+                    <button onClick={() => { stopAudio(); setAudioEngine('kokoro') }}
+                      title="Grátis — roda no navegador, PT-BR nativo (1ª vez: ~80MB download)"
+                      className={`px-2 py-1.5 transition-colors ${audioEngine === 'kokoro' ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'}`}>
+                      🆓 Kokoro
+                    </button>
+                    <button onClick={() => { stopAudio(); setAudioEngine('elevenlabs') }}
+                      disabled={!hasElevenLabs()}
+                      title={!hasElevenLabs() ? 'Adicione VITE_ELEVENLABS_API_KEY (grátis em elevenlabs.io)' : 'ElevenLabs — 10k chars/mês grátis'}
+                      className={`px-2 py-1.5 transition-colors ${audioEngine === 'elevenlabs' ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 disabled:opacity-40 disabled:cursor-not-allowed'}`}>
+                      🎙 ElevenLabs {!hasElevenLabs() && '🔑'}
+                    </button>
                     <button onClick={() => { stopAudio(); setAudioEngine('openai') }}
                       disabled={!hasOpenAI()}
-                      title={!hasOpenAI() ? 'Adicione VITE_OPENAI_API_KEY nas variáveis de ambiente' : ''}
-                      className={`px-2.5 py-1 transition-colors ${audioEngine === 'openai' ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 disabled:opacity-40 disabled:cursor-not-allowed'}`}>
-                      ✨ OpenAI {!hasOpenAI() && '(sem chave)'}
+                      title={!hasOpenAI() ? 'Adicione VITE_OPENAI_API_KEY' : 'OpenAI TTS'}
+                      className={`px-2 py-1.5 transition-colors ${audioEngine === 'openai' ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 disabled:opacity-40 disabled:cursor-not-allowed'}`}>
+                      ✨ OpenAI {!hasOpenAI() && '🔑'}
                     </button>
                     <button onClick={() => { stopAudio(); setAudioEngine('browser') }}
-                      className={`px-2.5 py-1 transition-colors ${audioEngine === 'browser' ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'}`}>
-                      🔊 Navegador
+                      className={`px-2 py-1.5 transition-colors ${audioEngine === 'browser' ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'}`}>
+                      🔊 Sistema
                     </button>
                   </div>
 
                   {/* Seletor de voz */}
-                  {audioEngine === 'openai' ? (
+                  {audioEngine === 'kokoro' && (
+                    <select value={kokoroVoice} onChange={e => { setKokoroVoice(e.target.value); if (audioPlaying) stopAudio() }}
+                      className="text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500">
+                      {KOKORO_VOICES.map(v => <option key={v.id} value={v.id}>{v.name} — {v.desc}</option>)}
+                    </select>
+                  )}
+                  {audioEngine === 'elevenlabs' && (
+                    <select value={elevenlabsVoice} onChange={e => { setElevenlabsVoice(e.target.value); if (audioPlaying) stopAudio() }}
+                      className="text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500">
+                      {ELEVENLABS_VOICES.map(v => <option key={v.id} value={v.id}>{v.name} — {v.desc}</option>)}
+                    </select>
+                  )}
+                  {audioEngine === 'openai' && (
                     <select value={openaiVoice} onChange={e => { setOpenaiVoice(e.target.value); if (audioPlaying) stopAudio() }}
                       className="text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500">
-                      {OPENAI_VOICES.map(v => (
-                        <option key={v.id} value={v.id}>{v.name} — {v.desc}</option>
-                      ))}
+                      {OPENAI_VOICES.map(v => <option key={v.id} value={v.id}>{v.name} — {v.desc}</option>)}
                     </select>
-                  ) : (
-                    browserVoices.length > 0 && (
-                      <select value={selectedBrowserVoice?.name || ''} onChange={e => { const v = browserVoices.find(v => v.name === e.target.value); setSelectedBrowserVoice(v || null); if (audioPlaying) stopAudio() }}
-                        className="flex-1 min-w-0 max-w-xs text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500">
-                        {browserVoices.map(v => <option key={v.name} value={v.name}>{v.name} ({v.lang})</option>)}
-                      </select>
-                    )
+                  )}
+                  {audioEngine === 'browser' && browserVoices.length > 0 && (
+                    <select value={selectedBrowserVoice?.name || ''} onChange={e => { const v = browserVoices.find(v => v.name === e.target.value); setSelectedBrowserVoice(v || null); if (audioPlaying) stopAudio() }}
+                      className="flex-1 min-w-0 max-w-[200px] text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500">
+                      {browserVoices.map(v => <option key={v.name} value={v.name}>{v.name} ({v.lang})</option>)}
+                    </select>
                   )}
 
                   {/* Velocidade */}
