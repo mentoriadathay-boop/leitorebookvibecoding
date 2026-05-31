@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { BookOpen, FileText, Menu, PanelLeft, PanelRight, Maximize2, Minimize2, ArrowLeft, Clock, CheckCircle2, Volume2, VolumeX, Square, Headphones } from 'lucide-react'
+import { BookOpen, FileText, Menu, PanelLeft, PanelRight, Maximize2, Minimize2, ArrowLeft, Clock, CheckCircle2, Volume2, Square, Headphones, Loader2 } from 'lucide-react'
+import { hasOpenAI, speakWithOpenAI, OPENAI_VOICES } from '../lib/ttsService'
 import Header from '../components/Header'
 import NavSidebar from '../components/NavSidebar'
 import Sidebar from '../components/Sidebar'
@@ -160,10 +161,14 @@ export default function Platform({ user, profile, onAdminClick }) {
   const [readingMode, setReadingMode] = useState(false)
   const [audioMode, setAudioMode] = useState(false)
   const [audioPlaying, setAudioPlaying] = useState(false)
-  const [voices, setVoices] = useState([])
-  const [selectedVoice, setSelectedVoice] = useState(null)
-  const [audioRate, setAudioRate] = useState(0.92)
+  const [audioLoading, setAudioLoading] = useState(false)
+  const [audioEngine, setAudioEngine] = useState(hasOpenAI() ? 'openai' : 'browser')
+  const [openaiVoice, setOpenaiVoice] = useState('nova')
+  const [browserVoices, setBrowserVoices] = useState([])
+  const [selectedBrowserVoice, setSelectedBrowserVoice] = useState(null)
+  const [audioRate, setAudioRate] = useState(1.0)
   const audioUttRef = useRef(null)
+  const audioElRef = useRef(null)
 
   useEffect(() => {
     const loadVoices = () => {
@@ -171,8 +176,8 @@ export default function Platform({ user, profile, onAdminClick }) {
       const pt = all.filter(v => v.lang.startsWith('pt'))
       const rest = all.filter(v => !v.lang.startsWith('pt'))
       const sorted = [...pt, ...rest]
-      setVoices(sorted)
-      if (!selectedVoice && pt.length > 0) setSelectedVoice(pt[0])
+      setBrowserVoices(sorted)
+      if (!selectedBrowserVoice && pt.length > 0) setSelectedBrowserVoice(pt[0])
     }
     loadVoices()
     window.speechSynthesis.onvoiceschanged = loadVoices
@@ -208,7 +213,9 @@ export default function Platform({ user, profile, onAdminClick }) {
 
   const stopAudio = () => {
     window.speechSynthesis.cancel()
+    if (audioElRef.current) { audioElRef.current.pause(); audioElRef.current = null }
     setAudioPlaying(false)
+    setAudioLoading(false)
   }
 
   const handleEnterReading = () => {
@@ -224,19 +231,37 @@ export default function Platform({ user, profile, onAdminClick }) {
     setActiveTab('reading')
   }
 
-  const playChapterAudio = (chapter) => {
+  const playChapterAudio = async (chapter) => {
     stopAudio()
     if (!chapter?.content) return
     const text = chapter.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
-    const utt = new SpeechSynthesisUtterance(text)
-    utt.lang = selectedVoice?.lang || 'pt-BR'
-    utt.rate = audioRate
-    if (selectedVoice) utt.voice = selectedVoice
-    utt.onend = () => setAudioPlaying(false)
-    utt.onerror = () => setAudioPlaying(false)
-    audioUttRef.current = utt
-    window.speechSynthesis.speak(utt)
-    setAudioPlaying(true)
+
+    if (audioEngine === 'openai') {
+      setAudioLoading(true)
+      try {
+        const url = await speakWithOpenAI(text, openaiVoice, audioRate)
+        const audio = new Audio(url)
+        audio.onended = () => { setAudioPlaying(false); URL.revokeObjectURL(url) }
+        audio.onerror = () => { setAudioPlaying(false); setAudioLoading(false) }
+        audioElRef.current = audio
+        await audio.play()
+        setAudioLoading(false)
+        setAudioPlaying(true)
+      } catch (e) {
+        setAudioLoading(false)
+        console.error('[TTS]', e.message)
+      }
+    } else {
+      const utt = new SpeechSynthesisUtterance(text)
+      utt.lang = selectedBrowserVoice?.lang || 'pt-BR'
+      utt.rate = audioRate
+      if (selectedBrowserVoice) utt.voice = selectedBrowserVoice
+      utt.onend = () => setAudioPlaying(false)
+      utt.onerror = () => setAudioPlaying(false)
+      audioUttRef.current = utt
+      window.speechSynthesis.speak(utt)
+      setAudioPlaying(true)
+    }
   }
 
   const handleEnterPDF = () => {
@@ -418,7 +443,11 @@ export default function Platform({ user, profile, onAdminClick }) {
                     <p className="text-xs font-semibold text-purple-700 dark:text-purple-300 truncate">{chapters[currentChapter]?.title}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    {!audioPlaying ? (
+                    {audioLoading ? (
+                      <button disabled className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-400 text-white rounded-lg">
+                        <Loader2 size={12} className="animate-spin" /> Gerando...
+                      </button>
+                    ) : !audioPlaying ? (
                       <button onClick={() => playChapterAudio(chapters[currentChapter])}
                         className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
                         <Volume2 size={12} /> Reproduzir
@@ -436,44 +465,48 @@ export default function Platform({ user, profile, onAdminClick }) {
                   </div>
                 </div>
 
-                {/* Controles de voz e velocidade */}
+                {/* Controles */}
                 <div className="flex flex-wrap items-center gap-3 px-4 pb-3 border-t border-purple-100 dark:border-purple-800/40 pt-2">
-                  {voices.length > 0 && (
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <label className="text-[10px] text-purple-500 dark:text-purple-400 font-medium shrink-0">Locutor</label>
-                      <select
-                        value={selectedVoice?.name || ''}
-                        onChange={e => {
-                          const v = voices.find(v => v.name === e.target.value)
-                          setSelectedVoice(v || null)
-                          if (audioPlaying) { stopAudio() }
-                        }}
-                        className="flex-1 min-w-0 text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500"
-                      >
-                        {voices.map(v => (
-                          <option key={v.name} value={v.name}>
-                            {v.name} ({v.lang})
-                          </option>
-                        ))}
+
+                  {/* Engine toggle */}
+                  <div className="flex items-center gap-1 rounded-lg border border-purple-200 dark:border-purple-700 overflow-hidden text-[10px] font-semibold">
+                    <button onClick={() => { stopAudio(); setAudioEngine('openai') }}
+                      disabled={!hasOpenAI()}
+                      title={!hasOpenAI() ? 'Adicione VITE_OPENAI_API_KEY nas variáveis de ambiente' : ''}
+                      className={`px-2.5 py-1 transition-colors ${audioEngine === 'openai' ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 disabled:opacity-40 disabled:cursor-not-allowed'}`}>
+                      ✨ OpenAI {!hasOpenAI() && '(sem chave)'}
+                    </button>
+                    <button onClick={() => { stopAudio(); setAudioEngine('browser') }}
+                      className={`px-2.5 py-1 transition-colors ${audioEngine === 'browser' ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'}`}>
+                      🔊 Navegador
+                    </button>
+                  </div>
+
+                  {/* Seletor de voz */}
+                  {audioEngine === 'openai' ? (
+                    <select value={openaiVoice} onChange={e => { setOpenaiVoice(e.target.value); if (audioPlaying) stopAudio() }}
+                      className="text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500">
+                      {OPENAI_VOICES.map(v => (
+                        <option key={v.id} value={v.id}>{v.name} — {v.desc}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    browserVoices.length > 0 && (
+                      <select value={selectedBrowserVoice?.name || ''} onChange={e => { const v = browserVoices.find(v => v.name === e.target.value); setSelectedBrowserVoice(v || null); if (audioPlaying) stopAudio() }}
+                        className="flex-1 min-w-0 max-w-xs text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500">
+                        {browserVoices.map(v => <option key={v.name} value={v.name}>{v.name} ({v.lang})</option>)}
                       </select>
-                    </div>
+                    )
                   )}
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <label className="text-[10px] text-purple-500 dark:text-purple-400 font-medium">Velocidade</label>
-                    <div className="flex items-center gap-1">
-                      {[0.7, 0.85, 1.0, 1.2, 1.4].map(r => (
-                        <button key={r}
-                          onClick={() => { setAudioRate(r); if (audioPlaying) { stopAudio() } }}
-                          className={`text-[10px] px-2 py-0.5 rounded font-semibold transition-colors ${
-                            audioRate === r
-                              ? 'bg-purple-600 text-white'
-                              : 'text-purple-500 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/30'
-                          }`}>
-                          {r === 0.7 ? '0.7×' : r === 0.85 ? '0.85×' : r === 1.0 ? '1×' : r === 1.2 ? '1.2×' : '1.4×'}
-                        </button>
-                      ))}
-                    </div>
+                  {/* Velocidade */}
+                  <div className="flex items-center gap-1 ml-auto">
+                    {[0.75, 1.0, 1.25, 1.5].map(r => (
+                      <button key={r} onClick={() => { setAudioRate(r); if (audioPlaying) stopAudio() }}
+                        className={`text-[10px] px-2 py-0.5 rounded font-semibold transition-colors ${audioRate === r ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/30'}`}>
+                        {r}×
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
