@@ -14,7 +14,6 @@ const NAV_ITEMS = [
   { id: 'tools',        label: 'Jornada SaaS',      icon: Map },
   { id: 'calculator',   label: 'Calculadora',       icon: Calculator },
   { id: 'prompts',      label: 'Prompts',           icon: Zap },
-  { id: 'pdf',          label: 'Ler PDF',           icon: FileText },
   { id: 'ai-support',   label: 'Suporte IA',        icon: MessageSquare },
   { id: 'ext-tools',    label: 'Ferramentas',       icon: Wrench },
   { id: 'email',        label: 'Newsletter',        icon: Mail },
