@@ -4,6 +4,7 @@ export const PROMPT_CATEGORIES = [
   'Desenvolvimento',
   'Design & UI',
   'Backend',
+  'SEO & Performance',
   'Vendas & Copy',
   'Marketing',
   'Crescimento',
@@ -459,5 +460,37 @@ Crie 8-10 perguntas e respostas que:
 - Incluam perguntas sobre preço, resultado, suporte e cancelamento
 
 As respostas devem ser diretas, honestas e em tom próximo.`,
+  },
+
+  // ── SEO & Performance ─────────────────────────────────────────────
+  {
+    category: 'SEO & Performance',
+    title: 'Prompt SEO Profissional para Vibe Coding',
+    desc: 'Cole antes de qualquer projeto: garante Next.js, SEO completo, rastreamento, performance, segurança e acessibilidade',
+    prompt: `Crie este projeto com as seguintes especificações técnicas obrigatórias:
+
+TECNOLOGIA E RENDERIZAÇÃO
+Utilize Next.js como framework principal para garantir renderização no servidor (SSR) e compatibilidade total com indexação pelo Google e pelas IAs de busca. Não utilize React puro com renderização exclusiva no cliente.
+
+SEO ESTRUTURAL
+Implemente meta tags de título e descrição únicas em cada página. Configure Open Graph completo para compartilhamento correto em redes sociais. Gere o arquivo sitemap.xml automaticamente com todas as páginas do projeto. Configure o arquivo robots.txt permitindo a indexação correta pelos mecanismos de busca. Adicione Schema Markup em JSON-LD nas páginas principais para resultados ricos no Google. Garanta que todas as imagens tenham atributo alt descritivo. Utilize tags HTML semânticas corretamente em toda a estrutura, com hierarquia correta de H1, H2 e H3. Configure URLs amigáveis e limpas em todas as páginas.
+
+RASTREAMENTO E CONVERSÃO
+Reserve um espaço no cabeçalho de todas as páginas para inserção do pixel do Meta, do Google Tag Manager e do Google Analytics 4. O espaço deve estar identificado com comentários no código indicando exatamente onde cada código deve ser inserido. Quando eu fornecer os IDs, faça a instalação completa e confirme que os eventos estão sendo disparados corretamente.
+
+PERFORMANCE
+Otimize todas as imagens com compressão e lazy loading. Minimize os arquivos CSS e JavaScript. Garanta que o site atinja boas métricas no Google PageSpeed Insights, priorizando a velocidade de carregamento tanto em desktop quanto em dispositivos móveis.
+
+SEGURANÇA
+Configure o certificado SSL. Adicione os headers de segurança HTTP recomendados, incluindo Content Security Policy, X-Frame-Options e X-Content-Type-Options. Configure as regras de acesso ao banco de dados para que cada usuário acesse apenas os dados que pertencem a ele. Garanta que nenhuma chave de API, senha ou dado sensível fique exposto no código, utilizando variáveis de ambiente para tudo.
+
+ACESSIBILIDADE
+Garanta contraste adequado entre texto e fundo. Adicione atributos ARIA onde necessário. Certifique que o site é navegável por teclado.
+
+ANTES DE FINALIZAR
+Apresente um checklist confirmando que cada um dos itens acima foi implementado. Aponte qualquer configuração que precise ser feita manualmente por mim após a entrega, como inserção de IDs de pixel, apontamento de domínio ou verificação no Google Search Console, e explique exatamente como fazer cada uma delas.
+
+---
+Como usar: cole esse prompt no início de qualquer projeto novo no Claude Code, antes de descrever o site ou a landing page que você quer criar. Depois disso, descreva normalmente o projeto, o objetivo, o público e o design que deseja. O Claude vai usar essas especificações como base obrigatória para tudo que construir.`,
   },
 ]
