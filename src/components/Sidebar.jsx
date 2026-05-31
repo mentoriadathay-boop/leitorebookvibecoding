@@ -1,9 +1,9 @@
-import { CheckCircle, Circle, ChevronDown, ChevronRight, Download, X } from 'lucide-react'
+import { CheckCircle, Circle, ChevronDown, ChevronRight, Download, X, CheckSquare } from 'lucide-react'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { chapters as defaultChapters, chapterGroups as defaultGroups } from '../data/chapters'
 
-export default function Sidebar({ currentChapter, onSelect, completed, onClose, chapters = defaultChapters, chapterGroups = defaultGroups }) {
+export default function Sidebar({ currentChapter, onSelect, completed, onClose, chapters = defaultChapters, chapterGroups = defaultGroups, onChecklist }) {
   const [collapsed, setCollapsed] = useState({})
   const [showCover, setShowCover] = useState(false)
 
@@ -12,6 +12,19 @@ export default function Sidebar({ currentChapter, onSelect, completed, onClose, 
   return (
     <>
       <aside className="w-full h-full overflow-y-auto scrollbar-thin bg-[#FAFAFA] dark:bg-[#111] flex flex-col">
+
+        {/* Checklist dos 20 passos */}
+        {onChecklist && (
+          <div className="p-3 border-b border-gray-100 dark:border-gray-700">
+            <button
+              onClick={onChecklist}
+              className="w-full flex items-center gap-2.5 px-3 py-2.5 bg-[#B80E02]/8 hover:bg-[#B80E02]/15 border border-[#B80E02]/25 rounded-xl text-xs font-semibold text-[#B80E02] transition-colors"
+            >
+              <CheckSquare size={14} className="shrink-0" />
+              Checklist dos 20 Passos
+            </button>
+          </div>
+        )}
 
         {/* Capa do ebook */}
         <div className="p-3 border-b border-gray-100 dark:border-gray-700">

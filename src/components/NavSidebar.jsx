@@ -1,4 +1,4 @@
-import { Newspaper, BookOpen, Lightbulb, Cpu, Map, Wrench, CheckSquare, Calculator, Zap, FileText, MessageSquare, Layout, FileText as FileText2, Users, FolderOpen, ExternalLink, Mail } from 'lucide-react'
+import { Newspaper, BookOpen, Lightbulb, Cpu, Map, Wrench, Calculator, Zap, FileText, MessageSquare, Layout, FileText as FileText2, Users, FolderOpen, ExternalLink, Mail } from 'lucide-react'
 
 const WhatsAppIcon = ({ size = 14 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -12,7 +12,6 @@ const NAV_ITEMS = [
   { id: 'ideas',        label: 'Minhas Ideias',     icon: Lightbulb },
   { id: 'generator',    label: 'Gerador de Ideias', icon: Cpu },
   { id: 'tools',        label: 'Jornada SaaS',      icon: Map },
-  { id: 'checklist',    label: 'Checklist',         icon: CheckSquare },
   { id: 'calculator',   label: 'Calculadora',       icon: Calculator },
   { id: 'prompts',      label: 'Prompts',           icon: Zap },
   { id: 'pdf',          label: 'Ler PDF',           icon: FileText },

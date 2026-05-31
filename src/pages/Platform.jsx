@@ -205,6 +205,7 @@ export default function Platform({ user, profile, onAdminClick }) {
           onClose={onClose}
           chapters={chapters}
           chapterGroups={chapterGroups}
+          onChecklist={() => { handleNavigate('checklist'); onClose?.() }}
         />
       </div>
     </div>
