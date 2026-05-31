@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { BookOpen, FileText, Menu, PanelLeft, PanelRight, Maximize2, Minimize2, ArrowLeft, Clock, CheckCircle2 } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { BookOpen, FileText, Menu, PanelLeft, PanelRight, Maximize2, Minimize2, ArrowLeft, Clock, CheckCircle2, Volume2, VolumeX, Square, Headphones } from 'lucide-react'
 import Header from '../components/Header'
 import NavSidebar from '../components/NavSidebar'
 import Sidebar from '../components/Sidebar'
@@ -40,7 +40,7 @@ function ComingSoon({ label }) {
   )
 }
 
-function ReadingHub({ chapters, currentChapter, completedCount, onEnterReading, onEnterPDF }) {
+function ReadingHub({ chapters, currentChapter, completedCount, onEnterReading, onEnterAudio, onEnterPDF }) {
   const total = chapters.length
   const progress = total > 0 ? Math.round((completedCount / total) * 100) : 0
   const chapter = chapters[currentChapter]
@@ -99,7 +99,7 @@ function ReadingHub({ chapters, currentChapter, completedCount, onEnterReading, 
         )}
 
         {/* Opções */}
-        <div className="grid sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700">
+        <div className="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700">
           <button onClick={onEnterReading}
             className="flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group text-left">
             <div className="w-9 h-9 rounded-xl bg-[#E8F5EE] dark:bg-[#0F4A28]/30 flex items-center justify-center shrink-0">
@@ -109,7 +109,20 @@ function ReadingHub({ chapters, currentChapter, completedCount, onEnterReading, 
               <p className="text-xs font-semibold text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors">
                 Leitura Interativa
               </p>
-              <p className="text-[10px] text-gray-400 leading-tight">Progresso, anotações e IA</p>
+              <p className="text-[10px] text-gray-400 leading-tight">Progresso e anotações</p>
+            </div>
+          </button>
+
+          <button onClick={onEnterAudio}
+            className="flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group text-left">
+            <div className="w-9 h-9 rounded-xl bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center shrink-0">
+              <Headphones size={16} className="text-purple-600 dark:text-purple-400" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                Leitura com Áudio
+              </p>
+              <p className="text-[10px] text-gray-400 leading-tight">Ouça enquanto lê</p>
             </div>
           </button>
 
@@ -145,6 +158,9 @@ export default function Platform({ user, profile, onAdminClick }) {
   const [rightPanelOpen, setRightPanelOpen] = useState(false)
   const [rightPanelTab, setRightPanelTab] = useState('notes')
   const [readingMode, setReadingMode] = useState(false)
+  const [audioMode, setAudioMode] = useState(false)
+  const [audioPlaying, setAudioPlaying] = useState(false)
+  const audioUttRef = useRef(null)
   const [focusMode, setFocusMode] = useState(false)
   const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem('welcomeSeen'))
 
@@ -174,9 +190,36 @@ export default function Platform({ user, profile, onAdminClick }) {
 
   const handleChapterRead = () => markCompleted(currentChapter)
 
+  const stopAudio = () => {
+    window.speechSynthesis.cancel()
+    setAudioPlaying(false)
+  }
+
   const handleEnterReading = () => {
+    stopAudio()
+    setAudioMode(false)
     setReadingMode(true)
     setActiveTab('reading')
+  }
+
+  const handleEnterAudio = () => {
+    setAudioMode(true)
+    setReadingMode(true)
+    setActiveTab('reading')
+  }
+
+  const playChapterAudio = (chapter) => {
+    stopAudio()
+    if (!chapter?.content) return
+    const text = chapter.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+    const utt = new SpeechSynthesisUtterance(text)
+    utt.lang = 'pt-BR'
+    utt.rate = 0.92
+    utt.onend = () => setAudioPlaying(false)
+    utt.onerror = () => setAudioPlaying(false)
+    audioUttRef.current = utt
+    window.speechSynthesis.speak(utt)
+    setAudioPlaying(true)
   }
 
   const handleEnterPDF = () => {
@@ -184,7 +227,7 @@ export default function Platform({ user, profile, onAdminClick }) {
     setReadingMode(false)
   }
 
-  const handleBackToMenu = () => setReadingMode(false)
+  const handleBackToMenu = () => { stopAudio(); setReadingMode(false); setAudioMode(false) }
 
   const toggleFocusMode = () => {
     setFocusMode(f => {
@@ -344,8 +387,36 @@ export default function Platform({ user, profile, onAdminClick }) {
                 currentChapter={currentChapter}
                 completedCount={completedCount}
                 onEnterReading={handleEnterReading}
+                onEnterAudio={handleEnterAudio}
                 onEnterPDF={handleEnterPDF}
               />
+            )}
+
+            {activeTab === 'reading' && readingMode && audioMode && (
+              <div className="mb-4 flex items-center gap-3 px-4 py-3 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/40 rounded-xl">
+                <Headphones size={16} className="text-purple-600 dark:text-purple-400 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-purple-700 dark:text-purple-300">Modo áudio ativo</p>
+                  <p className="text-[10px] text-purple-500 dark:text-purple-400 truncate">{chapters[currentChapter]?.title}</p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  {!audioPlaying ? (
+                    <button onClick={() => playChapterAudio(chapters[currentChapter])}
+                      className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
+                      <Volume2 size={12} /> Reproduzir
+                    </button>
+                  ) : (
+                    <button onClick={stopAudio}
+                      className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
+                      <Square size={12} /> Parar
+                    </button>
+                  )}
+                  <button onClick={() => { stopAudio(); setAudioMode(false) }}
+                    className="text-[10px] text-purple-400 hover:text-purple-600 transition-colors px-1">
+                    Desativar
+                  </button>
+                </div>
+              </div>
             )}
 
             {activeTab === 'reading' && readingMode && (
