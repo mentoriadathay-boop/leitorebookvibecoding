@@ -160,7 +160,23 @@ export default function Platform({ user, profile, onAdminClick }) {
   const [readingMode, setReadingMode] = useState(false)
   const [audioMode, setAudioMode] = useState(false)
   const [audioPlaying, setAudioPlaying] = useState(false)
+  const [voices, setVoices] = useState([])
+  const [selectedVoice, setSelectedVoice] = useState(null)
+  const [audioRate, setAudioRate] = useState(0.92)
   const audioUttRef = useRef(null)
+
+  useEffect(() => {
+    const loadVoices = () => {
+      const all = window.speechSynthesis.getVoices()
+      const pt = all.filter(v => v.lang.startsWith('pt'))
+      const rest = all.filter(v => !v.lang.startsWith('pt'))
+      const sorted = [...pt, ...rest]
+      setVoices(sorted)
+      if (!selectedVoice && pt.length > 0) setSelectedVoice(pt[0])
+    }
+    loadVoices()
+    window.speechSynthesis.onvoiceschanged = loadVoices
+  }, [])
   const [focusMode, setFocusMode] = useState(false)
   const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem('welcomeSeen'))
 
@@ -213,8 +229,9 @@ export default function Platform({ user, profile, onAdminClick }) {
     if (!chapter?.content) return
     const text = chapter.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
     const utt = new SpeechSynthesisUtterance(text)
-    utt.lang = 'pt-BR'
-    utt.rate = 0.92
+    utt.lang = selectedVoice?.lang || 'pt-BR'
+    utt.rate = audioRate
+    if (selectedVoice) utt.voice = selectedVoice
     utt.onend = () => setAudioPlaying(false)
     utt.onerror = () => setAudioPlaying(false)
     audioUttRef.current = utt
@@ -393,28 +410,71 @@ export default function Platform({ user, profile, onAdminClick }) {
             )}
 
             {activeTab === 'reading' && readingMode && audioMode && (
-              <div className="mb-4 flex items-center gap-3 px-4 py-3 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/40 rounded-xl">
-                <Headphones size={16} className="text-purple-600 dark:text-purple-400 shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-purple-700 dark:text-purple-300">Modo áudio ativo</p>
-                  <p className="text-[10px] text-purple-500 dark:text-purple-400 truncate">{chapters[currentChapter]?.title}</p>
+              <div className="mb-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/40 rounded-xl overflow-hidden">
+                {/* Linha principal */}
+                <div className="flex items-center gap-3 px-4 py-3">
+                  <Headphones size={15} className="text-purple-600 dark:text-purple-400 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-purple-700 dark:text-purple-300 truncate">{chapters[currentChapter]?.title}</p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    {!audioPlaying ? (
+                      <button onClick={() => playChapterAudio(chapters[currentChapter])}
+                        className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
+                        <Volume2 size={12} /> Reproduzir
+                      </button>
+                    ) : (
+                      <button onClick={stopAudio}
+                        className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
+                        <Square size={12} /> Parar
+                      </button>
+                    )}
+                    <button onClick={() => { stopAudio(); setAudioMode(false) }}
+                      className="text-[10px] text-purple-400 hover:text-purple-600 dark:hover:text-purple-300 transition-colors">
+                      ✕
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  {!audioPlaying ? (
-                    <button onClick={() => playChapterAudio(chapters[currentChapter])}
-                      className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
-                      <Volume2 size={12} /> Reproduzir
-                    </button>
-                  ) : (
-                    <button onClick={stopAudio}
-                      className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
-                      <Square size={12} /> Parar
-                    </button>
+
+                {/* Controles de voz e velocidade */}
+                <div className="flex flex-wrap items-center gap-3 px-4 pb-3 border-t border-purple-100 dark:border-purple-800/40 pt-2">
+                  {voices.length > 0 && (
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <label className="text-[10px] text-purple-500 dark:text-purple-400 font-medium shrink-0">Locutor</label>
+                      <select
+                        value={selectedVoice?.name || ''}
+                        onChange={e => {
+                          const v = voices.find(v => v.name === e.target.value)
+                          setSelectedVoice(v || null)
+                          if (audioPlaying) { stopAudio() }
+                        }}
+                        className="flex-1 min-w-0 text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500"
+                      >
+                        {voices.map(v => (
+                          <option key={v.name} value={v.name}>
+                            {v.name} ({v.lang})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   )}
-                  <button onClick={() => { stopAudio(); setAudioMode(false) }}
-                    className="text-[10px] text-purple-400 hover:text-purple-600 transition-colors px-1">
-                    Desativar
-                  </button>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <label className="text-[10px] text-purple-500 dark:text-purple-400 font-medium">Velocidade</label>
+                    <div className="flex items-center gap-1">
+                      {[0.7, 0.85, 1.0, 1.2, 1.4].map(r => (
+                        <button key={r}
+                          onClick={() => { setAudioRate(r); if (audioPlaying) { stopAudio() } }}
+                          className={`text-[10px] px-2 py-0.5 rounded font-semibold transition-colors ${
+                            audioRate === r
+                              ? 'bg-purple-600 text-white'
+                              : 'text-purple-500 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/30'
+                          }`}>
+                          {r === 0.7 ? '0.7×' : r === 0.85 ? '0.85×' : r === 1.0 ? '1×' : r === 1.2 ? '1.2×' : '1.4×'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
