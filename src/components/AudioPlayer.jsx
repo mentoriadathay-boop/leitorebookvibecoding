@@ -1,236 +1,170 @@
-import { useState, useRef, useEffect } from 'react'
-import { Play, Pause, Square, ChevronDown } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { Volume2, Square, Loader2, Settings, X } from 'lucide-react'
+import {
+  hasOpenAI, speakWithOpenAI, OPENAI_VOICES,
+  hasElevenLabs, speakWithElevenLabs, ELEVENLABS_VOICES,
+  speakWithKokoro, KOKORO_VOICES,
+} from '../lib/ttsService'
 
-const SPEEDS = [
-  { label: '0.8×', value: 0.8 },
-  { label: '1×',   value: 1.0 },
-  { label: '1.25×', value: 1.25 },
-  { label: '1.5×', value: 1.5 },
-  { label: '2×',   value: 2.0 },
+const ENGINES = [
+  { id: 'kokoro',     label: '🆓 Kokoro',     note: 'Grátis — PT-BR nativo' },
+  { id: 'elevenlabs', label: '🎙 ElevenLabs', note: '10k chars/mês grátis' },
+  { id: 'openai',     label: '✨ OpenAI',     note: 'Pago (barato)' },
+  { id: 'browser',    label: '🔊 Sistema',    note: 'Vozes do navegador' },
 ]
 
-function stripHtml(html) {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
-}
+export default function AudioPlayer({ text, compact = false }) {
+  const [playing, setPlaying] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [loadMsg, setLoadMsg] = useState('')
+  const [showSettings, setShowSettings] = useState(false)
 
-function getPtVoices() {
-  return window.speechSynthesis
-    .getVoices()
-    .filter(v => v.lang === 'pt-BR' || v.lang === 'pt_BR' || v.lang.startsWith('pt'))
-}
+  const [engine, setEngine] = useState(() =>
+    hasElevenLabs() ? 'elevenlabs' : hasOpenAI() ? 'openai' : 'kokoro'
+  )
+  const [openaiVoice, setOpenaiVoice] = useState('nova')
+  const [elevenlabsVoice, setElevenlabsVoice] = useState('EXAVITQu4vr4xnSDxMaL')
+  const [kokoroVoice, setKokoroVoice] = useState('pf_dora')
+  const [browserVoices, setBrowserVoices] = useState([])
+  const [browserVoice, setBrowserVoice] = useState(null)
+  const [rate, setRate] = useState(1.0)
 
-function pickFemaleVoice(voices) {
-  const femalePattern = /maria|francisca|luciana|vitoria|victoria|google português do brasil|google portuguese|female/i
-  return voices.find(v => femalePattern.test(v.name)) || voices[0] || null
-}
+  const audioElRef = useRef(null)
+  const uttRef = useRef(null)
 
-export default function AudioPlayer({ text }) {
-  const [playing, setPlaying]   = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [elapsed, setElapsed]   = useState(0)
-  const [rate, setRate]         = useState(1.0)
-  const [voices, setVoices]     = useState([])
-  const [selectedVoice, setSelectedVoice] = useState(null)
-  const intervalRef             = useRef(null)
-  const estimatedSecondsRef     = useRef(1)
-
-  const plainText      = stripHtml(text)
-  const totalWords     = plainText.split(' ').length
-  const estimatedSeconds = Math.ceil((totalWords / 150) * 60 / rate)
-  estimatedSecondsRef.current = estimatedSeconds
-
-  // Load voices — they may arrive async
   useEffect(() => {
     const load = () => {
-      const list = getPtVoices()
-      if (list.length === 0) return
-      setVoices(list)
-      setSelectedVoice(prev => prev ?? pickFemaleVoice(list))
+      const all = window.speechSynthesis.getVoices()
+      const pt = all.filter(v => v.lang.startsWith('pt'))
+      setBrowserVoices([...pt, ...all.filter(v => !v.lang.startsWith('pt'))])
+      if (!browserVoice && pt.length > 0) setBrowserVoice(pt[0])
     }
     load()
-    window.speechSynthesis.addEventListener('voiceschanged', load)
-    return () => window.speechSynthesis.removeEventListener('voiceschanged', load)
+    window.speechSynthesis.onvoiceschanged = load
+    return () => { stop() }
   }, [])
-
-  useEffect(() => {
-    window.speechSynthesis.cancel()
-    clearInterval(intervalRef.current)
-    setPlaying(false)
-    setProgress(0)
-    setElapsed(0)
-  }, [text])
-
-  useEffect(() => {
-    return () => {
-      window.speechSynthesis.cancel()
-      clearInterval(intervalRef.current)
-    }
-  }, [])
-
-  const startWithOptions = (r, voice) => {
-    window.speechSynthesis.cancel()
-    clearInterval(intervalRef.current)
-
-    const utter = new SpeechSynthesisUtterance(plainText)
-    utter.lang = 'pt-BR'
-    utter.rate = r
-    if (voice) {
-      utter.voice = voice
-      const femalePattern = /maria|francisca|luciana|vitoria|victoria|google português|female/i
-      utter.pitch = femalePattern.test(voice.name) ? 1.0 : 1.15
-    } else {
-      utter.pitch = 1.15
-    }
-
-    utter.onstart = () => {
-      setPlaying(true)
-      setElapsed(0)
-      setProgress(0)
-      intervalRef.current = setInterval(() => {
-        setElapsed(prev => {
-          const next = prev + 1
-          setProgress(Math.min((next / estimatedSecondsRef.current) * 100, 99))
-          return next
-        })
-      }, 1000)
-    }
-    utter.onend = () => {
-      setPlaying(false)
-      setProgress(100)
-      clearInterval(intervalRef.current)
-    }
-    utter.onerror = () => {
-      setPlaying(false)
-      clearInterval(intervalRef.current)
-    }
-
-    window.speechSynthesis.speak(utter)
-  }
-
-  const handlePlay = () => {
-    if (playing) {
-      window.speechSynthesis.pause()
-      setPlaying(false)
-      clearInterval(intervalRef.current)
-    } else if (progress > 0) {
-      window.speechSynthesis.resume()
-      setPlaying(true)
-      intervalRef.current = setInterval(() => {
-        setElapsed(prev => {
-          const next = prev + 1
-          setProgress(Math.min((next / estimatedSecondsRef.current) * 100, 99))
-          return next
-        })
-      }, 1000)
-    } else {
-      startWithOptions(rate, selectedVoice)
-    }
-  }
 
   const stop = () => {
     window.speechSynthesis.cancel()
-    setPlaying(false)
-    setProgress(0)
-    setElapsed(0)
-    clearInterval(intervalRef.current)
+    if (audioElRef.current) { audioElRef.current.pause(); audioElRef.current = null }
+    setPlaying(false); setLoading(false); setLoadMsg('')
   }
 
-  const changeRate = (newRate) => {
-    setRate(newRate)
-    if (playing) {
-      stop()
-      setTimeout(() => startWithOptions(newRate, selectedVoice), 30)
-    }
+  const playUrl = async (url) => {
+    const audio = new Audio(url)
+    audio.onended = () => { setPlaying(false); URL.revokeObjectURL(url) }
+    audio.onerror = () => { setPlaying(false); setLoading(false) }
+    audioElRef.current = audio
+    await audio.play()
+    setLoading(false); setPlaying(true)
   }
 
-  const changeVoice = (voiceName) => {
-    const voice = voices.find(v => v.name === voiceName) || null
-    setSelectedVoice(voice)
-    if (playing) {
-      stop()
-      setTimeout(() => startWithOptions(rate, voice), 30)
-    }
+  const play = async () => {
+    if (playing || loading) { stop(); return }
+    setLoading(true); setLoadMsg('')
+    try {
+      if (engine === 'openai') {
+        await playUrl(await speakWithOpenAI(text, openaiVoice, rate))
+      } else if (engine === 'elevenlabs') {
+        await playUrl(await speakWithElevenLabs(text, elevenlabsVoice, rate))
+      } else if (engine === 'kokoro') {
+        setLoadMsg('Carregando modelo...')
+        await speakWithKokoro(text, kokoroVoice, rate, msg => setLoadMsg(msg || ''))
+        setLoading(false); setPlaying(false)
+      } else {
+        setLoading(false)
+        const utt = new SpeechSynthesisUtterance(text)
+        utt.lang = browserVoice?.lang || 'pt-BR'; utt.rate = rate
+        if (browserVoice) utt.voice = browserVoice
+        utt.onend = () => setPlaying(false); utt.onerror = () => setPlaying(false)
+        uttRef.current = utt; window.speechSynthesis.speak(utt); setPlaying(true)
+      }
+    } catch (e) { console.error('[AudioPlayer]', e.message); setLoading(false); setLoadMsg('') }
   }
 
-  const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
+  const voices = engine === 'openai' ? OPENAI_VOICES
+    : engine === 'elevenlabs' ? ELEVENLABS_VOICES
+    : engine === 'kokoro' ? KOKORO_VOICES
+    : browserVoices.map(v => ({ id: v.name, name: v.name, desc: v.lang }))
+
+  const currentVoice = engine === 'openai' ? openaiVoice
+    : engine === 'elevenlabs' ? elevenlabsVoice
+    : engine === 'kokoro' ? kokoroVoice
+    : (browserVoice?.name || '')
+
+  const setVoice = (id) => {
+    if (engine === 'openai') setOpenaiVoice(id)
+    else if (engine === 'elevenlabs') setElevenlabsVoice(id)
+    else if (engine === 'kokoro') setKokoroVoice(id)
+    else { const v = browserVoices.find(v => v.name === id); if (v) setBrowserVoice(v) }
+    if (playing || loading) stop()
+  }
 
   return (
-    <div className="bg-[#E8F5EE] dark:bg-[#0F4A28]/30 rounded-xl p-3 my-4 border border-[#1B6B3A]/20 space-y-2">
-      {/* Playback row */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={handlePlay}
-          className="w-9 h-9 rounded-full bg-[#1B6B3A] hover:bg-[#0F4A28] text-white flex items-center justify-center transition-colors shrink-0"
-        >
-          {playing ? <Pause size={15} /> : <Play size={15} className="ml-0.5" />}
-        </button>
+    <div className="relative inline-flex items-center gap-1">
+      {/* Play/Stop */}
+      <button onClick={play}
+        className={`flex items-center gap-1.5 text-[10px] font-semibold px-2.5 py-1 rounded-full border transition-colors ${
+          playing ? 'bg-[#B80E02] text-white border-[#B80E02]'
+          : loading ? 'bg-purple-400 text-white border-purple-400 cursor-wait'
+          : 'text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:border-purple-500 hover:text-purple-600'
+        }`}>
+        {loading
+          ? <><Loader2 size={9} className="animate-spin" /><span className="max-w-[90px] truncate">{loadMsg || 'Gerando...'}</span></>
+          : playing ? <><Square size={9} /> Parar</>
+          : <><Volume2 size={10} /> Ouvir</>}
+      </button>
 
-        {progress > 0 && (
-          <button
-            onClick={stop}
-            className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 flex items-center justify-center transition-colors shrink-0"
-          >
-            <Square size={11} />
-          </button>
-        )}
+      {/* Settings */}
+      <button onClick={() => setShowSettings(v => !v)}
+        className="p-1 rounded text-gray-400 hover:text-purple-500 transition-colors" title="Configurar voz">
+        {showSettings ? <X size={11} /> : <Settings size={11} />}
+      </button>
 
-        <div className="flex-1 min-w-0">
-          <div className="h-1.5 bg-white dark:bg-gray-700 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-1000"
-              style={{ width: `${progress}%`, background: 'linear-gradient(to right, #1B6B3A, #C9A84C)' }}
-            />
+      {/* Painel */}
+      {showSettings && (
+        <div className="absolute top-full left-0 mt-1 z-30 bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-gray-600 rounded-xl shadow-xl p-3 w-68 space-y-3" style={{minWidth:'260px'}}>
+          {/* Engine */}
+          <div>
+            <p className="text-[9px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Motor</p>
+            <div className="grid grid-cols-2 gap-1">
+              {ENGINES.map(eng => {
+                const disabled = (eng.id === 'openai' && !hasOpenAI()) || (eng.id === 'elevenlabs' && !hasElevenLabs())
+                return (
+                  <button key={eng.id} onClick={() => { if (!disabled) { setEngine(eng.id); stop() } }}
+                    disabled={disabled} title={disabled ? 'Chave não configurada' : eng.note}
+                    className={`px-2 py-1.5 rounded-lg text-[10px] font-medium text-left border transition-colors ${
+                      engine === eng.id ? 'bg-purple-600 text-white border-purple-600'
+                      : disabled ? 'opacity-40 cursor-not-allowed border-gray-200 dark:border-gray-600 text-gray-400'
+                      : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-purple-400 hover:text-purple-600'
+                    }`}>
+                    {eng.label}
+                  </button>
+                )
+              })}
+            </div>
           </div>
-          <div className="flex justify-between mt-1">
-            <span className="text-[10px] text-gray-500 dark:text-gray-400">{fmt(elapsed)}</span>
-            <span className="text-[10px] text-gray-500 dark:text-gray-400">~{fmt(estimatedSeconds)}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Speed row */}
-      <div className="flex items-center gap-1 flex-wrap">
-        <span className="text-[10px] text-gray-400 dark:text-gray-500 mr-1">Velocidade:</span>
-        {SPEEDS.map(s => (
-          <button
-            key={s.value}
-            onClick={() => changeRate(s.value)}
-            className={`text-[10px] px-2 py-0.5 rounded-full font-semibold transition-colors ${
-              rate === s.value
-                ? 'bg-[#1B6B3A] text-white'
-                : 'bg-white dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400'
-            }`}
-          >
-            {s.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Voice selector */}
-      {voices.length > 1 && (
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-gray-400 dark:text-gray-500 shrink-0">Voz:</span>
-          <div className="relative flex-1 min-w-0">
-            <select
-              value={selectedVoice?.name ?? ''}
-              onChange={e => changeVoice(e.target.value)}
-              className="w-full text-[10px] appearance-none bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg pl-2.5 pr-6 py-1 text-gray-600 dark:text-gray-300 focus:outline-none focus:border-[#1B6B3A] cursor-pointer truncate"
-            >
-              {voices.map(v => (
-                <option key={v.name} value={v.name}>
-                  {v.name}
-                </option>
-              ))}
+          {/* Voz */}
+          <div>
+            <p className="text-[9px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Locutor</p>
+            <select value={currentVoice} onChange={e => setVoice(e.target.value)}
+              className="w-full text-[10px] border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1.5 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500">
+              {voices.map(v => <option key={v.id} value={v.id}>{v.name}{v.desc ? ` — ${v.desc}` : ''}</option>)}
             </select>
-            <ChevronDown size={11} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          </div>
+          {/* Velocidade */}
+          <div>
+            <p className="text-[9px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Velocidade</p>
+            <div className="flex gap-1">
+              {[0.75, 1.0, 1.25, 1.5].map(r => (
+                <button key={r} onClick={() => { setRate(r); if (playing || loading) stop() }}
+                  className={`flex-1 text-[10px] py-1 rounded font-semibold transition-colors ${
+                    rate === r ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-purple-100'
+                  }`}>{r}×</button>
+              ))}
+            </div>
           </div>
         </div>
-      )}
-
-      {voices.length === 0 && (
-        <p className="text-[10px] text-gray-400 dark:text-gray-500 italic">
-          Nenhuma voz pt-BR encontrada neste navegador.
-        </p>
       )}
     </div>
   )

@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
-import { Mail, ChevronDown, ChevronUp, Volume2, VolumeX, Square } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Mail, ChevronDown, ChevronUp } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 import AISupportChat from './AISupportChat'
+import AudioPlayer from './AudioPlayer'
 
 const CATEGORIES = {
   newsletter: { label: 'Newsletter',  color: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400' },
@@ -19,42 +20,6 @@ function stripHtml(html) {
   return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 }
 
-function AudioButton({ text }) {
-  const [playing, setPlaying] = useState(false)
-  const uttRef = useRef(null)
-
-  const toggle = () => {
-    if (playing) {
-      window.speechSynthesis.cancel()
-      setPlaying(false)
-      return
-    }
-    const utt = new SpeechSynthesisUtterance(text)
-    utt.lang = 'pt-BR'
-    utt.rate = 0.95
-    utt.onend = () => setPlaying(false)
-    utt.onerror = () => setPlaying(false)
-    uttRef.current = utt
-    window.speechSynthesis.speak(utt)
-    setPlaying(true)
-  }
-
-  useEffect(() => () => window.speechSynthesis.cancel(), [])
-
-  return (
-    <button
-      onClick={e => { e.stopPropagation(); toggle() }}
-      title={playing ? 'Parar áudio' : 'Ouvir email'}
-      className={`flex items-center gap-1.5 text-[10px] font-semibold px-2.5 py-1 rounded-full border transition-colors shrink-0 ${
-        playing
-          ? 'bg-[#B80E02] text-white border-[#B80E02]'
-          : 'text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:border-[#B80E02] hover:text-[#B80E02]'
-      }`}
-    >
-      {playing ? <><Square size={9} /> Parar</> : <><Volume2 size={10} /> Ouvir</>}
-    </button>
-  )
-}
 
 export default function EmailMarketing() {
   const [emails, setEmails] = useState([])
@@ -164,7 +129,7 @@ export default function EmailMarketing() {
                   <div className="border-t border-gray-100 dark:border-gray-700">
                     {/* Barra de ações */}
                     <div className="flex items-center gap-2 px-5 py-2.5 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-[#111]">
-                      <AudioButton text={plainText} />
+                      <AudioPlayer text={plainText} compact />
                       <button
                         onClick={() => setShowChat(v => v === email.id ? null : email.id)}
                         className={`flex items-center gap-1.5 text-[10px] font-semibold px-2.5 py-1 rounded-full border transition-colors ${
