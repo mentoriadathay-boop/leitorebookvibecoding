@@ -18,8 +18,21 @@ function fmtDate(dateStr) {
   })
 }
 
+function safeUrl(url, title) {
+  // Se a URL parece ser do Google Search ou é válida, usa direto
+  if (!url || url.includes('exemplo.com') || url.includes('example.com')) {
+    return `https://www.google.com/search?q=${encodeURIComponent(title)}`
+  }
+  // Se já é uma busca do Google, usa direto
+  if (url.includes('google.com/search')) return url
+  // Tenta usar a URL original
+  try { new URL(url); return url } catch { return `https://www.google.com/search?q=${encodeURIComponent(title)}` }
+}
+
 function ArticleCard({ article, newsDate, isSaved, savedId, onSave, onUnsave }) {
   const cat = CATEGORIES[article.category] || CATEGORIES.mercado
+  const href = safeUrl(article.url, article.title)
+  const isSearch = href.includes('google.com/search')
 
   const handleBookmark = (e) => {
     e.preventDefault()
@@ -30,7 +43,7 @@ function ArticleCard({ article, newsDate, isSaved, savedId, onSave, onUnsave }) 
 
   return (
     <a
-      href={article.url}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       className="group flex flex-col gap-2 bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-200 dark:border-gray-700 p-5 hover:border-[#1B6B3A] dark:hover:border-green-600 hover:shadow-md transition-all fade-in"
@@ -57,6 +70,11 @@ function ArticleCard({ article, newsDate, isSaved, savedId, onSave, onUnsave }) 
         {article.title}
       </h3>
       <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{article.summary}</p>
+      {isSearch && (
+        <span className="self-start text-[9px] bg-blue-50 dark:bg-blue-900/20 text-blue-500 dark:text-blue-400 px-2 py-0.5 rounded-full border border-blue-100 dark:border-blue-800/40">
+          🔍 Buscar no Google
+        </span>
+      )}
     </a>
   )
 }

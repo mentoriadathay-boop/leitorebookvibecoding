@@ -87,21 +87,47 @@ Retorne APENAS JSON válido, sem markdown, sem texto fora do JSON:
 }
 
 Categorias disponíveis: ferramenta | modelo | tendencia | case | mercado
-Inclua exatamente 8 artigos variados entre as 5 categorias.`
+Inclua exatamente 8 artigos variados entre as 5 categorias.
 
-  const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+IMPORTANTE: Para o campo "url", gere uma URL de busca no Google formatada assim:
+https://www.google.com/search?q=TITULO+DA+NOTICIA+site:techcrunch.com+OR+site:theverge.com+OR+site:anthropic.com+OR+site:openai.com
+Substitua TITULO+DA+NOTICIA pelo título da notícia com palavras separadas por +.
+Isso garante que o leitor sempre encontre a notícia real.`
+
+  // Tenta primeiro com web_search para URLs reais
+  let anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'x-api-key': ANTHROPIC_API_KEY,
       'anthropic-version': '2023-06-01',
+      'anthropic-beta': 'web-search-2025-03-05',
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
-      max_tokens: 4000,
+      max_tokens: 5000,
+      tools: [{ type: 'web_search_20250305', name: 'web_search' }],
       messages: [{ role: 'user', content: prompt }],
     }),
   })
+
+  // Fallback sem web_search se beta não disponível
+  if (!anthropicRes.ok || anthropicRes.status === 400) {
+    console.log('[vibe-news-cron] web_search indisponível, usando fallback sem busca')
+    anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 5000,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    })
+  }
 
   if (!anthropicRes.ok) {
     const err = await anthropicRes.text()
