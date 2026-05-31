@@ -50,33 +50,44 @@ Deno.serve(async (req: Request) => {
   }
 
   // Chama Claude para gerar as notícias
-  const prompt = `Você é um curador de conteúdo tech para brasileiros que criam SaaS e apps com IA (vibe coding).
+  const prompt = `Você é o curador oficial da Vibe News — o boletim diário de tecnologia da plataforma Hub Vibe Coding, voltado para brasileiros que criam SaaS e apps com IA (vibe coding).
 
-Hoje é ${today}. Crie uma curadoria de notícias relevantes cobrindo:
-- Novidades de ferramentas de vibe coding (Cursor, Windsurf, Lovable, Bolt, v0, Replit, Trae, etc.)
-- Lançamentos e atualizações de modelos de IA (Claude, GPT, Gemini, Llama, etc.)
-- Tendências de SaaS, no-code e automação com IA
-- Cases e estratégias de negócios digitais com IA
-- Mercado e oportunidades para criadores de produtos digitais
+Hoje é ${today}. Crie uma curadoria completa, detalhada e envolvente focada em:
 
-Crie artigos informativos e plausíveis baseados em tendências reais do mercado de IA. Seja específico com nomes de ferramentas, funcionalidades e impactos práticos.
+TEMAS PRINCIPAIS (cobrir obrigatoriamente):
+1. Vibe Coding: novidades de Cursor, Windsurf, Lovable, Bolt.new, v0.dev, Replit, Trae, Firebase Studio, Framer e outras ferramentas de desenvolvimento com IA
+2. Modelos de IA: lançamentos, benchmarks, atualizações e comparativos de Claude, GPT, Gemini, Llama, Mistral, Grok e outros
+3. Infraestrutura & Backend: Supabase, Neon, Vercel, Railway, Fly.io — novidades relevantes
+4. Negócios com IA: cases de indie hackers, MRR, crescimento, estratégias de monetização com IA
+5. Mercado: investimentos, aquisições, tendências de SaaS com IA, oportunidades para criadores
+
+RESUMO DO DIA:
+Escreva um resumo jornalístico rico com 5 a 6 parágrafos longos e detalhados. Cada parágrafo deve:
+- Ter no mínimo 4-5 frases completas
+- Conectar as notícias do dia em uma narrativa fluida e contextualizada
+- Explicar o impacto prático para quem está criando seu SaaS com IA agora
+- Mencionar números, comparações, tendências e implicações de mercado
+- Usar linguagem profissional mas acessível, com energia e entusiasmo
+
+ARTIGOS:
+Crie 8 artigos específicos e informativos. Cada um deve ter um resumo de 3-4 linhas com impacto real.
 
 Retorne APENAS JSON válido, sem markdown, sem texto fora do JSON:
 {
-  "summary": "Resumo narrativo do dia em 3-4 parágrafos em português brasileiro, envolvente e útil para quem cria SaaS com IA",
+  "summary": "Resumo narrativo extenso em 5-6 parágrafos longos e detalhados em português brasileiro, conectando as principais notícias do dia com contexto, números e impacto prático para criadores de SaaS com IA",
   "articles": [
     {
       "title": "Título da notícia em português",
-      "source": "Nome da fonte (ex: TechCrunch, Anthropic Blog, Product Hunt, The Verge)",
-      "url": "https://exemplo.com/noticia",
-      "summary": "Resumo em 2-3 linhas em português explicando o impacto prático para criadores de SaaS",
+      "source": "Nome da fonte real (TechCrunch, Anthropic Blog, OpenAI Blog, The Verge, VentureBeat, Product Hunt, GitHub Blog, etc.)",
+      "url": "https://exemplo.com/noticia-real",
+      "summary": "Resumo em 3-4 linhas em português explicando o que mudou, por que importa e qual o impacto prático para criadores de SaaS e apps com IA",
       "category": "ferramenta"
     }
   ]
 }
 
-Categorias: ferramenta | modelo | tendencia | case | mercado
-Inclua exatamente 6 artigos variados entre as categorias.`
+Categorias disponíveis: ferramenta | modelo | tendencia | case | mercado
+Inclua exatamente 8 artigos variados entre as 5 categorias.`
 
   const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
