@@ -373,22 +373,35 @@ export default function VibeNews() {
 
               {/* Cards de artigos */}
               <div>
-                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                  {news.articles?.length} notícias selecionadas
-                </p>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {news.articles?.map((article, i) => (
-                    <ArticleCard
-                      key={i}
-                      article={article}
-                      newsDate={news.date}
-                      isSaved={isNewsSaved(article.title)}
-                      savedId={getSavedId(article.title)}
-                      onSave={saveNews}
-                      onUnsave={unsaveNews}
-                    />
-                  ))}
-                </div>
+                {(() => {
+                  const seen = new Set()
+                  const uniqueArticles = (news.articles ?? []).filter(a => {
+                    const key = a.url || a.title
+                    if (seen.has(key)) return false
+                    seen.add(key)
+                    return true
+                  })
+                  return (
+                    <>
+                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                        {uniqueArticles.length} notícias selecionadas
+                      </p>
+                      <div className="grid sm:grid-cols-2 gap-3">
+                        {uniqueArticles.map((article, i) => (
+                          <ArticleCard
+                            key={article.url || article.title || i}
+                            article={article}
+                            newsDate={news.date}
+                            isSaved={isNewsSaved(article.title)}
+                            savedId={getSavedId(article.title)}
+                            onSave={saveNews}
+                            onUnsave={unsaveNews}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )
+                })()}
               </div>
 
               <p className="text-center text-[10px] text-gray-400 dark:text-gray-600">
