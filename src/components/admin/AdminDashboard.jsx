@@ -6,7 +6,7 @@ const PLAN_LABELS = { free: 'Gratuito', monthly: 'Mensal', annual: 'Anual', life
 const PLAN_COLORS = {
   free: 'text-gray-500',
   monthly: 'text-blue-500',
-  annual: 'text-[#1B6B3A]',
+  annual: 'text-[#5B2A6E]',
   lifetime: 'text-orange-500',
 }
 
@@ -69,12 +69,12 @@ export default function AdminDashboard() {
       <h2 className="font-playfair text-xl font-bold text-gray-900 dark:text-white">Visão geral</h2>
 
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
-        <StatCard icon={Users} label="Total de usuários" value={stats?.totalUsers} color="bg-[#1B6B3A]" />
+        <StatCard icon={Users} label="Total de usuários" value={stats?.totalUsers} color="bg-[#5B2A6E]" />
         <StatCard icon={TrendingUp} label="Novos (30 dias)" value={stats?.newUsers} color="bg-blue-500" />
-        <StatCard icon={BookOpen} label="Cap. publicados" value={stats?.totalChapters} color="bg-[#C9A84C]" />
+        <StatCard icon={BookOpen} label="Cap. publicados" value={stats?.totalChapters} color="bg-[#F5B942]" />
         <StatCard icon={FileText} label="Notas salvas" value={stats?.totalNotes} color="bg-purple-500" />
         <StatCard icon={Star} label="Vitalícios" value={stats?.plans?.lifetime} color="bg-orange-500" />
-        <StatCard icon={Calendar} label="Bloqueados" value={stats?.blockedUsers} color="bg-red-500" />
+        <StatCard icon={Calendar} label="Bloqueados" value={stats?.blockedUsers} color="bg-coral-500" />
       </div>
 
       {stats?.plans && (
@@ -95,7 +95,7 @@ export default function AdminDashboard() {
                       className="h-full rounded-full transition-all duration-500"
                       style={{
                         width: `${pct}%`,
-                        background: key === 'lifetime' ? '#f97316' : key === 'annual' ? '#1B6B3A' : key === 'monthly' ? '#3b82f6' : '#9ca3af',
+                        background: key === 'lifetime' ? '#f97316' : key === 'annual' ? '#5B2A6E' : key === 'monthly' ? '#3b82f6' : '#9ca3af',
                       }}
                     />
                   </div>

@@ -3,10 +3,10 @@ import { Bell } from 'lucide-react'
 import { useNotifications } from '../hooks/useNotifications'
 
 const TYPE_STYLES = {
-  feature: { label: 'Novidade',      color: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400' },
+  feature: { label: 'Novidade',      color: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light' },
   update:  { label: 'Atualização',   color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400' },
   news:    { label: 'Notícia',       color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400' },
-  alert:   { label: 'Aviso',         color: 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400' },
+  alert:   { label: 'Aviso',         color: 'bg-coral-100 text-coral-700 dark:bg-coral-900/20 dark:text-coral-400' },
 }
 
 function fmtRelative(dateStr) {
@@ -54,10 +54,10 @@ export default function NotificationBell({ user }) {
       >
         <Bell
           size={16}
-          className={unreadCount > 0 ? 'text-[#0F4A28] dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}
+          className={unreadCount > 0 ? 'text-[#3E1B4D] dark:text-magic-light' : 'text-gray-500 dark:text-gray-400'}
         />
         {unreadCount > 0 && (
-          <span className="absolute top-0.5 right-0.5 min-w-[14px] h-[14px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none px-0.5">
+          <span className="absolute top-0.5 right-0.5 min-w-[14px] h-[14px] bg-coral-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none px-0.5">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -68,7 +68,7 @@ export default function NotificationBell({ user }) {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700 sticky top-0 bg-white dark:bg-[#1A1A1A]">
             <span className="font-semibold text-sm text-gray-900 dark:text-white flex items-center gap-1.5">
-              <Bell size={13} className="text-[#1B6B3A] dark:text-green-400" />
+              <Bell size={13} className="text-[#5B2A6E] dark:text-magic-light" />
               Novidades
             </span>
             {notifications.length > 0 && unreadCount === 0 && (
@@ -90,7 +90,7 @@ export default function NotificationBell({ user }) {
                 return (
                   <div
                     key={n.id}
-                    className={`px-4 py-3 transition-colors ${isSessionUnread ? 'bg-[#E8F5EE]/50 dark:bg-[#0F4A28]/10' : ''}`}
+                    className={`px-4 py-3 transition-colors ${isSessionUnread ? 'bg-[#F2E4FA]/50 dark:bg-[#3E1B4D]/10' : ''}`}
                   >
                     <div className="flex items-center gap-2 mb-1.5">
                       <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${type.color}`}>
@@ -100,7 +100,7 @@ export default function NotificationBell({ user }) {
                         {fmtRelative(n.created_at)}
                       </span>
                       {isSessionUnread && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#1B6B3A] dark:bg-green-400 shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#5B2A6E] dark:bg-magic-light shrink-0" />
                       )}
                     </div>
                     <p className="text-sm font-semibold text-gray-900 dark:text-white leading-snug">

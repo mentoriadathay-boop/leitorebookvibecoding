@@ -4,11 +4,11 @@ import { supabase } from '../../lib/supabaseClient'
 import RichTextEditor from '../RichTextEditor'
 
 const CATEGORIES = [
-  { value: 'newsletter', label: 'Newsletter',  color: 'bg-[#E8F5EE] text-[#1B6B3A]' },
+  { value: 'newsletter', label: 'Newsletter',  color: 'bg-[#F2E4FA] text-[#5B2A6E]' },
   { value: 'bastidores', label: 'Bastidores',  color: 'bg-purple-100 text-purple-700' },
   { value: 'lancamento', label: 'Lançamento',  color: 'bg-blue-100 text-blue-700' },
-  { value: 'dica',       label: 'Dica',        color: 'bg-yellow-100 text-yellow-700' },
-  { value: 'promocao',   label: 'Promoção',    color: 'bg-red-100 text-red-700' },
+  { value: 'dica',       label: 'Dica',        color: 'bg-stargold-100 text-stargold-700' },
+  { value: 'promocao',   label: 'Promoção',    color: 'bg-coral-100 text-coral-700' },
 ]
 
 function catStyle(cat) { return CATEGORIES.find(c => c.value === cat) || CATEGORIES[0] }
@@ -143,7 +143,7 @@ export default function AdminEmailMarketing() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <Mail size={18} className="text-[#1B6B3A]" /> Newsletter
+            <Mail size={18} className="text-[#5B2A6E]" /> Newsletter
           </h2>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
             Publique emails para sua audiência — aparecem na aba Newsletter da plataforma. Use o botão Enviar para disparar via Resend.
@@ -151,7 +151,7 @@ export default function AdminEmailMarketing() {
         </div>
         <button
           onClick={() => { if (showForm && !editingId) { closeForm() } else if (!showForm) { setShowForm(true) } }}
-          className="flex items-center gap-2 px-4 py-2 bg-[#0F4A28] hover:bg-[#1B6B3A] text-white text-sm font-semibold rounded-xl transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white text-sm font-semibold rounded-xl transition-colors"
         >
           <Plus size={14} /> Novo email
         </button>
@@ -171,7 +171,7 @@ export default function AdminEmailMarketing() {
                 value={form.title}
                 onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
                 placeholder="Ex: Newsletter maio/2025"
-                className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
+                className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
               />
             </div>
             <div>
@@ -179,7 +179,7 @@ export default function AdminEmailMarketing() {
               <select
                 value={form.category}
                 onChange={e => setForm(p => ({ ...p, category: e.target.value }))}
-                className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300"
+                className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300"
               >
                 {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
               </select>
@@ -192,7 +192,7 @@ export default function AdminEmailMarketing() {
               value={form.subject}
               onChange={e => setForm(p => ({ ...p, subject: e.target.value }))}
               placeholder="Ex: 3 erros que impedem seu SaaS de crescer"
-              className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
+              className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
             />
           </div>
 
@@ -202,12 +202,12 @@ export default function AdminEmailMarketing() {
               <div className="flex rounded-lg border border-gray-200 dark:border-gray-600 overflow-hidden text-[10px] font-semibold">
                 <button type="button"
                   onClick={() => setEditorMode('visual')}
-                  className={`flex items-center gap-1 px-2.5 py-1.5 transition-colors ${editorMode === 'visual' ? 'bg-[#0F4A28] text-white' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
+                  className={`flex items-center gap-1 px-2.5 py-1.5 transition-colors ${editorMode === 'visual' ? 'bg-[#3E1B4D] text-white' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
                   <PenLine size={10} /> Visual
                 </button>
                 <button type="button"
                   onClick={() => setEditorMode('html')}
-                  className={`flex items-center gap-1 px-2.5 py-1.5 transition-colors ${editorMode === 'html' ? 'bg-[#0F4A28] text-white' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
+                  className={`flex items-center gap-1 px-2.5 py-1.5 transition-colors ${editorMode === 'html' ? 'bg-[#3E1B4D] text-white' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
                   <Code size={10} /> HTML
                 </button>
               </div>
@@ -229,7 +229,7 @@ export default function AdminEmailMarketing() {
                   onChange={e => setForm(p => ({ ...p, body: e.target.value }))}
                   placeholder={'Cole aqui o HTML completo do email...\n\nExemplo:\n<h2>Título</h2>\n<p>Parágrafo com <strong>negrito</strong>.</p>\n<ul><li>Item 1</li><li>Item 2</li></ul>'}
                   rows={14}
-                  className="w-full text-xs font-mono border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400 resize-y"
+                  className="w-full text-xs font-mono border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400 resize-y"
                 />
                 {form.body.trim() && (
                   <div className="mt-2 border border-gray-200 dark:border-gray-600 rounded-xl overflow-hidden">
@@ -244,15 +244,15 @@ export default function AdminEmailMarketing() {
           </div>
 
           <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" checked={form.published} onChange={e => setForm(p => ({ ...p, published: e.target.checked }))} className="w-4 h-4 accent-[#1B6B3A]" />
+            <input type="checkbox" checked={form.published} onChange={e => setForm(p => ({ ...p, published: e.target.checked }))} className="w-4 h-4 accent-[#5B2A6E]" />
             <span className="text-xs text-gray-700 dark:text-gray-300">Publicar imediatamente (visível para alunos)</span>
           </label>
 
-          {error && <p className="flex items-center gap-1.5 text-xs text-red-600"><AlertCircle size={12} /> {error}</p>}
+          {error && <p className="flex items-center gap-1.5 text-xs text-coral-600"><AlertCircle size={12} /> {error}</p>}
 
           <div className="flex items-center gap-3">
             <button type="submit" disabled={saving}
-              className="flex items-center gap-2 px-5 py-2 bg-[#0F4A28] hover:bg-[#1B6B3A] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50">
+              className="flex items-center gap-2 px-5 py-2 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50">
               {saving ? <><Loader size={13} className="animate-spin" /> Salvando...</> : <><CheckCircle size={13} /> Salvar</>}
             </button>
             <button type="button" onClick={closeForm}
@@ -285,7 +285,7 @@ export default function AdminEmailMarketing() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide ${cat.color}`}>{cat.label}</span>
-                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${email.published ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${email.published ? 'bg-success-100 text-success-700' : 'bg-gray-100 text-gray-500'}`}>
                         {email.published ? 'Publicado' : 'Rascunho'}
                       </span>
                       {email.sent && (
@@ -303,21 +303,21 @@ export default function AdminEmailMarketing() {
                     {/* Editar */}
                     <button onClick={() => openEdit(email)}
                       title="Editar email"
-                      className="p-2 rounded-lg text-gray-400 hover:text-[#1B6B3A] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                      className="p-2 rounded-lg text-gray-400 hover:text-[#5B2A6E] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                       <Pencil size={14} />
                     </button>
 
                     {/* Visualizar */}
                     <button onClick={() => setPreview(preview?.id === email.id ? null : email)}
                       title="Visualizar conteúdo"
-                      className="p-2 rounded-lg text-gray-400 hover:text-[#1B6B3A] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                      className="p-2 rounded-lg text-gray-400 hover:text-[#5B2A6E] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                       <Eye size={14} />
                     </button>
 
                     {/* Publicar/Despublicar */}
                     <button onClick={() => togglePublished(email)}
                       title={email.published ? 'Despublicar' : 'Publicar'}
-                      className={`p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 ${email.published ? 'text-green-600' : 'text-gray-400'}`}>
+                      className={`p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 ${email.published ? 'text-success-600' : 'text-gray-400'}`}>
                       {email.published ? <Eye size={14} /> : <EyeOff size={14} />}
                     </button>
 
@@ -334,7 +334,7 @@ export default function AdminEmailMarketing() {
                         onClick={() => setSendConfirm(email.id)}
                         disabled={isSending}
                         title="Enviar por email para todos os alunos"
-                        className="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold bg-[#0F4A28] hover:bg-[#1B6B3A] text-white rounded-lg transition-colors disabled:opacity-50">
+                        className="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white rounded-lg transition-colors disabled:opacity-50">
                         {isSending ? <Loader size={11} className="animate-spin" /> : <Send size={11} />}
                         {isSending ? 'Enviando...' : 'Enviar'}
                       </button>
@@ -343,12 +343,12 @@ export default function AdminEmailMarketing() {
                     {/* Excluir */}
                     {deleteConfirm === email.id ? (
                       <div className="flex items-center gap-1">
-                        <button onClick={() => handleDelete(email.id)} className="text-xs text-red-600 font-bold px-2">Sim</button>
+                        <button onClick={() => handleDelete(email.id)} className="text-xs text-coral-600 font-bold px-2">Sim</button>
                         <button onClick={() => setDeleteConfirm(null)} className="text-xs text-gray-400 px-2">Não</button>
                       </div>
                     ) : (
                       <button onClick={() => setDeleteConfirm(email.id)}
-                        className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        className="p-2 rounded-lg text-gray-400 hover:text-coral-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <Trash2 size={14} />
                       </button>
                     )}
@@ -357,7 +357,7 @@ export default function AdminEmailMarketing() {
 
                 {/* Resultado do envio */}
                 {result && (
-                  <div className={`mt-3 px-3 py-2 rounded-lg text-xs flex items-center gap-2 ${result.error ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
+                  <div className={`mt-3 px-3 py-2 rounded-lg text-xs flex items-center gap-2 ${result.error ? 'bg-coral-50 text-coral-700' : 'bg-success-50 text-success-700'}`}>
                     {result.error
                       ? <><AlertCircle size={13} /> Erro: {result.error}</>
                       : <><CheckCircle size={13} /> Enviado para {result.sent} de {result.total} alunos {result.failed > 0 ? `(${result.failed} falhas)` : ''}</>
@@ -392,8 +392,8 @@ export default function AdminEmailMarketing() {
         .email-content li { margin: 0.25rem 0; }
         .email-content strong, .email-content b { font-weight: 700; }
         .email-content em, .email-content i { font-style: italic; }
-        .email-content a { color: #1B6B3A; text-decoration: underline; }
-        .email-content blockquote { border-left: 4px solid #C9A84C; padding: 6px 14px; margin: 0.75rem 0; background: #fdf6e3; border-radius: 0 6px 6px 0; }
+        .email-content a { color: #5B2A6E; text-decoration: underline; }
+        .email-content blockquote { border-left: 4px solid #F5B942; padding: 6px 14px; margin: 0.75rem 0; background: #FFF6E0; border-radius: 0 6px 6px 0; }
         .email-content img { max-width: 100%; border-radius: 8px; margin: 0.75rem 0; display: block; }
         .email-content hr { border: none; border-top: 2px solid #e5e7eb; margin: 1rem 0; }
         .email-content pre, .email-content code { background: #f3f4f6; padding: 1px 5px; border-radius: 4px; font-family: monospace; font-size: 0.85em; }

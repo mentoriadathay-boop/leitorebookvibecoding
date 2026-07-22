@@ -42,15 +42,15 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#E8F5EE] dark:bg-[#0a1a0f] px-4 py-8">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F2E4FA] dark:bg-[#1F1425] px-4 py-8">
       <div className="w-full max-w-sm">
 
         {/* Logo + Brand */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-red-600 flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ background: 'linear-gradient(135deg, #5B2A6E 0%, #C2298A 100%)' }}>
             <BookOpen size={28} className="text-white" />
           </div>
-          <h1 className="font-playfair text-2xl font-bold text-[#0F4A28] dark:text-green-300">
+          <h1 className="font-playfair text-2xl font-bold text-[#3E1B4D] dark:text-magic-light">
             Hub Vibe Coding
           </h1>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -73,12 +73,12 @@ export default function Login() {
           </p>
 
           {error && (
-            <div className="mb-4 p-3 bg-[#FEF2F2] dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-xs text-[#B91C1C] dark:text-red-400">
+            <div className="mb-4 p-3 bg-[#FCEDE7] dark:bg-coral-900/20 border border-coral-200 dark:border-coral-700 rounded-lg text-xs text-[#F2A488] dark:text-coral-400">
               {error}
             </div>
           )}
           {success && (
-            <div className="mb-4 p-3 bg-[#E8F5EE] dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg text-xs text-[#0F4A28] dark:text-green-400">
+            <div className="mb-4 p-3 bg-success-50 dark:bg-success-900/20 border border-success-200 dark:border-success-700 rounded-lg text-xs text-success-700 dark:text-success-300">
               {success}
             </div>
           )}
@@ -92,7 +92,7 @@ export default function Login() {
                 onChange={e => setEmail(e.target.value)}
                 required
                 placeholder="seu@email.com"
-                className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
+                className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
               />
             </div>
 
@@ -106,7 +106,7 @@ export default function Login() {
                     onChange={e => setPassword(e.target.value)}
                     required
                     placeholder="Sua senha"
-                    className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 pr-10 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
+                    className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 pr-10 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
                   />
                   <button
                     type="button"
@@ -122,7 +122,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white rounded-xl font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white rounded-xl font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Aguarde...' : mode === 'login' ? 'Entrar' : 'Enviar link de recuperação'}
             </button>
@@ -139,7 +139,7 @@ export default function Login() {
             ) : (
               <button
                 onClick={() => { setMode('login'); setError(''); setSuccess('') }}
-                className="text-xs text-[#1B6B3A] hover:text-[#0F4A28] dark:text-green-400 transition-colors"
+                className="text-xs text-[#5B2A6E] hover:text-[#3E1B4D] dark:text-magic-light transition-colors"
               >
                 ← Voltar ao login
               </button>
@@ -154,7 +154,7 @@ export default function Login() {
             href="https://thayanefidelis.store/"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-[#1B6B3A] dark:hover:text-green-400 transition-colors"
+            className="underline hover:text-[#5B2A6E] dark:hover:text-magic-light transition-colors"
           >
             Adquira o ebook
           </a>

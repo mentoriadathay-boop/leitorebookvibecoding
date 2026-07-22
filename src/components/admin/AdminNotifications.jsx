@@ -3,10 +3,10 @@ import { Bell, Plus, Trash2, Send, CheckCircle, AlertCircle, Loader } from 'luci
 import { supabase } from '../../lib/supabaseClient'
 
 const TYPES = [
-  { value: 'feature', label: 'Novidade',    color: 'bg-[#E8F5EE] text-[#1B6B3A]' },
+  { value: 'feature', label: 'Novidade',    color: 'bg-[#F2E4FA] text-[#5B2A6E]' },
   { value: 'update',  label: 'Atualização', color: 'bg-blue-100 text-blue-700' },
   { value: 'news',    label: 'Notícia',     color: 'bg-purple-100 text-purple-700' },
-  { value: 'alert',   label: 'Aviso',       color: 'bg-red-100 text-red-700' },
+  { value: 'alert',   label: 'Aviso',       color: 'bg-coral-100 text-coral-700' },
 ]
 
 function typeStyle(type) {
@@ -91,12 +91,12 @@ export default function AdminNotifications() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="font-playfair text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-          <Bell size={18} className="text-[#1B6B3A]" />
+          <Bell size={18} className="text-[#5B2A6E]" />
           Notificações
         </h2>
         <button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-1.5 text-xs bg-[#0F4A28] hover:bg-[#1B6B3A] text-white px-3 py-1.5 rounded-full transition-colors font-medium"
+          className="flex items-center gap-1.5 text-xs bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white px-3 py-1.5 rounded-full transition-colors font-medium"
         >
           <Plus size={13} /> Nova notificação
         </button>
@@ -130,7 +130,7 @@ export default function AdminNotifications() {
               value={form.title}
               onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
               required
-              className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-[#111] text-gray-900 dark:text-white focus:outline-none focus:border-[#1B6B3A] dark:focus:border-green-500"
+              className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-[#111] text-gray-900 dark:text-white focus:outline-none focus:border-[#5B2A6E] dark:focus:border-success-500"
             />
 
             <textarea
@@ -138,14 +138,14 @@ export default function AdminNotifications() {
               value={form.body}
               onChange={e => setForm(f => ({ ...f, body: e.target.value }))}
               rows={3}
-              className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-[#111] text-gray-900 dark:text-white focus:outline-none focus:border-[#1B6B3A] dark:focus:border-green-500 resize-none"
+              className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-[#111] text-gray-900 dark:text-white focus:outline-none focus:border-[#5B2A6E] dark:focus:border-success-500 resize-none"
             />
 
             <div className="flex items-center gap-2">
               <button
                 type="submit"
                 disabled={saving}
-                className="text-sm bg-[#0F4A28] hover:bg-[#1B6B3A] text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 font-medium"
+                className="text-sm bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 font-medium"
               >
                 {saving ? 'Publicando...' : 'Publicar'}
               </button>
@@ -162,8 +162,8 @@ export default function AdminNotifications() {
       )}
 
       {/* Info box sobre email */}
-      <div className="bg-[#FDF6E3] dark:bg-yellow-900/10 border border-[#C9A84C]/30 rounded-xl p-4 text-xs text-gray-600 dark:text-gray-400">
-        <p className="font-semibold text-[#C9A84C] mb-1">📧 Envio de email</p>
+      <div className="bg-[#FFF6E0] dark:bg-stargold-900/10 border border-[#F5B942]/30 rounded-xl p-4 text-xs text-gray-600 dark:text-gray-400">
+        <p className="font-semibold text-[#F5B942] mb-1">📧 Envio de email</p>
         <p>
           O botão <strong>Email</strong> dispara a Edge Function <code className="bg-black/5 dark:bg-white/5 px-1 rounded">send-notification-email</code> via Resend.
           Configure os secrets <code className="bg-black/5 dark:bg-white/5 px-1 rounded">RESEND_API_KEY</code> e <code className="bg-black/5 dark:bg-white/5 px-1 rounded">FROM_EMAIL</code> no painel do Supabase → Edge Functions → Secrets.
@@ -198,7 +198,7 @@ export default function AdminNotifications() {
                         {fmtDate(n.created_at)}
                       </span>
                       {(n.email_sent || st === 'sent') && (
-                        <span className="text-[10px] text-green-600 dark:text-green-400 flex items-center gap-0.5">
+                        <span className="text-[10px] text-success-600 dark:text-success-400 flex items-center gap-0.5">
                           <CheckCircle size={10} /> Email enviado
                         </span>
                       )}
@@ -216,12 +216,12 @@ export default function AdminNotifications() {
                         onClick={() => handleSendEmail(n)}
                         disabled={st === 'sending'}
                         title="Enviar email para todos os usuários ativos"
-                        className="flex items-center gap-1 text-xs text-[#1B6B3A] dark:text-green-400 hover:bg-[#E8F5EE] dark:hover:bg-[#0F4A28]/20 px-2 py-1 rounded-lg transition-colors disabled:opacity-50 border border-[#1B6B3A]/30 dark:border-green-700/40"
+                        className="flex items-center gap-1 text-xs text-[#5B2A6E] dark:text-magic-light hover:bg-[#F2E4FA] dark:hover:bg-[#3E1B4D]/20 px-2 py-1 rounded-lg transition-colors disabled:opacity-50 border border-[#5B2A6E]/30 dark:border-[#5B2A6E]/40"
                       >
                         {st === 'sending' ? (
                           <><Loader size={11} className="animate-spin" /> Enviando</>
                         ) : st === 'error' ? (
-                          <><AlertCircle size={11} className="text-red-500" /> Erro</>
+                          <><AlertCircle size={11} className="text-coral-500" /> Erro</>
                         ) : (
                           <><Send size={11} /> Email</>
                         )}
@@ -233,7 +233,7 @@ export default function AdminNotifications() {
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => handleDelete(n.id)}
-                          className="text-xs text-white bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg transition-colors"
+                          className="text-xs text-white bg-coral-500 hover:bg-coral-600 px-2 py-1 rounded-lg transition-colors"
                         >
                           Confirmar
                         </button>
@@ -247,7 +247,7 @@ export default function AdminNotifications() {
                     ) : (
                       <button
                         onClick={() => setDeleteConfirm(n.id)}
-                        className="p-1.5 text-gray-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                        className="p-1.5 text-gray-400 hover:text-coral-500 transition-colors rounded-lg hover:bg-coral-50 dark:hover:bg-coral-900/20"
                         title="Remover notificação"
                       >
                         <Trash2 size={13} />

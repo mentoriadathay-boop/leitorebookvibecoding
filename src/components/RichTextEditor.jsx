@@ -22,7 +22,7 @@ function Btn({ onClick, active, title, children }) {
       title={title}
       className={`p-1.5 rounded transition-colors ${
         active
-          ? 'bg-[#0F4A28] text-white'
+          ? 'bg-[#3E1B4D] text-white'
           : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
       }`}
     >
@@ -48,7 +48,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Escreva
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Link.configure({
         openOnClick: false,
-        HTMLAttributes: { class: 'text-[#1B6B3A] underline cursor-pointer' },
+        HTMLAttributes: { class: 'text-[#5B2A6E] underline cursor-pointer' },
       }),
       Placeholder.configure({ placeholder }),
     ],
@@ -144,9 +144,9 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Escreva
               <input value={linkUrl} onChange={e => setLinkUrl(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && insertLink()}
                 placeholder="https://..." autoFocus
-                className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded px-2 py-1.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
+                className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded px-2 py-1.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
               <button type="button" onClick={insertLink}
-                className="text-xs px-2 py-1 bg-[#0F4A28] text-white rounded hover:bg-[#1B6B3A] font-semibold">OK</button>
+                className="text-xs px-2 py-1 bg-[#3E1B4D] text-white rounded hover:bg-[#5B2A6E] font-semibold">OK</button>
             </div>
           )}
         </div>
@@ -161,9 +161,9 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Escreva
               <input value={imageUrl} onChange={e => setImageUrl(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && insertImage()}
                 placeholder="https://... (URL da imagem)" autoFocus
-                className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded px-2 py-1.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
+                className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded px-2 py-1.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
               <button type="button" onClick={insertImage}
-                className="text-xs px-2 py-1 bg-[#0F4A28] text-white rounded hover:bg-[#1B6B3A] font-semibold">OK</button>
+                className="text-xs px-2 py-1 bg-[#3E1B4D] text-white rounded hover:bg-[#5B2A6E] font-semibold">OK</button>
             </div>
           )}
         </div>
@@ -188,15 +188,15 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Escreva
         .ProseMirror p  { margin: .35rem 0; line-height: 1.7; }
         .ProseMirror ul, .ProseMirror ol { padding-left: 1.5rem; margin: .5rem 0; }
         .ProseMirror li { margin: .25rem 0; }
-        .ProseMirror blockquote { border-left: 4px solid #C9A84C; padding-left: 1rem; margin: .75rem 0; color: #6b7280; font-style: italic; background: #fdf6e3; border-radius: 0 6px 6px 0; padding: 8px 16px; }
+        .ProseMirror blockquote { border-left: 4px solid #F5B942; padding-left: 1rem; margin: .75rem 0; color: #6b7280; font-style: italic; background: #FFF6E0; border-radius: 0 6px 6px 0; padding: 8px 16px; }
         .ProseMirror hr  { border: none; border-top: 2px solid #e5e7eb; margin: 1rem 0; }
-        .ProseMirror a   { color: #1B6B3A; text-decoration: underline; }
+        .ProseMirror a   { color: #5B2A6E; text-decoration: underline; }
         .ProseMirror img { max-width: 100%; border-radius: 8px; margin: 12px 0; display: block; }
         .ProseMirror strong { font-weight: 700; }
         .ProseMirror code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; font-size: .85em; font-family: monospace; }
         .dark .ProseMirror h1, .dark .ProseMirror h2, .dark .ProseMirror h3 { color: #f9fafb; }
         .dark .ProseMirror p, .dark .ProseMirror li { color: #d1d5db; }
-        .dark .ProseMirror blockquote { background: rgba(201,168,76,.08); color: #9ca3af; }
+        .dark .ProseMirror blockquote { background: rgba(245,185,66,.08); color: #9ca3af; }
         .dark .ProseMirror code { background: #374151; color: #d1fae5; }
         .dark .ProseMirror hr { border-color: #374151; }
       `}</style>

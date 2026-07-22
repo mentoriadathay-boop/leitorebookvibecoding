@@ -103,14 +103,14 @@ Seja como um mentor próximo: direto, prático, com exemplos reais quando possí
       {!open ? (
         <button
           onClick={openChat}
-          className="w-full flex items-center justify-between gap-3 p-4 bg-[#E8F5EE] dark:bg-[#0F4A28]/20 border border-[#1B6B3A]/30 rounded-xl hover:border-[#1B6B3A] hover:bg-[#d4edde] dark:hover:bg-[#0F4A28]/30 transition-all group"
+          className="w-full flex items-center justify-between gap-3 p-4 bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 border border-[#5B2A6E]/30 rounded-xl hover:border-[#5B2A6E] hover:bg-[#EDE7F6] dark:hover:bg-[#3E1B4D]/30 transition-all group"
         >
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#1B6B3A] flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-full bg-[#5B2A6E] flex items-center justify-center shrink-0">
               <Sparkles size={14} className="text-white" />
             </div>
             <div className="text-left">
-              <p className="text-sm font-semibold text-[#0F4A28] dark:text-green-300">
+              <p className="text-sm font-semibold text-[#3E1B4D] dark:text-magic-light">
                 Tirar dúvidas sobre este capítulo
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -118,12 +118,12 @@ Seja como um mentor próximo: direto, prático, com exemplos reais quando possí
               </p>
             </div>
           </div>
-          <ChevronDown size={16} className="text-[#1B6B3A] dark:text-green-400 shrink-0 group-hover:translate-y-0.5 transition-transform" />
+          <ChevronDown size={16} className="text-[#5B2A6E] dark:text-magic-light shrink-0 group-hover:translate-y-0.5 transition-transform" />
         </button>
       ) : (
-        <div className="border border-[#1B6B3A]/30 dark:border-green-800/40 rounded-xl overflow-hidden">
+        <div className="border border-[#5B2A6E]/30 dark:border-[#5B2A6E]/40 rounded-xl overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-[#1B6B3A] dark:bg-[#0F4A28]">
+          <div className="flex items-center justify-between px-4 py-3 bg-[#5B2A6E] dark:bg-[#3E1B4D]">
             <div className="flex items-center gap-2">
               <Bot size={15} className="text-white" />
               <span className="text-sm font-semibold text-white">IA — {chapter.title}</span>
@@ -146,8 +146,8 @@ Seja como um mentor próximo: direto, prático, com exemplos reais quando possí
                 <div
                   className={`max-w-[85%] text-sm px-3 py-2.5 rounded-2xl leading-relaxed fade-in ${
                     msg.role === 'user'
-                      ? 'bg-[#1B6B3A] text-white rounded-br-sm'
-                      : 'bg-[#E8F5EE] dark:bg-[#0F4A28]/30 text-gray-800 dark:text-gray-200 rounded-bl-sm'
+                      ? 'bg-[#5B2A6E] text-white rounded-br-sm'
+                      : 'bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 text-gray-800 dark:text-gray-200 rounded-bl-sm'
                   }`}
                 >
                   {stripMarkdown(msg.content)}
@@ -157,10 +157,10 @@ Seja como um mentor próximo: direto, prático, com exemplos reais quando possí
 
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-[#E8F5EE] dark:bg-[#0F4A28]/30 px-4 py-2.5 rounded-2xl rounded-bl-sm">
-                  <span className="dot1 text-[#1B6B3A]">•</span>
-                  <span className="dot2 text-[#1B6B3A]">•</span>
-                  <span className="dot3 text-[#1B6B3A]">•</span>
+                <div className="bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 px-4 py-2.5 rounded-2xl rounded-bl-sm">
+                  <span className="dot1 text-[#5B2A6E]">•</span>
+                  <span className="dot2 text-[#5B2A6E]">•</span>
+                  <span className="dot3 text-[#5B2A6E]">•</span>
                 </div>
               </div>
             )}
@@ -178,7 +178,7 @@ Seja como um mentor próximo: direto, prático, com exemplos reais quando possí
                 <button
                   key={s}
                   onClick={() => { setInput(s); inputRef.current?.focus() }}
-                  className="text-xs px-3 py-1.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-full text-gray-600 dark:text-gray-300 hover:border-[#1B6B3A] hover:text-[#1B6B3A] dark:hover:text-green-400 transition-colors"
+                  className="text-xs px-3 py-1.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-full text-gray-600 dark:text-gray-300 hover:border-[#5B2A6E] hover:text-[#5B2A6E] dark:hover:text-magic-light transition-colors"
                 >
                   {s}
                 </button>
@@ -194,12 +194,12 @@ Seja como um mentor próximo: direto, prático, com exemplos reais quando possí
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKey}
               placeholder="Pergunte qualquer coisa..."
-              className="flex-1 text-sm border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
+              className="flex-1 text-sm border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
             />
             <button
               onClick={send}
               disabled={!input.trim() || loading}
-              className="w-9 h-9 rounded-xl bg-[#1B6B3A] hover:bg-[#0F4A28] text-white flex items-center justify-center disabled:opacity-40 transition-colors shrink-0"
+              className="w-9 h-9 rounded-xl bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white flex items-center justify-center disabled:opacity-40 transition-colors shrink-0"
             >
               <Send size={14} />
             </button>

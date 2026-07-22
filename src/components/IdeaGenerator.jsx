@@ -102,7 +102,7 @@ export default function IdeaGenerator({ onSaveIdea }) {
               value={nicho}
               onChange={e => setNicho(e.target.value)}
               placeholder="Ex: Clínicas odontológicas, academias de ginástica..."
-              className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
+              className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
             />
           </div>
 
@@ -114,7 +114,7 @@ export default function IdeaGenerator({ onSaveIdea }) {
               value={dor}
               onChange={e => setDor(e.target.value)}
               placeholder="Ex: Gestão de agendamentos, controle de estoque..."
-              className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
+              className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
             />
           </div>
 
@@ -124,7 +124,7 @@ export default function IdeaGenerator({ onSaveIdea }) {
               <select
                 value={publico}
                 onChange={e => setPublico(e.target.value)}
-                className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300"
+                className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300"
               >
                 {publicoOptions.map(o => <option key={o} value={o}>{o}</option>)}
               </select>
@@ -134,7 +134,7 @@ export default function IdeaGenerator({ onSaveIdea }) {
               <select
                 value={disponibilidade}
                 onChange={e => setDisponibilidade(e.target.value)}
-                className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300"
+                className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300"
               >
                 {disponibilidadeOptions.map(o => <option key={o} value={o}>{o}</option>)}
               </select>
@@ -144,7 +144,7 @@ export default function IdeaGenerator({ onSaveIdea }) {
           <button
             onClick={generate}
             disabled={loading || !nicho.trim() || !dor.trim()}
-            className="w-full flex items-center justify-center gap-2 py-3 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white rounded-xl font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 py-3 bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white rounded-xl font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <>
@@ -165,7 +165,7 @@ export default function IdeaGenerator({ onSaveIdea }) {
             <h3 className="font-playfair font-semibold text-lg text-gray-900 dark:text-white">Suas 3 ideias</h3>
             <button
               onClick={generate}
-              className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#1B6B3A] transition-colors"
+              className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#5B2A6E] transition-colors"
             >
               <RotateCcw size={12} /> Gerar novas
             </button>
@@ -176,7 +176,7 @@ export default function IdeaGenerator({ onSaveIdea }) {
               <div key={i} className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 p-5 fade-in">
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <h4 className="font-playfair font-bold text-lg text-gray-900 dark:text-white">{idea.title}</h4>
-                  <span className="shrink-0 text-[11px] bg-[#FEF2F2] dark:bg-red-900/20 text-[#B91C1C] dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">
+                  <span className="shrink-0 text-[11px] bg-[#FCEDE7] dark:bg-coral-900/20 text-[#F2A488] dark:text-coral-400 px-2 py-0.5 rounded-full font-semibold">
                     #{idea.tag}
                   </span>
                 </div>
@@ -188,7 +188,7 @@ export default function IdeaGenerator({ onSaveIdea }) {
                     {idea.descricao.map((f, j) => (
                       <span
                         key={j}
-                        className="inline-flex items-center gap-1 text-[11px] bg-[#E8F5EE] dark:bg-[#0F4A28]/30 text-[#1B6B3A] dark:text-green-400 px-2.5 py-1 rounded-full font-medium"
+                        className="inline-flex items-center gap-1 text-[11px] bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 text-[#5B2A6E] dark:text-magic-light px-2.5 py-1 rounded-full font-medium"
                       >
                         <span className="text-[10px]">✓</span> {f}
                       </span>
@@ -198,11 +198,11 @@ export default function IdeaGenerator({ onSaveIdea }) {
 
                 <div className="space-y-1.5 mb-4">
                   <div className="flex items-start gap-2 text-xs">
-                    <span className="shrink-0 font-semibold text-[#C9A84C] w-24">Monetização:</span>
+                    <span className="shrink-0 font-semibold text-[#F5B942] w-24">Monetização:</span>
                     <span className="text-gray-600 dark:text-gray-400">{idea.monetizacao}</span>
                   </div>
                   <div className="flex items-start gap-2 text-xs">
-                    <span className="shrink-0 font-semibold text-[#1B6B3A] dark:text-green-400 w-24">Diferencial:</span>
+                    <span className="shrink-0 font-semibold text-[#5B2A6E] dark:text-magic-light w-24">Diferencial:</span>
                     <span className="text-gray-600 dark:text-gray-400">{idea.diferencial}</span>
                   </div>
                 </div>
@@ -212,8 +212,8 @@ export default function IdeaGenerator({ onSaveIdea }) {
                   disabled={saved[i]}
                   className={`flex items-center gap-1.5 text-xs px-4 py-2 rounded-lg border transition-all ${
                     saved[i]
-                      ? 'bg-green-100 text-green-700 border-green-300 dark:bg-green-900/20 dark:text-green-400'
-                      : 'border-[#1B6B3A] text-[#1B6B3A] hover:bg-[#E8F5EE] dark:hover:bg-[#0F4A28]/20'
+                      ? 'bg-success-100 text-success-700 border-success-300 dark:bg-success-900/20 dark:text-success-300'
+                      : 'border-[#5B2A6E] text-[#5B2A6E] hover:bg-[#F2E4FA] dark:hover:bg-[#3E1B4D]/20'
                   }`}
                 >
                   <Bookmark size={12} />

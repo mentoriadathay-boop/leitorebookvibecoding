@@ -40,7 +40,7 @@ export default function MySaas() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#1B6B3A] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-[#5B2A6E] flex items-center justify-center">
               <Rocket size={15} className="text-white" />
             </div>
             <div>
@@ -52,7 +52,7 @@ export default function MySaas() {
           </div>
           <button
             onClick={() => setEditing(true)}
-            className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 transition-colors"
+            className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light transition-colors"
           >
             <Pencil size={12} /> Editar
           </button>
@@ -71,8 +71,8 @@ export default function MySaas() {
           ) : null)}
         </div>
 
-        <div className="p-3 bg-[#E8F5EE] dark:bg-[#0F4A28]/20 rounded-lg border border-[#1B6B3A]/20">
-          <p className="text-[10px] text-[#1B6B3A] dark:text-green-400 font-semibold mb-1">💡 Dica</p>
+        <div className="p-3 bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 rounded-lg border border-[#5B2A6E]/20">
+          <p className="text-[10px] text-[#5B2A6E] dark:text-magic-light font-semibold mb-1">💡 Dica</p>
           <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed">
             O chat de IA já conhece seu projeto e vai usar esse contexto para responder de forma personalizada.
           </p>
@@ -84,7 +84,7 @@ export default function MySaas() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-1">
-        <Rocket size={15} className="text-[#1B6B3A] dark:text-green-400" />
+        <Rocket size={15} className="text-[#5B2A6E] dark:text-magic-light" />
         <p className="text-sm font-semibold text-gray-800 dark:text-white">
           {form.name ? 'Editar meu SaaS' : 'Cadastrar meu SaaS'}
         </p>
@@ -103,7 +103,7 @@ export default function MySaas() {
               value={form[f.key]}
               onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
               placeholder={f.placeholder}
-              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
+              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
             />
           </div>
         ))}
@@ -119,8 +119,8 @@ export default function MySaas() {
                 onClick={() => setForm(p => ({ ...p, status: s.value }))}
                 className={`flex-1 text-[11px] py-1.5 rounded-lg border transition-colors ${
                   form.status === s.value
-                    ? 'bg-[#1B6B3A] text-white border-[#1B6B3A]'
-                    : 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-[#1B6B3A]'
+                    ? 'bg-[#5B2A6E] text-white border-[#5B2A6E]'
+                    : 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-[#5B2A6E]'
                 }`}
               >
                 {s.label}
@@ -135,8 +135,8 @@ export default function MySaas() {
         disabled={!form.name.trim()}
         className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all ${
           saved
-            ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
-            : 'bg-[#1B6B3A] hover:bg-[#0F4A28] text-white disabled:opacity-40'
+            ? 'bg-success-100 text-success-700 dark:bg-success-900/20 dark:text-success-400'
+            : 'bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white disabled:opacity-40'
         }`}
       >
         {saved ? <><Check size={14} /> Salvo!</> : <><Save size={14} /> Salvar</>}

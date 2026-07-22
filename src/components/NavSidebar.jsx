@@ -44,8 +44,8 @@ export default function NavSidebar({ activeTab, onNavigate, onClose }) {
               onClick={() => handleClick(item.id)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 text-left text-xs font-medium rounded-lg border transition-all ${
                 active
-                  ? 'bg-[#B80E02] border-[#B80E02] text-white shadow-sm'
-                  : 'bg-white dark:bg-[#1A1A1A] border-[#B80E02]/20 dark:border-[#B80E02]/20 text-gray-700 dark:text-gray-300 hover:border-[#B80E02]/60 hover:bg-red-50 dark:hover:bg-[#B80E02]/10 hover:text-[#B80E02] dark:hover:text-red-400'
+                  ? 'bg-[#5B2A6E] border-[#5B2A6E] text-white shadow-sm'
+                  : 'bg-white dark:bg-[#1A1A1A] border-[#5B2A6E]/20 dark:border-[#5B2A6E]/20 text-gray-700 dark:text-gray-300 hover:border-[#5B2A6E]/60 hover:bg-[#F2E4FA] dark:hover:bg-[#5B2A6E]/10 hover:text-[#5B2A6E] dark:hover:text-magic-light'
               }`}
             >
               <Icon size={15} className="shrink-0" />
@@ -87,7 +87,7 @@ export default function NavSidebar({ activeTab, onNavigate, onClose }) {
             href="https://thayanefidelis.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-[#B80E02] dark:hover:text-red-400 transition-colors"
+            className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light transition-colors"
           >
             thayanefidelis.com <ExternalLink size={9} />
           </a>

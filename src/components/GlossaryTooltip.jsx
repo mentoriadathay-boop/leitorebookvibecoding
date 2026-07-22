@@ -18,10 +18,10 @@ export default function GlossaryTooltip({ term, children }) {
       </span>
       {visible && (
         <span
-          className="absolute bottom-full left-0 z-50 w-64 p-3 text-xs bg-[#FDF6E3] dark:bg-gray-800 border border-[#C9A84C]/40 rounded-lg shadow-lg text-gray-700 dark:text-gray-200 fade-in"
+          className="absolute bottom-full left-0 z-50 w-64 p-3 text-xs bg-[#FFF6E0] dark:bg-gray-800 border border-[#F5B942]/40 rounded-lg shadow-lg text-gray-700 dark:text-gray-200 fade-in"
           style={{ marginBottom: 6 }}
         >
-          <strong className="text-[#0F4A28] dark:text-green-400 block mb-1">{term}</strong>
+          <strong className="text-[#3E1B4D] dark:text-magic-light block mb-1">{term}</strong>
           {glossary[term]}
         </span>
       )}

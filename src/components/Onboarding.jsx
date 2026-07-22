@@ -99,7 +99,7 @@ export default function Onboarding({ onClose }) {
         {/* Top bar */}
         <div className="flex items-center justify-between px-5 pt-4 pb-0 shrink-0">
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B6B3A] dark:text-green-400 bg-[#E8F5EE] dark:bg-[#0F4A28]/30 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#5B2A6E] dark:text-magic-light bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 px-2 py-0.5 rounded-full">
               {current.tag}
             </span>
             <span className="text-[10px] text-gray-400">{step + 1} de {STEPS.length}</span>
@@ -129,7 +129,7 @@ export default function Onboarding({ onClose }) {
 
           {/* Tip box (last step) */}
           {current.tip && (
-            <div className="mb-5 p-4 bg-[#E8F5EE] dark:bg-[#0F4A28]/20 border border-[#1B6B3A]/30 rounded-xl flex items-start gap-3">
+            <div className="mb-5 p-4 bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 border border-[#5B2A6E]/30 rounded-xl flex items-start gap-3">
               <span className="text-xl shrink-0">{current.tip.icon}</span>
               <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{current.tip.text}</p>
             </div>
@@ -152,7 +152,7 @@ export default function Onboarding({ onClose }) {
 
           {/* Hint */}
           {current.highlight && (
-            <div className="mt-4 flex items-center gap-2 text-xs text-[#1B6B3A] dark:text-green-400 bg-[#E8F5EE] dark:bg-[#0F4A28]/20 px-3 py-2 rounded-lg">
+            <div className="mt-4 flex items-center gap-2 text-xs text-[#5B2A6E] dark:text-magic-light bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 px-3 py-2 rounded-lg">
               <span className="text-base">👉</span>
               {current.highlight}
             </div>
@@ -165,7 +165,7 @@ export default function Onboarding({ onClose }) {
             <button key={i} onClick={() => { setDir(i > step ? 1 : -1); setStep(i) }}
               className={`rounded-full transition-all duration-300 ${
                 i === step
-                  ? 'w-5 h-2 bg-[#1B6B3A] dark:bg-green-400'
+                  ? 'w-5 h-2 bg-[#5B2A6E] dark:bg-magic-light'
                   : 'w-2 h-2 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500'
               }`}
             />
@@ -188,12 +188,12 @@ export default function Onboarding({ onClose }) {
 
           {isLast ? (
             <button onClick={onClose}
-              className="flex-1 py-2.5 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+              className="flex-1 py-2.5 bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-2">
               🚀 {current.cta}
             </button>
           ) : (
             <button onClick={() => go(1)}
-              className="flex-1 py-2.5 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-1.5">
+              className="flex-1 py-2.5 bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-1.5">
               {step === 0 ? 'Conhecer a plataforma' : 'Próximo'} <ChevronRight size={15} />
             </button>
           )}

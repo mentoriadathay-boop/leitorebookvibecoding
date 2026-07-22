@@ -54,7 +54,7 @@ function ReadingHub({ chapters, currentChapter, completedCount, onEnterReading, 
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
         <h2 className="font-playfair text-2xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
-          <BookOpen size={22} className="text-[#1B6B3A] dark:text-green-400" />
+          <BookOpen size={22} className="text-[#5B2A6E] dark:text-magic-light" />
           Ebooks
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400">Selecione um ebook para começar ou continuar.</p>
@@ -82,7 +82,7 @@ function ReadingHub({ chapters, currentChapter, completedCount, onEnterReading, 
               <div className="flex items-center gap-2 mt-2">
                 <div className="flex-1 h-1 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                   <div className="h-full rounded-full transition-all"
-                    style={{ width: `${progress}%`, background: 'linear-gradient(to right, #1B6B3A, #C9A84C)' }} />
+                    style={{ width: `${progress}%`, background: 'linear-gradient(to right, #5B2A6E, #F5B942)' }} />
                 </div>
                 <span className="text-[10px] text-gray-400 shrink-0">{completedCount}/{total}</span>
               </div>
@@ -97,7 +97,7 @@ function ReadingHub({ chapters, currentChapter, completedCount, onEnterReading, 
             <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-0.5 flex items-center gap-1">
               <Clock size={9} /> Continuar lendo
             </p>
-            <p className="text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors truncate">
+            <p className="text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-[#5B2A6E] dark:group-hover:text-magic-light transition-colors truncate">
               {chapter.title}
             </p>
           </button>
@@ -107,11 +107,11 @@ function ReadingHub({ chapters, currentChapter, completedCount, onEnterReading, 
         <div className="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700">
           <button onClick={onEnterReading}
             className="flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group text-left">
-            <div className="w-9 h-9 rounded-xl bg-[#E8F5EE] dark:bg-[#0F4A28]/30 flex items-center justify-center shrink-0">
-              <BookOpen size={16} className="text-[#1B6B3A] dark:text-green-400" />
+            <div className="w-9 h-9 rounded-xl bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 flex items-center justify-center shrink-0">
+              <BookOpen size={16} className="text-[#5B2A6E] dark:text-magic-light" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors">
+              <p className="text-xs font-semibold text-gray-900 dark:text-white group-hover:text-[#5B2A6E] dark:group-hover:text-magic-light transition-colors">
                 Leitura Interativa
               </p>
               <p className="text-[10px] text-gray-400 leading-tight">Progresso e anotações</p>
@@ -133,11 +133,11 @@ function ReadingHub({ chapters, currentChapter, completedCount, onEnterReading, 
 
           <button onClick={onEnterPDF}
             className="flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group text-left">
-            <div className="w-9 h-9 rounded-xl bg-[#FDF6E3] dark:bg-yellow-900/20 flex items-center justify-center shrink-0">
-              <FileText size={16} className="text-[#C9A84C]" />
+            <div className="w-9 h-9 rounded-xl bg-[#FFF6E0] dark:bg-stargold-900/20 flex items-center justify-center shrink-0">
+              <FileText size={16} className="text-[#F5B942]" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors">
+              <p className="text-xs font-semibold text-gray-900 dark:text-white group-hover:text-[#5B2A6E] dark:group-hover:text-magic-light transition-colors">
                 Ler em PDF
               </p>
               <p className="text-[10px] text-gray-400 leading-tight">Versão completa em PDF</p>
@@ -320,7 +320,7 @@ export default function Platform({ user, profile, onAdminClick }) {
     <div className="flex flex-col h-full bg-[#FAFAFA] dark:bg-[#111]">
       <button
         onClick={() => { handleBackToMenu(); onClose?.() }}
-        className="flex items-center gap-2 px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-[#B80E02] border-b border-gray-100 dark:border-gray-700 transition-colors shrink-0"
+        className="flex items-center gap-2 px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-[#C2298A] border-b border-gray-100 dark:border-gray-700 transition-colors shrink-0"
       >
         <ArrowLeft size={13} /> Voltar ao menu
       </button>
@@ -382,14 +382,14 @@ export default function Platform({ user, profile, onAdminClick }) {
               <button
                 onClick={() => setLeftPanelOpen(o => !o)}
                 title={leftPanelOpen ? 'Recolher menu' : 'Expandir menu'}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
               >
                 <PanelLeft size={15} />
               </button>
               {showChapterSidebar && (
                 <button
                   onClick={handleBackToMenu}
-                  className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 transition-colors"
+                  className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light transition-colors"
                 >
                   <ArrowLeft size={13} /> Leitura
                 </button>
@@ -398,7 +398,7 @@ export default function Platform({ user, profile, onAdminClick }) {
               <button
                 onClick={() => setRightPanelOpen(o => !o)}
                 title="Anotações / Meu SaaS"
-                className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
               >
                 <PanelRight size={15} />
               </button>
@@ -406,7 +406,7 @@ export default function Platform({ user, profile, onAdminClick }) {
                 <button
                   onClick={toggleFocusMode}
                   title="Modo foco"
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
                 >
                   <Maximize2 size={15} />
                 </button>
@@ -419,7 +419,7 @@ export default function Platform({ user, profile, onAdminClick }) {
             <div className="lg:hidden flex items-center gap-2 mb-4">
               <button
                 onClick={() => setDrawerOpen(true)}
-                className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 px-3 py-1.5 rounded-lg hover:border-[#1B6B3A] transition-colors"
+                className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 px-3 py-1.5 rounded-lg hover:border-[#5B2A6E] transition-colors"
               >
                 <Menu size={13} /> Menu
               </button>
@@ -435,7 +435,7 @@ export default function Platform({ user, profile, onAdminClick }) {
               <div className="hidden lg:flex justify-end mb-3">
                 <button
                   onClick={toggleFocusMode}
-                  className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 border border-gray-200 dark:border-gray-600 px-3 py-1.5 rounded-lg hover:border-[#1B6B3A] transition-colors"
+                  className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light border border-gray-200 dark:border-gray-600 px-3 py-1.5 rounded-lg hover:border-[#5B2A6E] transition-colors"
                 >
                   <Minimize2 size={13} /> Sair do foco
                 </button>
@@ -626,7 +626,7 @@ export default function Platform({ user, profile, onAdminClick }) {
               href="https://thayanefidelis.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 transition-colors"
+              className="text-xs text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light transition-colors"
             >
               thayanefidelis.com
             </a>
@@ -650,7 +650,7 @@ export default function Platform({ user, profile, onAdminClick }) {
                 onClick={() => setRightPanelTab(t.id)}
                 className={`flex-1 py-2.5 text-xs font-medium transition-colors ${
                   rightPanelTab === t.id
-                    ? 'text-[#1B6B3A] dark:text-green-400 border-b-2 border-[#1B6B3A]'
+                    ? 'text-[#5B2A6E] dark:text-magic-light border-b-2 border-[#5B2A6E]'
                     : 'text-gray-500 dark:text-gray-400'
                 }`}
               >

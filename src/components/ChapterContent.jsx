@@ -167,7 +167,7 @@ export default function ChapterContent({ chapter, chapterIndex = 0, onNext, onPr
     <article className="max-w-2xl mx-auto px-1" ref={contentRef} onMouseUp={handleMouseUp}>
       {/* Chapter header */}
       <div className="mb-6">
-        <span className="inline-block text-[11px] uppercase tracking-widest font-bold text-[#B91C1C] dark:text-red-400 mb-2">
+        <span className="inline-block text-[11px] uppercase tracking-widest font-bold text-[#F2A488] dark:text-coral-400 mb-2">
           {chapter.tag}
         </span>
         <h1 className="font-playfair text-2xl md:text-3xl font-bold text-gray-900 dark:text-white leading-tight mb-3">
@@ -177,7 +177,7 @@ export default function ChapterContent({ chapter, chapterIndex = 0, onNext, onPr
           <span className="flex items-center gap-1"><Clock size={12} /> {chapter.readingTime} min de leitura</span>
           <span className="flex items-center gap-1"><FileText size={12} /> Página {chapter.page}</span>
         </div>
-        <div className="h-px bg-gradient-to-r from-[#B91C1C] via-[#C9A84C] to-transparent mb-5 opacity-60" />
+        <div className="h-px bg-gradient-to-r from-[#F2A488] via-[#F5B942] to-transparent mb-5 opacity-60" />
       </div>
 
       {/* Audio player */}
@@ -192,8 +192,8 @@ export default function ChapterContent({ chapter, chapterIndex = 0, onNext, onPr
           }}
           className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border transition-all ${
             focusMode
-              ? 'bg-[#C9A84C] text-white border-[#C9A84C]'
-              : 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-[#C9A84C]'
+              ? 'bg-[#F5B942] text-white border-[#F5B942]'
+              : 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-[#F5B942]'
           }`}
         >
           <Focus size={12} />
@@ -202,7 +202,7 @@ export default function ChapterContent({ chapter, chapterIndex = 0, onNext, onPr
         {focusMode && (
           <button
             onClick={advanceFocus}
-            className="text-xs px-3 py-1.5 rounded-full bg-[#0F4A28] text-white"
+            className="text-xs px-3 py-1.5 rounded-full bg-[#3E1B4D] text-white"
           >
             Próximo parágrafo →
           </button>
@@ -217,7 +217,7 @@ export default function ChapterContent({ chapter, chapterIndex = 0, onNext, onPr
         >
           <button
             onMouseDown={e => { e.preventDefault(); handleHighlight() }}
-            className="flex items-center gap-1.5 text-xs bg-[#C9A84C] hover:bg-yellow-600 text-white px-3 py-1.5 rounded-full shadow-lg font-medium whitespace-nowrap"
+            className="flex items-center gap-1.5 text-xs bg-[#F5B942] hover:bg-stargold-600 text-white px-3 py-1.5 rounded-full shadow-lg font-medium whitespace-nowrap"
           >
             <Highlighter size={11} /> Destacar
           </button>
@@ -234,18 +234,18 @@ export default function ChapterContent({ chapter, chapterIndex = 0, onNext, onPr
 
       {/* Highlights panel */}
       {highlights.length > 0 && (
-        <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800/40 rounded-xl">
-          <p className="text-xs font-semibold text-yellow-700 dark:text-yellow-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div className="mt-6 p-4 bg-stargold-50 dark:bg-stargold-900/10 border border-stargold-200 dark:border-stargold-800/40 rounded-xl">
+          <p className="text-xs font-semibold text-stargold-700 dark:text-stargold-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Highlighter size={12} /> Meus destaques ({highlights.length})
           </p>
           <div className="space-y-2">
             {highlights.map((h, i) => (
               <div key={i} className="flex items-start gap-2 group">
-                <span className="flex-1 text-xs text-gray-700 dark:text-gray-300 bg-yellow-100 dark:bg-yellow-900/20 px-2.5 py-1.5 rounded-lg leading-relaxed border-l-2 border-yellow-400">
+                <span className="flex-1 text-xs text-gray-700 dark:text-gray-300 bg-stargold-100 dark:bg-stargold-900/20 px-2.5 py-1.5 rounded-lg leading-relaxed border-l-2 border-stargold-400">
                   "{h}"
                 </span>
                 <button onClick={() => removeHighlight(h)}
-                  className="shrink-0 mt-1.5 text-gray-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all">
+                  className="shrink-0 mt-1.5 text-gray-300 hover:text-coral-400 opacity-0 group-hover:opacity-100 transition-all">
                   <X size={12} />
                 </button>
               </div>
@@ -256,13 +256,13 @@ export default function ChapterContent({ chapter, chapterIndex = 0, onNext, onPr
 
       {/* Quiz button */}
       {chapter.quizQuestions?.length > 0 && !showQuiz && (
-        <div className="my-6 p-4 bg-[#FDF6E3] dark:bg-yellow-900/20 rounded-xl border border-[#C9A84C]/30 text-center">
+        <div className="my-6 p-4 bg-[#FFF6E0] dark:bg-stargold-900/20 rounded-xl border border-[#F5B942]/30 text-center">
           <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
             Teste seus conhecimentos sobre este capítulo
           </p>
           <button
             onClick={() => setShowQuiz(true)}
-            className="text-sm bg-[#C9A84C] hover:bg-yellow-600 text-white px-5 py-2 rounded-full transition-colors font-medium"
+            className="text-sm bg-[#F5B942] hover:bg-stargold-600 text-white px-5 py-2 rounded-full transition-colors font-medium"
           >
             Testar conhecimento
           </button>
@@ -283,14 +283,14 @@ export default function ChapterContent({ chapter, chapterIndex = 0, onNext, onPr
         <button
           onClick={() => { onPrev?.(); onChapterRead?.() }}
           disabled={!hasPrev}
-          className="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#1B6B3A] hover:text-[#1B6B3A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#5B2A6E] hover:text-[#5B2A6E] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           <ChevronLeft size={15} /> Anterior
         </button>
         <button
           onClick={() => { onNext?.(); onChapterRead?.() }}
           disabled={!hasNext}
-          className="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-[#1B6B3A] hover:bg-[#0F4A28] text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           Próximo <ChevronRight size={15} />
         </button>

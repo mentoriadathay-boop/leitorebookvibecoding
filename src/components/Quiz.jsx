@@ -26,7 +26,7 @@ export default function Quiz({ questions, onClose }) {
       {questions.map((q, qi) => (
         <div key={qi} className="mb-5">
           <p className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-3">
-            <span className="text-[#B91C1C] dark:text-red-400 font-bold mr-1">{qi + 1}.</span>
+            <span className="text-[#F2A488] dark:text-coral-400 font-bold mr-1">{qi + 1}.</span>
             {q.question}
           </p>
           <div className="space-y-2">
@@ -36,18 +36,18 @@ export default function Quiz({ questions, onClose }) {
               let cls = 'w-full text-left text-sm px-4 py-2.5 rounded-lg border transition-all '
               if (!submitted) {
                 cls += selected
-                  ? 'border-[#1B6B3A] bg-[#E8F5EE] dark:bg-[#0F4A28]/30 text-[#0F4A28] dark:text-green-300'
-                  : 'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-[#1B6B3A] hover:bg-[#E8F5EE] dark:hover:bg-[#0F4A28]/20'
+                  ? 'border-[#5B2A6E] bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 text-[#3E1B4D] dark:text-magic-light'
+                  : 'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-[#5B2A6E] hover:bg-[#F2E4FA] dark:hover:bg-[#3E1B4D]/20'
               } else {
-                if (correct) cls += 'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300'
-                else if (selected && !correct) cls += 'border-red-400 bg-[#FEF2F2] dark:bg-red-900/20 text-red-700 dark:text-red-300'
+                if (correct) cls += 'border-success-500 bg-success-50 dark:bg-success-900/20 text-success-800 dark:text-success-300'
+                else if (selected && !correct) cls += 'border-coral-400 bg-[#FCEDE7] dark:bg-coral-900/20 text-coral-700 dark:text-coral-300'
                 else cls += 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-500 opacity-60'
               }
               return (
                 <button key={oi} onClick={() => select(qi, oi)} className={cls}>
                   <span className="flex items-center gap-2">
-                    {submitted && correct && <CheckCircle size={14} className="text-green-500 shrink-0" />}
-                    {submitted && selected && !correct && <XCircle size={14} className="text-red-500 shrink-0" />}
+                    {submitted && correct && <CheckCircle size={14} className="text-success-500 shrink-0" />}
+                    {submitted && selected && !correct && <XCircle size={14} className="text-coral-500 shrink-0" />}
                     {opt}
                   </span>
                 </button>
@@ -55,7 +55,7 @@ export default function Quiz({ questions, onClose }) {
             })}
           </div>
           {submitted && (
-            <p className="mt-2 text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 rounded-lg px-3 py-2 border-l-2 border-[#C9A84C]">
+            <p className="mt-2 text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 rounded-lg px-3 py-2 border-l-2 border-[#F5B942]">
               {q.explanation}
             </p>
           )}
@@ -66,14 +66,14 @@ export default function Quiz({ questions, onClose }) {
         <button
           onClick={() => setSubmitted(true)}
           disabled={Object.keys(answers).length < questions.length}
-          className="w-full py-2.5 rounded-lg bg-[#1B6B3A] hover:bg-[#0F4A28] text-white text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full py-2.5 rounded-lg bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Ver resultado
         </button>
       ) : (
         <div className="text-center">
           <p className="text-2xl font-playfair font-bold mb-1">
-            <span className={score === questions.length ? 'text-green-600' : score > 0 ? 'text-[#C9A84C]' : 'text-red-500'}>
+            <span className={score === questions.length ? 'text-success-600' : score > 0 ? 'text-[#F5B942]' : 'text-coral-500'}>
               {score}/{questions.length}
             </span>
           </p>
@@ -82,7 +82,7 @@ export default function Quiz({ questions, onClose }) {
           </p>
           <button
             onClick={() => { setAnswers({}); setSubmitted(false) }}
-            className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#1B6B3A] mx-auto transition-colors"
+            className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#5B2A6E] mx-auto transition-colors"
           >
             <RotateCcw size={12} /> Tentar novamente
           </button>

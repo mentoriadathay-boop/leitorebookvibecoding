@@ -5,11 +5,11 @@ import AISupportChat from './AISupportChat'
 import AudioPlayer from './AudioPlayer'
 
 const CATEGORIES = {
-  newsletter: { label: 'Newsletter',  color: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400' },
+  newsletter: { label: 'Newsletter',  color: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light' },
   bastidores: { label: 'Bastidores',  color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400' },
   lancamento: { label: 'Lançamento',  color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400' },
-  dica:       { label: 'Dica',        color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400' },
-  promocao:   { label: 'Promoção',    color: 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400' },
+  dica:       { label: 'Dica',        color: 'bg-stargold-100 text-stargold-700 dark:bg-stargold-900/20 dark:text-stargold-400' },
+  promocao:   { label: 'Promoção',    color: 'bg-coral-100 text-coral-700 dark:bg-coral-900/20 dark:text-coral-400' },
 }
 
 function fmtDate(d) {
@@ -45,7 +45,7 @@ export default function EmailMarketing() {
 
   if (loading) return (
     <div className="flex items-center justify-center py-20">
-      <div className="w-10 h-10 rounded-xl bg-[#0F4A28] flex items-center justify-center animate-pulse">
+      <div className="w-10 h-10 rounded-xl bg-[#3E1B4D] flex items-center justify-center animate-pulse">
         <Mail size={18} className="text-white" />
       </div>
     </div>
@@ -55,7 +55,7 @@ export default function EmailMarketing() {
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
         <h2 className="font-playfair text-2xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
-          <Mail size={22} className="text-[#1B6B3A] dark:text-green-400" />
+          <Mail size={22} className="text-[#5B2A6E] dark:text-magic-light" />
           Newsletter
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -73,8 +73,8 @@ export default function EmailMarketing() {
               <button key={cat} onClick={() => setFilter(cat)}
                 className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors border ${
                   active
-                    ? 'bg-[#0F4A28] text-white border-[#0F4A28]'
-                    : 'bg-white dark:bg-[#1A1A1A] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:border-[#1B6B3A]'
+                    ? 'bg-[#3E1B4D] text-white border-[#3E1B4D]'
+                    : 'bg-white dark:bg-[#1A1A1A] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:border-[#5B2A6E]'
                 }`}
               >
                 {cat === 'todos' ? 'Todos' : (info?.label || cat)}
@@ -87,8 +87,8 @@ export default function EmailMarketing() {
       {/* Lista */}
       {filtered.length === 0 ? (
         <div className="text-center py-16 bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700">
-          <div className="w-14 h-14 rounded-2xl bg-[#E8F5EE] dark:bg-[#0F4A28]/20 flex items-center justify-center mx-auto mb-4">
-            <Mail size={24} className="text-[#1B6B3A] dark:text-green-400" />
+          <div className="w-14 h-14 rounded-2xl bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 flex items-center justify-center mx-auto mb-4">
+            <Mail size={24} className="text-[#5B2A6E] dark:text-magic-light" />
           </div>
           <h3 className="font-playfair font-bold text-lg text-gray-900 dark:text-white mb-2">Nenhum email ainda</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">Em breve o conteúdo aparecerá aqui.</p>
@@ -101,7 +101,7 @@ export default function EmailMarketing() {
             const plainText = stripHtml(email.body)
             return (
               <div key={email.id}
-                className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:border-[#1B6B3A] dark:hover:border-green-600 transition-all">
+                className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:border-[#5B2A6E] dark:hover:border-success-600 transition-all">
 
                 {/* Header clicável */}
                 <button onClick={() => { setExpanded(isOpen ? null : email.id); setShowChat(null) }}
@@ -134,8 +134,8 @@ export default function EmailMarketing() {
                         onClick={() => setShowChat(v => v === email.id ? null : email.id)}
                         className={`flex items-center gap-1.5 text-[10px] font-semibold px-2.5 py-1 rounded-full border transition-colors ${
                           showChat === email.id
-                            ? 'bg-[#0F4A28] text-white border-[#0F4A28]'
-                            : 'text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:border-[#1B6B3A] hover:text-[#1B6B3A]'
+                            ? 'bg-[#3E1B4D] text-white border-[#3E1B4D]'
+                            : 'text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:border-[#5B2A6E] hover:text-[#5B2A6E]'
                         }`}
                       >
                         💬 Perguntar à IA
@@ -188,9 +188,9 @@ export default function EmailMarketing() {
         .email-content li { margin: 0.3rem 0; }
         .email-content strong, .email-content b { font-weight: 700; }
         .email-content em, .email-content i { font-style: italic; }
-        .email-content a { color: #1B6B3A; text-decoration: underline; }
-        .email-content blockquote { border-left: 4px solid #C9A84C; padding: 8px 16px; margin: 1rem 0; background: #fdf6e3; border-radius: 0 8px 8px 0; color: #4b5563; font-style: italic; }
-        .dark .email-content blockquote { background: rgba(201,168,76,.1); color: #9ca3af; }
+        .email-content a { color: #5B2A6E; text-decoration: underline; }
+        .email-content blockquote { border-left: 4px solid #F5B942; padding: 8px 16px; margin: 1rem 0; background: #FFF6E0; border-radius: 0 8px 8px 0; color: #4b5563; font-style: italic; }
+        .dark .email-content blockquote { background: rgba(245,185,66,.1); color: #9ca3af; }
         .email-content hr { border: none; border-top: 2px solid #e5e7eb; margin: 1.2rem 0; }
         .dark .email-content hr { border-color: #374151; }
         .email-content img { max-width: 100%; border-radius: 10px; margin: 1rem 0; display: block; }

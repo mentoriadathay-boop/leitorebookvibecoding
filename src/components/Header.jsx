@@ -17,7 +17,7 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#B80E02] shadow-md">
+    <header className="fixed top-0 left-0 right-0 z-50 shadow-md" style={{ background: 'linear-gradient(135deg, #5B2A6E 0%, #C2298A 65%, #F5B942 130%)' }}>
       <div className="flex items-center justify-between px-4 h-14">
         {/* Logo + Brand */}
         <a
@@ -90,7 +90,7 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
       <div className="h-0.5 bg-white/20">
         <div
           className="h-full transition-all duration-500"
-          style={{ width: `${progress}%`, background: 'linear-gradient(to right, #ffffff, #C9A84C)' }}
+          style={{ width: `${progress}%`, background: 'linear-gradient(to right, #FFFFFF, #FFD966)' }}
         />
       </div>
 
@@ -100,7 +100,7 @@ export default function Header({ darkMode, toggleDark, progress, user, onMenuTog
           {user && (
             <button
               onClick={handleLogout}
-              className="text-sm text-red-500 py-2 text-left"
+              className="text-sm text-coral-500 py-2 text-left"
             >
               Sair
             </button>

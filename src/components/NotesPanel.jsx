@@ -41,8 +41,8 @@ export default function NotesPanel({
             { label: 'Notas salvas', value: noteCount },
             { label: 'Ideias geradas', value: ideasCount || 0 },
           ].map(item => (
-            <div key={item.label} className="bg-[#E8F5EE] dark:bg-[#0F4A28]/20 rounded-lg p-2.5 text-center">
-              <div className="font-playfair font-bold text-xl text-[#0F4A28] dark:text-green-400">{item.value}</div>
+            <div key={item.label} className="bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 rounded-lg p-2.5 text-center">
+              <div className="font-playfair font-bold text-xl text-[#3E1B4D] dark:text-magic-light">{item.value}</div>
               <div className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">{item.label}</div>
             </div>
           ))}
@@ -50,7 +50,7 @@ export default function NotesPanel({
         <div className="mt-3 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
           <div
             className="h-full rounded-full transition-all duration-500"
-            style={{ width: `${progress}%`, background: 'linear-gradient(to right, #1B6B3A, #C9A84C)' }}
+            style={{ width: `${progress}%`, background: 'linear-gradient(to right, #5B2A6E, #F5B942)' }}
           />
         </div>
       </div>
@@ -62,14 +62,14 @@ export default function NotesPanel({
           value={text}
           onChange={e => setText(e.target.value)}
           placeholder="Suas reflexões sobre este capítulo..."
-          className="w-full h-28 text-xs resize-none border border-gray-200 dark:border-gray-600 rounded-lg p-2.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
+          className="w-full h-28 text-xs resize-none border border-gray-200 dark:border-gray-600 rounded-lg p-2.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
         />
         <button
           onClick={handleSave}
           className={`mt-2 w-full flex items-center justify-center gap-1.5 text-xs py-2 rounded-lg transition-all font-medium ${
             saved
-              ? 'bg-green-100 text-green-700 border border-green-300'
-              : 'bg-[#1B6B3A] hover:bg-[#0F4A28] text-white'
+              ? 'bg-success-100 text-success-700 border border-success-300'
+              : 'bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white'
           }`}
         >
           <Save size={12} />
@@ -84,8 +84,8 @@ export default function NotesPanel({
           onClick={() => onToggleBookmark(chapterIndex)}
           className={`w-full flex items-center justify-center gap-1.5 text-xs py-2 rounded-lg border transition-all ${
             bookmarks.includes(chapterIndex)
-              ? 'bg-[#C9A84C] text-white border-[#C9A84C]'
-              : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#C9A84C]'
+              ? 'bg-[#F5B942] text-white border-[#F5B942]'
+              : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#F5B942]'
           }`}
         >
           {bookmarks.includes(chapterIndex)
@@ -98,7 +98,7 @@ export default function NotesPanel({
           <div className="mt-3 space-y-1">
             {bookmarks.map(bi => (
               <div key={bi} className="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-1.5 py-1">
-                <Bookmark size={10} className="text-[#C9A84C] shrink-0" />
+                <Bookmark size={10} className="text-[#F5B942] shrink-0" />
                 <span className="truncate">{chapters[bi]?.title}</span>
               </div>
             ))}

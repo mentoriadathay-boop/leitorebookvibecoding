@@ -129,7 +129,7 @@ export default function PDFReader() {
             onChange={e => setPageInput(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') { goTo(parseInt(pageInput)); setPageInput('') } }}
             onBlur={() => setPageInput('')}
-            className="w-12 text-center text-xs border border-gray-200 dark:border-gray-600 rounded-lg py-1 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300"
+            className="w-12 text-center text-xs border border-gray-200 dark:border-gray-600 rounded-lg py-1 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300"
           />
           <span className="text-xs text-gray-400 whitespace-nowrap">
             de {numPages || '—'}
@@ -159,7 +159,7 @@ export default function PDFReader() {
         <div className="w-px h-5 bg-gray-200 dark:bg-gray-600 mx-1" />
 
         {/* Bookmark — ir para última página salva */}
-        <div className="flex items-center gap-1 text-[11px] text-[#1B6B3A] dark:text-green-400 bg-[#E8F5EE] dark:bg-[#0F4A28]/20 px-2 py-1 rounded-full">
+        <div className="flex items-center gap-1 text-[11px] text-[#5B2A6E] dark:text-magic-light bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 px-2 py-1 rounded-full">
           <Bookmark size={11} />
           <span>Pág. {page} salva</span>
         </div>
@@ -168,8 +168,8 @@ export default function PDFReader() {
         <button onClick={() => setShowHl(v => !v)}
           className={`ml-auto flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full font-medium transition-colors ${
             showHl
-              ? 'bg-yellow-400 text-yellow-900'
-              : 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 hover:bg-yellow-100'
+              ? 'bg-stargold-400 text-stargold-900'
+              : 'bg-stargold-50 dark:bg-stargold-900/20 text-stargold-700 dark:text-stargold-400 hover:bg-stargold-100'
           }`}>
           <Highlighter size={12} />
           Grifos {totalHighlights > 0 && `(${totalHighlights})`}
@@ -179,7 +179,7 @@ export default function PDFReader() {
         <button
           onClick={() => setFullscreen(f => !f)}
           title={fullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
-          className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
         >
           {fullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
         </button>
@@ -189,9 +189,9 @@ export default function PDFReader() {
       {showHl && (
         <>
           <div className="fixed inset-0 z-40 bg-black/20" onClick={() => setShowHl(false)} />
-          <div className="fixed right-0 top-16 bottom-0 z-50 w-72 bg-white dark:bg-[#1A1A1A] border-l border-yellow-200 dark:border-yellow-800/40 shadow-2xl flex flex-col">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-yellow-100 dark:border-yellow-800/30">
-              <p className="text-xs font-bold text-yellow-700 dark:text-yellow-400 flex items-center gap-1.5">
+          <div className="fixed right-0 top-16 bottom-0 z-50 w-72 bg-white dark:bg-[#1A1A1A] border-l border-stargold-200 dark:border-stargold-800/40 shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-stargold-100 dark:border-stargold-800/30">
+              <p className="text-xs font-bold text-stargold-700 dark:text-stargold-400 flex items-center gap-1.5">
                 <Highlighter size={12} /> Meus grifos — {totalHighlights}
               </p>
               <button onClick={() => setShowHl(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
@@ -206,17 +206,17 @@ export default function PDFReader() {
                   {Object.entries(highlights).sort(([a], [b]) => Number(a) - Number(b)).map(([pg, items]) => (
                     <div key={pg}>
                       <button onClick={() => { goTo(Number(pg)); setShowHl(false) }}
-                        className="text-[10px] font-bold text-yellow-600 dark:text-yellow-500 uppercase tracking-wider mb-1.5 hover:underline">
+                        className="text-[10px] font-bold text-stargold-600 dark:text-stargold-500 uppercase tracking-wider mb-1.5 hover:underline">
                         Página {pg}
                       </button>
                       <div className="space-y-1.5">
                         {items.map((h, i) => (
                           <div key={i} className="flex items-start gap-2 group">
-                            <span className="flex-1 text-xs text-gray-700 dark:text-gray-300 bg-yellow-100 dark:bg-yellow-900/30 px-2.5 py-1.5 rounded-lg border-l-2 border-yellow-400 leading-relaxed">
+                            <span className="flex-1 text-xs text-gray-700 dark:text-gray-300 bg-stargold-100 dark:bg-stargold-900/30 px-2.5 py-1.5 rounded-lg border-l-2 border-stargold-400 leading-relaxed">
                               "{h.text}"
                             </span>
                             <button onClick={() => removeHighlight(Number(pg), i)}
-                              className="shrink-0 mt-1.5 text-gray-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all">
+                              className="shrink-0 mt-1.5 text-gray-300 hover:text-coral-400 opacity-0 group-hover:opacity-100 transition-all">
                               <X size={12} />
                             </button>
                           </div>
@@ -235,10 +235,10 @@ export default function PDFReader() {
       {!showHl && pageHighlights.length > 0 && (
         <div className="flex flex-wrap gap-1.5 px-1 py-1.5">
           {pageHighlights.map((h, i) => (
-            <span key={i} className="flex items-center gap-1 text-[11px] bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-400 px-2.5 py-1 rounded-full">
+            <span key={i} className="flex items-center gap-1 text-[11px] bg-stargold-100 dark:bg-stargold-900/20 text-stargold-800 dark:text-stargold-400 px-2.5 py-1 rounded-full">
               <Highlighter size={10} />
               "{h.text.slice(0, 40)}{h.text.length > 40 ? '…' : ''}"
-              <button onClick={() => removeHighlight(page, i)} className="text-yellow-500 hover:text-red-400 ml-0.5">
+              <button onClick={() => removeHighlight(page, i)} className="text-stargold-500 hover:text-coral-400 ml-0.5">
                 <X size={10} />
               </button>
             </span>
@@ -258,7 +258,7 @@ export default function PDFReader() {
           <div className="fixed z-50" style={{ left: tooltip.x + (containerRef.current?.getBoundingClientRect().left || 0), top: tooltip.y + (containerRef.current?.getBoundingClientRect().top || 0) - 40 }}>
             <button
               onMouseDown={e => { e.preventDefault(); addHighlight() }}
-              className="flex items-center gap-1.5 text-xs bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-3 py-1.5 rounded-full shadow-lg font-semibold whitespace-nowrap -translate-x-1/2"
+              className="flex items-center gap-1.5 text-xs bg-stargold-400 hover:bg-stargold-500 text-stargold-900 px-3 py-1.5 rounded-full shadow-lg font-semibold whitespace-nowrap -translate-x-1/2"
             >
               <Highlighter size={12} /> Grifar
             </button>
@@ -271,7 +271,7 @@ export default function PDFReader() {
           onLoadError={() => setLoading(false)}
           loading={
             <div className="flex flex-col items-center justify-center py-20 gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#0F4A28] flex items-center justify-center animate-pulse">
+              <div className="w-10 h-10 rounded-xl bg-[#3E1B4D] flex items-center justify-center animate-pulse">
                 <BookOpen size={18} className="text-white" />
               </div>
               <p className="text-sm text-gray-400">Carregando PDF...</p>
@@ -293,7 +293,7 @@ export default function PDFReader() {
       {!fullscreen && (
         <div className="flex items-center justify-between py-4 px-2">
           <button onClick={() => goTo(page - 1)} disabled={page <= 1}
-            className="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#1B6B3A] hover:text-[#1B6B3A] disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+            className="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#5B2A6E] hover:text-[#5B2A6E] disabled:opacity-30 disabled:cursor-not-allowed transition-all">
             <ChevronLeft size={15} /> Anterior
           </button>
 
@@ -302,7 +302,7 @@ export default function PDFReader() {
           </span>
 
           <button onClick={() => goTo(page + 1)} disabled={!numPages || page >= numPages}
-            className="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-[#1B6B3A] hover:bg-[#0F4A28] text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+            className="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all">
             Próxima <ChevronRight size={15} />
           </button>
         </div>

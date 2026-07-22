@@ -41,10 +41,10 @@ export default function Checklist({ checklistSteps, onToggleStep, onNavigate }) 
           <div className="flex-1 h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${progress}%`, background: 'linear-gradient(to right, #1B6B3A, #C9A84C)' }}
+              style={{ width: `${progress}%`, background: 'linear-gradient(to right, #5B2A6E, #F5B942)' }}
             />
           </div>
-          <span className="text-sm font-semibold text-[#0F4A28] dark:text-green-400 whitespace-nowrap">
+          <span className="text-sm font-semibold text-[#3E1B4D] dark:text-magic-light whitespace-nowrap">
             {completedCount}/20 ({progress}%)
           </span>
         </div>
@@ -58,8 +58,8 @@ export default function Checklist({ checklistSteps, onToggleStep, onNavigate }) 
               key={step.number}
               className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all ${
                 done
-                  ? 'bg-[#E8F5EE] dark:bg-[#0F4A28]/20 border-[#1B6B3A]/30'
-                  : 'bg-white dark:bg-[#1A1A1A] border-gray-200 dark:border-gray-700 hover:border-[#1B6B3A]/40'
+                  ? 'bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 border-[#5B2A6E]/30'
+                  : 'bg-white dark:bg-[#1A1A1A] border-gray-200 dark:border-gray-700 hover:border-[#5B2A6E]/40'
               }`}
             >
               <button
@@ -67,13 +67,13 @@ export default function Checklist({ checklistSteps, onToggleStep, onNavigate }) 
                 className="shrink-0 transition-transform active:scale-90"
               >
                 {done
-                  ? <CheckCircle size={22} className="text-[#1B6B3A] check-pop" />
-                  : <Circle size={22} className="text-gray-300 dark:text-gray-600 hover:text-[#1B6B3A] transition-colors" />
+                  ? <CheckCircle size={22} className="text-[#5B2A6E] check-pop" />
+                  : <Circle size={22} className="text-gray-300 dark:text-gray-600 hover:text-[#5B2A6E] transition-colors" />
                 }
               </button>
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-[11px] font-bold text-[#B91C1C] dark:text-red-400 uppercase">
+                  <span className="text-[11px] font-bold text-[#F2A488] dark:text-coral-400 uppercase">
                     Passo {String(step.number).padStart(2, '0')}
                   </span>
                   <span className={`text-sm font-semibold truncate ${done ? 'line-through text-gray-400' : 'text-gray-800 dark:text-gray-200'}`}>
@@ -84,7 +84,7 @@ export default function Checklist({ checklistSteps, onToggleStep, onNavigate }) 
               </div>
               <button
                 onClick={() => onNavigate?.(step.chapterIdx)}
-                className="shrink-0 text-gray-400 hover:text-[#1B6B3A] transition-colors"
+                className="shrink-0 text-gray-400 hover:text-[#5B2A6E] transition-colors"
                 title="Ir para o capítulo"
               >
                 <ExternalLink size={14} />

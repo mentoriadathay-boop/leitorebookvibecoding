@@ -26,39 +26,39 @@
 .chapter-content p { @apply mb-4; line-height: 1.85; }
 .chapter-content ul { @apply list-disc pl-6 mb-4 space-y-1; }
 .chapter-content ol { @apply list-decimal pl-6 mb-4 space-y-1; }
-.chapter-content h3 { font-family: 'Playfair Display', serif; @apply text-xl font-semibold mt-6 mb-3; color: #0F4A28; }
-.dark .chapter-content h3 { color: #4ADE80; }
+.chapter-content h3 { font-family: 'Playfair Display', serif; @apply text-xl font-semibold mt-6 mb-3; color: #3E1B4D; }
+.dark .chapter-content h3 { color: #FFD966; }
 .chapter-content h4 { font-family: 'Playfair Display', serif; @apply text-lg font-semibold mt-4 mb-2; }
 .chapter-content strong { @apply font-semibold; }
 
 .chapter-content blockquote {
-  border-left: 4px solid #C9A84C;
-  background: #FDF6E3;
+  border-left: 4px solid #F5B942;
+  background: #FFF6E0;
   padding: 12px 20px;
   margin: 20px 0;
   border-radius: 0 8px 8px 0;
   font-family: 'Playfair Display', serif;
   font-style: italic;
-  color: #7B1C1C;
+  color: #2E1338;
 }
-.dark .chapter-content blockquote { background: rgba(201,168,76,0.1); color: #FBBF24; }
+.dark .chapter-content blockquote { background: rgba(245,185,66,0.1); color: #FFD966; }
 
 .chapter-content .info-box {
-  background: #E8F5EE;
-  border: 1px solid rgba(27,107,58,0.3);
+  background: #F2E4FA;
+  border: 1px solid rgba(91,42,110,0.3);
   border-radius: 8px;
   padding: 16px;
   margin: 16px 0;
 }
-.dark .chapter-content .info-box { background: rgba(15,74,40,0.3); border-color: rgba(27,107,58,0.5); }
+.dark .chapter-content .info-box { background: rgba(62,27,77,0.3); border-color: rgba(91,42,110,0.5); }
 
 .glossary-term {
-  border-bottom: 2px dotted #C9A84C;
+  border-bottom: 2px dotted #F5B942;
   cursor: pointer;
   transition: background 0.15s;
 }
-.glossary-term:hover { background: #FDF6E3; border-radius: 2px; }
-.dark .glossary-term:hover { background: rgba(201,168,76,0.15); }
+.glossary-term:hover { background: #FFF6E0; border-radius: 2px; }
+.dark .glossary-term:hover { background: rgba(245,185,66,0.15); }
 
 @keyframes dots {
   0%, 20% { opacity: 0; }

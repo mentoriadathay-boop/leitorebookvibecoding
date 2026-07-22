@@ -4,11 +4,11 @@ import { ExternalLink, RefreshCw, Newspaper, Clock, Bookmark } from 'lucide-reac
 import AISupportChat from './AISupportChat'
 
 const CATEGORIES = {
-  ferramenta: { label: 'Ferramenta', color: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400' },
+  ferramenta: { label: 'Ferramenta', color: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light' },
   modelo:     { label: 'Modelo IA',  color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400' },
   tendencia:  { label: 'Tendência',  color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400' },
-  case:       { label: 'Case',       color: 'bg-[#FDF6E3] text-[#C9A84C] dark:bg-yellow-900/20 dark:text-yellow-400' },
-  mercado:    { label: 'Mercado',    color: 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400' },
+  case:       { label: 'Case',       color: 'bg-[#FFF6E0] text-[#F5B942] dark:bg-stargold-900/20 dark:text-stargold-400' },
+  mercado:    { label: 'Mercado',    color: 'bg-coral-100 text-coral-700 dark:bg-coral-900/20 dark:text-coral-400' },
 }
 
 function fmtDate(dateStr) {
@@ -46,7 +46,7 @@ function ArticleCard({ article, newsDate, isSaved, savedId, onSave, onUnsave }) 
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col gap-2 bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-200 dark:border-gray-700 p-5 hover:border-[#1B6B3A] dark:hover:border-green-600 hover:shadow-md transition-all fade-in"
+      className="group flex flex-col gap-2 bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-200 dark:border-gray-700 p-5 hover:border-[#5B2A6E] dark:hover:border-success-600 hover:shadow-md transition-all fade-in"
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 flex-wrap">
@@ -59,14 +59,14 @@ function ArticleCard({ article, newsDate, isSaved, savedId, onSave, onUnsave }) 
           <button
             onClick={handleBookmark}
             title={isSaved ? 'Remover dos salvos' : 'Salvar notícia'}
-            className={`transition-colors ${isSaved ? 'text-[#C9A84C]' : 'text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300 hover:text-[#C9A84C]'}`}
+            className={`transition-colors ${isSaved ? 'text-[#F5B942]' : 'text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300 hover:text-[#F5B942]'}`}
           >
-            <Bookmark size={13} className={isSaved ? 'fill-[#C9A84C]' : ''} />
+            <Bookmark size={13} className={isSaved ? 'fill-[#F5B942]' : ''} />
           </button>
-          <ExternalLink size={13} className="text-gray-300 group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 shrink-0 transition-colors" />
+          <ExternalLink size={13} className="text-gray-300 group-hover:text-[#5B2A6E] dark:group-hover:text-magic-light shrink-0 transition-colors" />
         </div>
       </div>
-      <h3 className="font-semibold text-sm text-gray-900 dark:text-white leading-snug group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors">
+      <h3 className="font-semibold text-sm text-gray-900 dark:text-white leading-snug group-hover:text-[#5B2A6E] dark:group-hover:text-magic-light transition-colors">
         {article.title}
       </h3>
       <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{article.summary}</p>
@@ -188,7 +188,7 @@ export default function VibeNews() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
-          <div className="w-10 h-10 rounded-xl bg-[#0F4A28] flex items-center justify-center mx-auto mb-3 animate-pulse">
+          <div className="w-10 h-10 rounded-xl bg-[#3E1B4D] flex items-center justify-center mx-auto mb-3 animate-pulse">
             <Newspaper size={18} className="text-white" />
           </div>
           <p className="text-sm text-gray-400 dark:text-gray-500">Carregando notícias...</p>
@@ -203,7 +203,7 @@ export default function VibeNews() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="font-playfair text-2xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
-            <Newspaper size={22} className="text-[#1B6B3A] dark:text-green-400" />
+            <Newspaper size={22} className="text-[#5B2A6E] dark:text-magic-light" />
             Vibe News
           </h2>
           {news && view === 'today' && (
@@ -217,7 +217,7 @@ export default function VibeNews() {
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="p-2 text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 transition-colors disabled:opacity-50"
+            className="p-2 text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light transition-colors disabled:opacity-50"
             title="Atualizar"
           >
             <RefreshCw size={15} className={refreshing ? 'animate-spin' : ''} />
@@ -231,8 +231,8 @@ export default function VibeNews() {
           onClick={() => setView('today')}
           className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 -mb-px transition-all ${
             view === 'today'
-              ? 'border-[#1B6B3A] text-[#1B6B3A] dark:text-green-400'
-              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400'
+              ? 'border-[#5B2A6E] text-[#5B2A6E] dark:text-magic-light'
+              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light'
           }`}
         >
           <Newspaper size={12} />
@@ -242,17 +242,17 @@ export default function VibeNews() {
           onClick={() => setView('saved')}
           className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 -mb-px transition-all ${
             view === 'saved'
-              ? 'border-[#C9A84C] text-[#C9A84C]'
-              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#C9A84C]'
+              ? 'border-[#F5B942] text-[#F5B942]'
+              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-[#F5B942]'
           }`}
         >
           <Bookmark
             size={12}
-            className={savedNews.length > 0 ? 'fill-[#C9A84C] text-[#C9A84C]' : ''}
+            className={savedNews.length > 0 ? 'fill-[#F5B942] text-[#F5B942]' : ''}
           />
           Notícias Salvas
           {savedNews.length > 0 && (
-            <span className="bg-[#C9A84C] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold leading-none">
+            <span className="bg-[#F5B942] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold leading-none">
               {savedNews.length}
             </span>
           )}
@@ -264,8 +264,8 @@ export default function VibeNews() {
         <div className="space-y-6">
           {savedNews.length === 0 ? (
             <div className="text-center py-16 bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700">
-              <div className="w-14 h-14 rounded-2xl bg-[#FDF6E3] dark:bg-yellow-900/20 flex items-center justify-center mx-auto mb-4">
-                <Bookmark size={24} className="text-[#C9A84C]" />
+              <div className="w-14 h-14 rounded-2xl bg-[#FFF6E0] dark:bg-stargold-900/20 flex items-center justify-center mx-auto mb-4">
+                <Bookmark size={24} className="text-[#F5B942]" />
               </div>
               <h3 className="font-playfair font-bold text-lg text-gray-900 dark:text-white mb-2">
                 Nenhuma notícia salva ainda
@@ -282,11 +282,11 @@ export default function VibeNews() {
                 </p>
                 <div className="space-y-3">
                   {savedByDate[date].filter(e => e.article?.type === 'summary').map(entry => (
-                    <div key={entry.id} className="bg-[#E8F5EE] dark:bg-[#0F4A28]/20 border-l-4 border-[#1B6B3A] rounded-xl p-4">
+                    <div key={entry.id} className="bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 border-l-4 border-[#5B2A6E] rounded-xl p-4">
                       <div className="flex items-center justify-between mb-2">
-                        <p className="text-xs font-bold text-[#1B6B3A] dark:text-green-400 uppercase tracking-wider">Resumo do dia</p>
-                        <button onClick={() => unsaveNews(entry.id)} title="Remover" className="text-[#C9A84C] hover:text-yellow-600 transition-colors">
-                          <Bookmark size={13} className="fill-[#C9A84C]" />
+                        <p className="text-xs font-bold text-[#5B2A6E] dark:text-magic-light uppercase tracking-wider">Resumo do dia</p>
+                        <button onClick={() => unsaveNews(entry.id)} title="Remover" className="text-[#F5B942] hover:text-stargold-600 transition-colors">
+                          <Bookmark size={13} className="fill-[#F5B942]" />
                         </button>
                       </div>
                       <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line line-clamp-4">{entry.article.summary}</p>
@@ -317,8 +317,8 @@ export default function VibeNews() {
         <>
           {!news ? (
             <div className="text-center py-16 bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700">
-              <div className="w-14 h-14 rounded-2xl bg-[#E8F5EE] dark:bg-[#0F4A28]/20 flex items-center justify-center mx-auto mb-4">
-                <Newspaper size={24} className="text-[#1B6B3A] dark:text-green-400" />
+              <div className="w-14 h-14 rounded-2xl bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 flex items-center justify-center mx-auto mb-4">
+                <Newspaper size={24} className="text-[#5B2A6E] dark:text-magic-light" />
               </div>
               <h3 className="font-playfair font-bold text-lg text-gray-900 dark:text-white mb-2">
                 As notícias de hoje ainda estão sendo preparadas
@@ -329,7 +329,7 @@ export default function VibeNews() {
               <button
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="flex items-center gap-2 mx-auto text-sm px-4 py-2 border border-[#1B6B3A] text-[#1B6B3A] hover:bg-[#E8F5EE] dark:hover:bg-[#0F4A28]/20 rounded-xl transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 mx-auto text-sm px-4 py-2 border border-[#5B2A6E] text-[#5B2A6E] hover:bg-[#F2E4FA] dark:hover:bg-[#3E1B4D]/20 rounded-xl transition-colors disabled:opacity-50"
               >
                 <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
                 Verificar novamente
@@ -339,7 +339,7 @@ export default function VibeNews() {
             <>
               {/* Banner quando não é de hoje */}
               {!isToday(news.date) && (
-                <div className="flex items-center justify-between gap-3 px-4 py-2.5 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/40 rounded-xl text-xs text-yellow-700 dark:text-yellow-400">
+                <div className="flex items-center justify-between gap-3 px-4 py-2.5 bg-stargold-50 dark:bg-stargold-900/20 border border-stargold-200 dark:border-stargold-800/40 rounded-xl text-xs text-stargold-700 dark:text-stargold-400">
                   <span>⏳ As notícias de hoje ainda estão sendo preparadas — exibindo a edição mais recente.</span>
                   <button onClick={handleRefresh} disabled={refreshing}
                     className="flex items-center gap-1 shrink-0 font-semibold hover:underline disabled:opacity-50">
@@ -349,9 +349,9 @@ export default function VibeNews() {
               )}
 
               {/* Resumo do dia */}
-              <div className="bg-[#E8F5EE] dark:bg-[#0F4A28]/20 border-l-4 border-[#1B6B3A] rounded-xl p-5">
+              <div className="bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 border-l-4 border-[#5B2A6E] rounded-xl p-5">
                 <div className="flex items-center justify-between mb-3">
-                  <p className="text-xs font-bold text-[#1B6B3A] dark:text-green-400 uppercase tracking-wider">
+                  <p className="text-xs font-bold text-[#5B2A6E] dark:text-magic-light uppercase tracking-wider">
                     Resumo do dia
                   </p>
                   <button
@@ -361,9 +361,9 @@ export default function VibeNews() {
                       else saveNews(news.date, { type: 'summary', title: summaryTitle, summary: news.summary, source: 'Vibe News', category: 'mercado' })
                     }}
                     title={isNewsSaved(`Resumo — ${news.date}`) ? 'Remover dos salvos' : 'Salvar resumo'}
-                    className={`transition-colors ${isNewsSaved(`Resumo — ${news.date}`) ? 'text-[#C9A84C]' : 'text-gray-400 hover:text-[#C9A84C]'}`}
+                    className={`transition-colors ${isNewsSaved(`Resumo — ${news.date}`) ? 'text-[#F5B942]' : 'text-gray-400 hover:text-[#F5B942]'}`}
                   >
-                    <Bookmark size={14} className={isNewsSaved(`Resumo — ${news.date}`) ? 'fill-[#C9A84C]' : ''} />
+                    <Bookmark size={14} className={isNewsSaved(`Resumo — ${news.date}`) ? 'fill-[#F5B942]' : ''} />
                   </button>
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
