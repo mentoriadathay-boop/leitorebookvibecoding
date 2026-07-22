@@ -34,13 +34,13 @@ export default function AdminVibeNews() {
 
   const hasToday = editions.some(e => e.date === brasiliaToday())
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (force = false) => {
     setGenerating(true)
     setResult(null)
     try {
       const { data, error } = await supabase.functions.invoke('vibe-news-cron', {
         method: 'POST',
-        body: {},
+        body: { force },
       })
       if (error) {
         setResult({ ok: false, error: error.message || JSON.stringify(error) })
@@ -67,18 +67,31 @@ export default function AdminVibeNews() {
           </p>
         </div>
 
-        <button
-          onClick={handleGenerate}
-          disabled={generating || hasToday}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50 shrink-0"
-        >
-          {generating
-            ? <><Loader size={14} className="animate-spin" /> Gerando...</>
-            : hasToday
-            ? <><CheckCircle size={14} /> Já gerada hoje</>
-            : <><RefreshCw size={14} /> Gerar notícias de hoje</>
-          }
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          {hasToday && (
+            <button
+              onClick={() => handleGenerate(true)}
+              disabled={generating}
+              title="Apaga a edição de hoje e gera uma nova (use se algum link estiver quebrado ou repetido)"
+              className="flex items-center gap-2 px-3 py-2.5 border border-[#5B2A6E] text-[#5B2A6E] dark:text-magic-light hover:bg-[#F2E4FA] dark:hover:bg-[#3E1B4D]/20 text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
+            >
+              {generating ? <Loader size={14} className="animate-spin" /> : <RefreshCw size={14} />}
+              Regerar hoje
+            </button>
+          )}
+          <button
+            onClick={() => handleGenerate(false)}
+            disabled={generating || hasToday}
+            className="flex items-center gap-2 px-4 py-2.5 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
+          >
+            {generating
+              ? <><Loader size={14} className="animate-spin" /> Gerando...</>
+              : hasToday
+              ? <><CheckCircle size={14} /> Já gerada hoje</>
+              : <><RefreshCw size={14} /> Gerar notícias de hoje</>
+            }
+          </button>
+        </div>
       </div>
 
       {/* Status do dia */}
