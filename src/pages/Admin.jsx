@@ -23,17 +23,17 @@ export default function Admin({ profile, onExit }) {
     <div className="min-h-screen bg-gray-50 dark:bg-[#111] flex flex-col">
       <header className="bg-white dark:bg-[#1A1A1A] border-b border-gray-200 dark:border-gray-700 px-4 h-14 flex items-center justify-between sticky top-0 z-50 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#0F4A28] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-[#3E1B4D] flex items-center justify-center">
             <Shield size={15} className="text-white" />
           </div>
           <span className="font-playfair font-bold text-gray-900 dark:text-white text-sm">Painel Admin</span>
-          <span className="text-[10px] bg-[#E8F5EE] dark:bg-[#0F4A28]/30 text-[#1B6B3A] dark:text-green-400 px-2 py-0.5 rounded-full font-semibold">
+          <span className="text-[10px] bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 text-[#5B2A6E] dark:text-magic-light px-2 py-0.5 rounded-full font-semibold">
             {profile?.display_name || profile?.id?.slice(0, 8)}
           </span>
         </div>
         <button
           onClick={onExit}
-          className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#1B6B3A] dark:hover:text-green-400 transition-colors"
+          className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#5B2A6E] dark:hover:text-magic-light transition-colors"
         >
           <ArrowLeft size={13} /> Voltar à plataforma
         </button>
@@ -49,7 +49,7 @@ export default function Admin({ profile, onExit }) {
                 onClick={() => setTab(t.id)}
                 className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
                   tab === t.id
-                    ? 'border-[#1B6B3A] text-[#1B6B3A] dark:text-green-400'
+                    ? 'border-[#5B2A6E] text-[#5B2A6E] dark:text-magic-light'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                 }`}
               >

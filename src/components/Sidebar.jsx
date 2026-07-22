@@ -18,7 +18,7 @@ export default function Sidebar({ currentChapter, onSelect, completed, onClose, 
           <div className="p-3 border-b border-gray-100 dark:border-gray-700">
             <button
               onClick={onChecklist}
-              className="w-full flex items-center gap-2.5 px-3 py-2.5 bg-[#B80E02]/8 hover:bg-[#B80E02]/15 border border-[#B80E02]/25 rounded-xl text-xs font-semibold text-[#B80E02] transition-colors"
+              className="w-full flex items-center gap-2.5 px-3 py-2.5 bg-[#C2298A]/8 hover:bg-[#C2298A]/15 border border-[#C2298A]/25 rounded-xl text-xs font-semibold text-[#C2298A] transition-colors"
             >
               <CheckSquare size={14} className="shrink-0" />
               Checklist dos 20 Passos
@@ -37,7 +37,7 @@ export default function Sidebar({ currentChapter, onSelect, completed, onClose, 
           </p>
           <button
             onClick={() => setShowCover(true)}
-            className="text-[10px] text-[#B80E02] mt-1.5 font-medium hover:underline"
+            className="text-[10px] text-[#C2298A] mt-1.5 font-medium hover:underline"
           >
             Ver capa →
           </button>
@@ -68,13 +68,13 @@ export default function Sidebar({ currentChapter, onSelect, completed, onClose, 
                     onClick={() => { onSelect(chIdx); onClose?.() }}
                     className={`w-full flex items-center gap-2 px-4 py-2 text-left transition-colors text-xs ${
                       isActive
-                        ? 'bg-[#B80E02]/10 border-l-2 border-[#B80E02] text-[#B80E02] font-semibold'
+                        ? 'bg-[#5B2A6E]/10 border-l-2 border-[#5B2A6E] text-[#5B2A6E] dark:text-magic-light font-semibold'
                         : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
                     }`}
                   >
                     <span className="shrink-0">
                       {isDone
-                        ? <CheckCircle size={13} className="text-[#1B6B3A] dark:text-green-400" />
+                        ? <CheckCircle size={13} className="text-[#5B2A6E] dark:text-magic-light" />
                         : <Circle size={13} className="text-gray-300 dark:text-gray-600" />
                       }
                     </span>
@@ -93,7 +93,7 @@ export default function Sidebar({ currentChapter, onSelect, completed, onClose, 
           <a
             href="/ebook-vibe-coding.pdf"
             download="Vibe Coding — 20 Passos para Criar seu SaaS.pdf"
-            className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white text-xs font-semibold rounded-xl transition-colors"
+            className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white text-xs font-semibold rounded-xl transition-colors"
           >
             <Download size={13} />
             Baixar PDF do Ebook
@@ -110,7 +110,7 @@ export default function Sidebar({ currentChapter, onSelect, completed, onClose, 
           <div className="relative max-w-lg w-full" onClick={e => e.stopPropagation()}>
             <button
               onClick={() => setShowCover(false)}
-              className="absolute -top-3 -right-3 z-10 bg-white dark:bg-gray-800 rounded-full p-1.5 shadow-lg text-gray-500 hover:text-red-500 transition-colors"
+              className="absolute -top-3 -right-3 z-10 bg-white dark:bg-gray-800 rounded-full p-1.5 shadow-lg text-gray-500 hover:text-coral-500 transition-colors"
             >
               <X size={16} />
             </button>

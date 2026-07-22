@@ -78,7 +78,7 @@ export default function AISupportChat({ chapter, initialMessage, placeholder, co
   return (
     <div className={`bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-200 dark:border-gray-700 flex flex-col ${containerClass}`}>
       <div className="flex items-center gap-2 px-3 py-2 border-b border-gray-100 dark:border-gray-700 shrink-0">
-        <Bot size={14} className="text-[#1B6B3A]" />
+        <Bot size={14} className="text-[#5B2A6E]" />
         <span className="text-xs font-semibold text-gray-600 dark:text-gray-300">Suporte IA</span>
       </div>
 
@@ -88,15 +88,15 @@ export default function AISupportChat({ chapter, initialMessage, placeholder, co
             key={i}
             className={`text-xs max-w-[85%] px-2.5 py-2 rounded-xl leading-relaxed fade-in ${
               msg.role === 'assistant'
-                ? 'bg-[#E8F5EE] dark:bg-[#0F4A28]/30 text-gray-700 dark:text-gray-200 self-start'
-                : 'bg-[#1B6B3A] text-white ml-auto'
+                ? 'bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 text-gray-700 dark:text-gray-200 self-start'
+                : 'bg-[#5B2A6E] text-white ml-auto'
             }`}
           >
             {stripMarkdown(msg.content)}
           </div>
         ))}
         {loading && (
-          <div className="text-xs bg-[#E8F5EE] dark:bg-[#0F4A28]/30 text-gray-500 dark:text-gray-400 px-3 py-2 rounded-xl max-w-[60%]">
+          <div className="text-xs bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 text-gray-500 dark:text-gray-400 px-3 py-2 rounded-xl max-w-[60%]">
             <span className="dot1">•</span>
             <span className="dot2">•</span>
             <span className="dot3">•</span>
@@ -111,12 +111,12 @@ export default function AISupportChat({ chapter, initialMessage, placeholder, co
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKey}
           placeholder={placeholder || 'Sua dúvida...'}
-          className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
+          className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
         />
         <button
           onClick={send}
           disabled={!input.trim() || loading}
-          className="w-7 h-7 rounded-lg bg-[#1B6B3A] hover:bg-[#0F4A28] text-white flex items-center justify-center disabled:opacity-40 transition-colors"
+          className="w-7 h-7 rounded-lg bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white flex items-center justify-center disabled:opacity-40 transition-colors"
         >
           <Send size={12} />
         </button>

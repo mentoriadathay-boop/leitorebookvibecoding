@@ -7,7 +7,7 @@ const PLAN_LABELS = { free: 'Gratuito', monthly: 'Mensal', annual: 'Anual', life
 const PLAN_BADGE = {
   free: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
   monthly: 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400',
-  annual: 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400',
+  annual: 'bg-success-100 text-success-700 dark:bg-success-900/20 dark:text-success-400',
   lifetime: 'bg-orange-100 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400',
 }
 
@@ -121,12 +121,12 @@ export default function AdminUsers() {
           Gestão de Usuários
         </h2>
         <div className="flex gap-2">
-          <button onClick={load} className="p-2 text-gray-400 hover:text-[#1B6B3A] transition-colors" title="Atualizar">
+          <button onClick={load} className="p-2 text-gray-400 hover:text-[#5B2A6E] transition-colors" title="Atualizar">
             <RefreshCw size={15} />
           </button>
           <button
             onClick={() => setShowAdd(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white text-sm rounded-xl font-medium transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white text-sm rounded-xl font-medium transition-colors"
           >
             <Plus size={14} /> Adicionar usuário
           </button>
@@ -141,7 +141,7 @@ export default function AdminUsers() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar por email ou nome..."
-            className="pl-8 pr-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#1A1A1A] text-gray-700 dark:text-gray-300 w-60"
+            className="pl-8 pr-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#1A1A1A] text-gray-700 dark:text-gray-300 w-60"
           />
         </div>
         <select value={filterPlan} onChange={e => setFilterPlan(e.target.value)}
@@ -180,7 +180,7 @@ export default function AdminUsers() {
                     <td className="px-4 py-3 font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
                       {u.display_name}
                       {u.role === 'admin' && (
-                        <span className="ml-1.5 text-[9px] bg-[#E8F5EE] text-[#1B6B3A] px-1.5 py-0.5 rounded-full font-bold">ADMIN</span>
+                        <span className="ml-1.5 text-[9px] bg-[#F2E4FA] text-[#5B2A6E] px-1.5 py-0.5 rounded-full font-bold">ADMIN</span>
                       )}
                     </td>
                     <td className="px-4 py-3 text-gray-600 dark:text-gray-400 text-xs">{u.email}</td>
@@ -194,8 +194,8 @@ export default function AdminUsers() {
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span className={`text-[11px] px-2 py-1 rounded-full font-medium ${
                         u.status === 'active'
-                          ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
-                          : 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400'
+                          ? 'bg-success-100 text-success-700 dark:bg-success-900/20 dark:text-success-400'
+                          : 'bg-coral-100 text-coral-700 dark:bg-coral-900/20 dark:text-coral-400'
                       }`}>
                         {u.status === 'active' ? 'Ativo' : 'Bloqueado'}
                       </span>
@@ -206,12 +206,12 @@ export default function AdminUsers() {
                           className={`p-1.5 rounded-lg transition-colors ${
                             u.status === 'active'
                               ? 'text-gray-400 hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20'
-                              : 'text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20'
+                              : 'text-success-500 hover:bg-success-50 dark:hover:bg-success-900/20'
                           }`}>
                           {u.status === 'active' ? <Ban size={14} /> : <CheckCircle size={14} />}
                         </button>
                         <button onClick={() => setConfirmDelete(u)} title="Excluir"
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-coral-600 hover:bg-coral-50 dark:hover:bg-coral-900/20 transition-colors">
                           <Trash2 size={14} />
                         </button>
                       </div>
@@ -234,9 +234,9 @@ export default function AdminUsers() {
             </div>
 
             {addError && (
-              <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg flex items-start gap-2">
-                <AlertCircle size={13} className="text-red-500 shrink-0 mt-0.5" />
-                <span className="text-xs text-red-600 dark:text-red-400">{addError}</span>
+              <div className="mb-4 p-3 bg-coral-50 dark:bg-coral-900/20 border border-coral-200 dark:border-coral-700 rounded-lg flex items-start gap-2">
+                <AlertCircle size={13} className="text-coral-500 shrink-0 mt-0.5" />
+                <span className="text-xs text-coral-600 dark:text-coral-400">{addError}</span>
               </div>
             )}
 
@@ -251,14 +251,14 @@ export default function AdminUsers() {
                   <input type={f.type} required minLength={f.key === 'password' ? 6 : undefined}
                     value={addForm[f.key]} onChange={e => setAddForm(p => ({ ...p, [f.key]: e.target.value }))}
                     placeholder={f.placeholder}
-                    className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
+                    className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
                 </div>
               ))}
 
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1.5">Plano</label>
                 <select value={addForm.plan} onChange={e => setAddForm(p => ({ ...p, plan: e.target.value }))}
-                  className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300">
+                  className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300">
                   {PLANS.map(p => <option key={p} value={p}>{PLAN_LABELS[p]}</option>)}
                 </select>
               </div>
@@ -269,7 +269,7 @@ export default function AdminUsers() {
                   Cancelar
                 </button>
                 <button type="submit" disabled={addLoading}
-                  className="flex-1 py-2.5 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50">
+                  className="flex-1 py-2.5 bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50">
                   {addLoading ? 'Criando...' : 'Criar usuário'}
                 </button>
               </div>
@@ -282,8 +282,8 @@ export default function AdminUsers() {
       {confirmDelete && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center">
-            <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-4">
-              <Trash2 size={20} className="text-red-600" />
+            <div className="w-12 h-12 rounded-full bg-coral-100 dark:bg-coral-900/20 flex items-center justify-center mx-auto mb-4">
+              <Trash2 size={20} className="text-coral-600" />
             </div>
             <h3 className="font-playfair font-bold text-lg text-gray-900 dark:text-white mb-2">Excluir usuário?</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
@@ -295,7 +295,7 @@ export default function AdminUsers() {
                 Cancelar
               </button>
               <button onClick={() => deleteUser(confirmDelete.id)}
-                className="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl transition-colors">
+                className="flex-1 py-2.5 bg-coral-600 hover:bg-coral-700 text-white text-sm font-semibold rounded-xl transition-colors">
                 Excluir
               </button>
             </div>

@@ -26,7 +26,7 @@ export default function IdeasSection({ ideas, onSaveIdea, onDeleteIdea }) {
     a.click()
   }
 
-  const tagColors = ['bg-red-100 text-red-700', 'bg-blue-100 text-blue-700', 'bg-purple-100 text-purple-700', 'bg-green-100 text-green-700', 'bg-orange-100 text-orange-700']
+  const tagColors = ['bg-coral-100 text-coral-700', 'bg-blue-100 text-blue-700', 'bg-purple-100 text-purple-700', 'bg-success-100 text-success-700', 'bg-orange-100 text-orange-700']
   const tagColor = (t) => tagColors[Math.abs(t.split('').reduce((a, c) => a + c.charCodeAt(0), 0)) % tagColors.length]
 
   return (
@@ -42,19 +42,19 @@ export default function IdeasSection({ ideas, onSaveIdea, onDeleteIdea }) {
           value={text}
           onChange={e => setText(e.target.value)}
           placeholder="Descreva sua ideia de SaaS..."
-          className="w-full h-24 text-sm resize-none border border-gray-200 dark:border-gray-600 rounded-lg p-3 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400 mb-3"
+          className="w-full h-24 text-sm resize-none border border-gray-200 dark:border-gray-600 rounded-lg p-3 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400 mb-3"
         />
         <div className="flex gap-2">
           <input
             value={tag}
             onChange={e => setTag(e.target.value)}
             placeholder="Tag (ex: Educação, Saúde)"
-            className="flex-1 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
+            className="flex-1 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400"
           />
           <button
             onClick={handleSave}
             disabled={!text.trim()}
-            className="px-4 py-2 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white text-sm rounded-lg font-medium disabled:opacity-40 transition-colors"
+            className="px-4 py-2 bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white text-sm rounded-lg font-medium disabled:opacity-40 transition-colors"
           >
             Salvar ideia
           </button>
@@ -71,7 +71,7 @@ export default function IdeasSection({ ideas, onSaveIdea, onDeleteIdea }) {
                 onClick={() => setFilter(f)}
                 className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
                   filter === f
-                    ? 'bg-[#1B6B3A] text-white border-[#1B6B3A]'
+                    ? 'bg-[#5B2A6E] text-white border-[#5B2A6E]'
                     : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400'
                 }`}
               >
@@ -81,7 +81,7 @@ export default function IdeasSection({ ideas, onSaveIdea, onDeleteIdea }) {
           </div>
           <button
             onClick={exportTxt}
-            className="flex items-center gap-1 text-xs text-[#1B6B3A] hover:text-[#0F4A28] transition-colors"
+            className="flex items-center gap-1 text-xs text-[#5B2A6E] hover:text-[#3E1B4D] transition-colors"
           >
             <Download size={12} /> Exportar .txt
           </button>
@@ -115,7 +115,7 @@ export default function IdeasSection({ ideas, onSaveIdea, onDeleteIdea }) {
               </div>
               <button
                 onClick={() => onDeleteIdea(idea.id)}
-                className="shrink-0 text-gray-300 dark:text-gray-600 hover:text-red-500 transition-colors mt-0.5"
+                className="shrink-0 text-gray-300 dark:text-gray-600 hover:text-coral-500 transition-colors mt-0.5"
               >
                 <Trash2 size={14} />
               </button>

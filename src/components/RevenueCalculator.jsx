@@ -35,7 +35,7 @@ function SliderField({ label, min, max, step, value, onChange, display }) {
     <div>
       <div className="flex justify-between text-xs mb-1.5">
         <span className="text-gray-600 dark:text-gray-400 font-medium">{label}</span>
-        <span className="font-semibold text-[#0F4A28] dark:text-green-400">{display}</span>
+        <span className="font-semibold text-[#3E1B4D] dark:text-magic-light">{display}</span>
       </div>
       <input
         type="range"
@@ -44,7 +44,7 @@ function SliderField({ label, min, max, step, value, onChange, display }) {
         step={step}
         value={value}
         onChange={e => onChange(Number(e.target.value))}
-        className="w-full accent-[#1B6B3A] h-1.5 rounded-full"
+        className="w-full accent-[#5B2A6E] h-1.5 rounded-full"
       />
     </div>
   )
@@ -97,14 +97,14 @@ export default function RevenueCalculator() {
           <div>
             <div className="flex justify-between text-xs mb-1.5">
               <span className="text-gray-600 dark:text-gray-400 font-medium">Valor do plano mensal (R$)</span>
-              <span className="font-semibold text-[#0F4A28] dark:text-green-400">{fmt(price)}</span>
+              <span className="font-semibold text-[#3E1B4D] dark:text-magic-light">{fmt(price)}</span>
             </div>
             <input
               type="number"
               min={1}
               value={price}
               onChange={e => setPrice(Math.max(1, Number(e.target.value)))}
-              className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300"
+              className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300"
             />
           </div>
 
@@ -128,23 +128,23 @@ export default function RevenueCalculator() {
         {/* Results */}
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-[#E8F5EE] dark:bg-[#0F4A28]/20 rounded-xl p-4 border border-[#1B6B3A]/20">
+            <div className="bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 rounded-xl p-4 border border-[#5B2A6E]/20">
               <p className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1 flex items-center">
                 MRR Atual <Tooltip text={TOOLTIPS.mrr} />
               </p>
-              <p className="font-playfair font-bold text-xl text-[#0F4A28] dark:text-green-400">{fmt(mrr)}</p>
+              <p className="font-playfair font-bold text-xl text-[#3E1B4D] dark:text-magic-light">{fmt(mrr)}</p>
             </div>
-            <div className="bg-[#FDF6E3] dark:bg-yellow-900/20 rounded-xl p-4 border border-[#C9A84C]/30">
+            <div className="bg-[#FFF6E0] dark:bg-stargold-900/20 rounded-xl p-4 border border-[#F5B942]/30">
               <p className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1 flex items-center">
                 ARR Atual <Tooltip text={TOOLTIPS.arr} />
               </p>
-              <p className="font-playfair font-bold text-xl text-[#C9A84C]">{fmt(arr)}</p>
+              <p className="font-playfair font-bold text-xl text-[#F5B942]">{fmt(arr)}</p>
             </div>
             <div className="bg-white dark:bg-[#1A1A1A] rounded-xl p-4 border border-gray-200 dark:border-gray-700">
               <p className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1 flex items-center">
                 MRR em 12 meses <Tooltip text={TOOLTIPS.mrr12} />
               </p>
-              <p className="font-playfair font-bold text-xl text-[#1B6B3A]">{fmt(months[11]?.mrr || 0)}</p>
+              <p className="font-playfair font-bold text-xl text-[#5B2A6E]">{fmt(months[11]?.mrr || 0)}</p>
             </div>
             <div className="bg-white dark:bg-[#1A1A1A] rounded-xl p-4 border border-gray-200 dark:border-gray-700">
               <p className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1 flex items-center">
@@ -157,7 +157,7 @@ export default function RevenueCalculator() {
           {/* Bar chart */}
           <div className="bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-200 dark:border-gray-700 p-4">
             <p className="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-3 flex items-center gap-1">
-              <TrendingUp size={13} className="text-[#1B6B3A]" /> Projeção 12 meses (MRR)
+              <TrendingUp size={13} className="text-[#5B2A6E]" /> Projeção 12 meses (MRR)
             </p>
             <div className="flex items-end gap-1 h-24">
               {months.map((m) => (
@@ -166,7 +166,7 @@ export default function RevenueCalculator() {
                     className="w-full rounded-t-sm transition-all duration-500"
                     style={{
                       height: `${Math.max(4, (m.mrr / maxMrr) * 80)}px`,
-                      background: 'linear-gradient(to top, #1B6B3A, #C9A84C)',
+                      background: 'linear-gradient(to top, #5B2A6E, #F5B942)',
                       opacity: 0.8 + (m.month / 12) * 0.2,
                     }}
                   />

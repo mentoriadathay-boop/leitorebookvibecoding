@@ -105,7 +105,7 @@ export default function AudioPlayer({ text, compact = false }) {
       {/* Play/Stop */}
       <button onClick={play}
         className={`flex items-center gap-1.5 text-[10px] font-semibold px-2.5 py-1 rounded-full border transition-colors ${
-          playing ? 'bg-[#B80E02] text-white border-[#B80E02]'
+          playing ? 'bg-[#C2298A] text-white border-[#C2298A]'
           : loading ? 'bg-purple-400 text-white border-purple-400 cursor-wait'
           : 'text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:border-purple-500 hover:text-purple-600'
         }`}>

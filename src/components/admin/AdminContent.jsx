@@ -15,7 +15,7 @@ function ToolbarBtn({ active, onClick, children, title }) {
   return (
     <button type="button" onClick={onClick} title={title}
       className={`px-2 py-1 rounded text-sm font-medium transition-colors ${
-        active ? 'bg-[#1B6B3A] text-white' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+        active ? 'bg-[#5B2A6E] text-white' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
       }`}>
       {children}
     </button>
@@ -66,11 +66,11 @@ function QuizEditor({ questions, onChange }) {
         <div key={i} className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
           <div className="flex justify-between items-start gap-2 mb-2">
             <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{i + 1}. {q.question}</p>
-            <button onClick={() => remove(i)} className="text-gray-400 hover:text-red-500 transition-colors shrink-0"><Trash2 size={14} /></button>
+            <button onClick={() => remove(i)} className="text-gray-400 hover:text-coral-500 transition-colors shrink-0"><Trash2 size={14} /></button>
           </div>
           <div className="grid grid-cols-2 gap-1 mb-2">
             {q.options.map((opt, j) => (
-              <p key={j} className={`text-xs px-2 py-1 rounded ${q.correctIndex === j ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400 font-medium' : 'text-gray-500 dark:text-gray-400'}`}>
+              <p key={j} className={`text-xs px-2 py-1 rounded ${q.correctIndex === j ? 'bg-success-100 text-success-700 dark:bg-success-900/20 dark:text-success-400 font-medium' : 'text-gray-500 dark:text-gray-400'}`}>
                 {j === q.correctIndex ? '✓ ' : ''}{opt}
               </p>
             ))}
@@ -79,24 +79,24 @@ function QuizEditor({ questions, onChange }) {
         </div>
       ))}
 
-      <div className="bg-[#E8F5EE] dark:bg-[#0F4A28]/20 rounded-xl p-4 border border-[#1B6B3A]/20 space-y-3">
-        <p className="text-xs font-semibold text-[#1B6B3A] dark:text-green-400">Nova pergunta</p>
+      <div className="bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 rounded-xl p-4 border border-[#5B2A6E]/20 space-y-3">
+        <p className="text-xs font-semibold text-[#5B2A6E] dark:text-magic-light">Nova pergunta</p>
         <input value={newQ.question} onChange={e => setNewQ(p => ({ ...p, question: e.target.value }))}
-          placeholder="Texto da pergunta" className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
+          placeholder="Texto da pergunta" className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
         <div className="grid grid-cols-2 gap-2">
           {newQ.options.map((opt, j) => (
             <div key={j} className="flex items-center gap-2">
-              <input type="radio" checked={newQ.correctIndex === j} onChange={() => setNewQ(p => ({ ...p, correctIndex: j }))} className="accent-[#1B6B3A]" />
+              <input type="radio" checked={newQ.correctIndex === j} onChange={() => setNewQ(p => ({ ...p, correctIndex: j }))} className="accent-[#5B2A6E]" />
               <input value={opt} onChange={e => {
                 const opts = [...newQ.options]; opts[j] = e.target.value
                 setNewQ(p => ({ ...p, options: opts }))
-              }} placeholder={`Opção ${j + 1}`} className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded px-2 py-1.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
+              }} placeholder={`Opção ${j + 1}`} className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded px-2 py-1.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
             </div>
           ))}
         </div>
         <input value={newQ.explanation} onChange={e => setNewQ(p => ({ ...p, explanation: e.target.value }))}
-          placeholder="Explicação da resposta (opcional)" className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
-        <button onClick={add} className="flex items-center gap-1.5 text-xs px-3 py-2 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white rounded-lg transition-colors font-medium">
+          placeholder="Explicação da resposta (opcional)" className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
+        <button onClick={add} className="flex items-center gap-1.5 text-xs px-3 py-2 bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white rounded-lg transition-colors font-medium">
           <Plus size={12} /> Adicionar pergunta
         </button>
       </div>
@@ -117,9 +117,9 @@ function GlossaryEditor({ terms, onChange }) {
     <div className="space-y-3">
       <div className="flex flex-wrap gap-2">
         {terms.map(t => (
-          <span key={t} className="flex items-center gap-1.5 text-xs bg-[#E8F5EE] dark:bg-[#0F4A28]/30 text-[#1B6B3A] dark:text-green-400 px-3 py-1.5 rounded-full border border-[#1B6B3A]/20">
+          <span key={t} className="flex items-center gap-1.5 text-xs bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 text-[#5B2A6E] dark:text-magic-light px-3 py-1.5 rounded-full border border-[#5B2A6E]/20">
             {t}
-            <button onClick={() => onChange(terms.filter(x => x !== t))} className="text-[#1B6B3A]/60 hover:text-red-500 transition-colors"><X size={11} /></button>
+            <button onClick={() => onChange(terms.filter(x => x !== t))} className="text-[#5B2A6E]/60 hover:text-coral-500 transition-colors"><X size={11} /></button>
           </span>
         ))}
         {terms.length === 0 && <p className="text-xs text-gray-400 italic">Nenhum termo adicionado</p>}
@@ -128,8 +128,8 @@ function GlossaryEditor({ terms, onChange }) {
         <input value={newTerm} onChange={e => setNewTerm(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), add())}
           placeholder="Nome do termo (ex: SaaS, MRR...)"
-          className="flex-1 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
-        <button onClick={add} className="px-3 py-2 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white text-sm rounded-lg transition-colors font-medium">
+          className="flex-1 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
+        <button onClick={add} className="px-3 py-2 bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white text-sm rounded-lg transition-colors font-medium">
           <Plus size={14} />
         </button>
       </div>
@@ -182,7 +182,7 @@ function ChapterEditorModal({ chapter, onClose, onSave }) {
           </h3>
           <div className="flex items-center gap-3">
             <button onClick={save} disabled={saving}
-              className="flex items-center gap-2 px-4 py-2 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50">
+              className="flex items-center gap-2 px-4 py-2 bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50">
               <Save size={14} /> {saving ? 'Salvando...' : 'Salvar'}
             </button>
             <button onClick={onClose} className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"><X size={18} /></button>
@@ -193,19 +193,19 @@ function ChapterEditorModal({ chapter, onClose, onSave }) {
         <div className="flex flex-wrap gap-3 px-5 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 shrink-0">
           <input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
             placeholder="Título do capítulo"
-            className="flex-1 min-w-48 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
+            className="flex-1 min-w-48 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
           <input value={form.group_label} onChange={e => setForm(p => ({ ...p, group_label: e.target.value }))}
             placeholder="Grupo (ex: Módulo 1)"
-            className="w-36 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
+            className="w-36 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
           <input type="number" value={form.page} onChange={e => setForm(p => ({ ...p, page: Number(e.target.value) }))}
             placeholder="Pág."
-            className="w-20 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
+            className="w-20 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
           <input type="number" value={form.reading_time} onChange={e => setForm(p => ({ ...p, reading_time: Number(e.target.value) }))}
             placeholder="Min leitura"
-            className="w-28 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
+            className="w-28 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
           <button onClick={() => setForm(p => ({ ...p, published: !p.published }))}
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              form.published ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
+              form.published ? 'bg-success-100 text-success-700 dark:bg-success-900/20 dark:text-success-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
             }`}>
             {form.published ? <><Eye size={14} /> Publicado</> : <><EyeOff size={14} /> Rascunho</>}
           </button>
@@ -216,7 +216,7 @@ function ChapterEditorModal({ chapter, onClose, onSave }) {
           {[['content', 'Conteúdo'], ['quiz', 'Quiz'], ['glossary', 'Glossário']].map(([id, label]) => (
             <button key={id} onClick={() => setEditorTab(id)}
               className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-all ${
-                editorTab === id ? 'border-[#1B6B3A] text-[#1B6B3A] dark:text-green-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'
+                editorTab === id ? 'border-[#5B2A6E] text-[#5B2A6E] dark:text-magic-light' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'
               }`}>
               {label}
             </button>
@@ -236,7 +236,7 @@ function ChapterEditorModal({ chapter, onClose, onSave }) {
                 .tiptap-editor .tiptap ul { list-style: disc; margin-left: 1.5rem; margin: 0.5rem 0 0.5rem 1.5rem; }
                 .tiptap-editor .tiptap ol { list-style: decimal; margin: 0.5rem 0 0.5rem 1.5rem; }
                 .tiptap-editor .tiptap li { margin: 0.2rem 0; }
-                .tiptap-editor .tiptap blockquote { border-left: 3px solid #1B6B3A; padding-left: 1rem; color: #6b7280; font-style: italic; margin: 0.75rem 0; }
+                .tiptap-editor .tiptap blockquote { border-left: 3px solid #5B2A6E; padding-left: 1rem; color: #6b7280; font-style: italic; margin: 0.75rem 0; }
                 .tiptap-editor .tiptap strong { font-weight: 700; }
                 .tiptap-editor .tiptap em { font-style: italic; }
                 .tiptap-editor .tiptap u { text-decoration: underline; }
@@ -377,7 +377,7 @@ export default function AdminContent() {
             </button>
           )}
           <button onClick={() => setEditing({})}
-            className="flex items-center gap-2 px-4 py-2 bg-[#1B6B3A] hover:bg-[#0F4A28] text-white text-sm rounded-xl font-medium transition-colors">
+            className="flex items-center gap-2 px-4 py-2 bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white text-sm rounded-xl font-medium transition-colors">
             <Plus size={14} /> Novo capítulo
           </button>
         </div>
@@ -419,7 +419,7 @@ export default function AdminContent() {
                     <td className="px-4 py-3">
                       <span className={`text-[11px] px-2 py-1 rounded-full font-medium ${
                         ch.published
-                          ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
+                          ? 'bg-success-100 text-success-700 dark:bg-success-900/20 dark:text-success-400'
                           : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
                       }`}>
                         {ch.published ? 'Publicado' : 'Rascunho'}
@@ -428,7 +428,7 @@ export default function AdminContent() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         <button onClick={() => togglePublished(ch)} title={ch.published ? 'Despublicar' : 'Publicar'}
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-[#1B6B3A] hover:bg-[#E8F5EE] dark:hover:bg-[#0F4A28]/20 transition-colors">
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] hover:bg-[#F2E4FA] dark:hover:bg-[#3E1B4D]/20 transition-colors">
                           {ch.published ? <EyeOff size={14} /> : <Eye size={14} />}
                         </button>
                         <button onClick={() => setEditing(ch)} title="Editar"
@@ -436,7 +436,7 @@ export default function AdminContent() {
                           <Pencil size={14} />
                         </button>
                         <button onClick={() => setConfirmDel(ch)} title="Excluir"
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-coral-600 hover:bg-coral-50 dark:hover:bg-coral-900/20 transition-colors">
                           <Trash2 size={14} />
                         </button>
                       </div>
@@ -460,8 +460,8 @@ export default function AdminContent() {
       {confirmDel && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center">
-            <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-4">
-              <Trash2 size={20} className="text-red-600" />
+            <div className="w-12 h-12 rounded-full bg-coral-100 dark:bg-coral-900/20 flex items-center justify-center mx-auto mb-4">
+              <Trash2 size={20} className="text-coral-600" />
             </div>
             <h3 className="font-playfair font-bold text-lg text-gray-900 dark:text-white mb-2">Excluir capítulo?</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
@@ -473,7 +473,7 @@ export default function AdminContent() {
                 Cancelar
               </button>
               <button onClick={() => deleteChapter(confirmDel.id)}
-                className="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl transition-colors">
+                className="flex-1 py-2.5 bg-coral-600 hover:bg-coral-700 text-white text-sm font-semibold rounded-xl transition-colors">
                 Excluir
               </button>
             </div>

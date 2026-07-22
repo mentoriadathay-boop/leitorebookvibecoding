@@ -43,10 +43,10 @@ Faça um diagnóstico completo. Retorne APENAS este JSON:
 }`
 }
 
-const impactColor = { alto: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', médio: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', baixo: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' }
+const impactColor = { alto: 'bg-coral-100 text-coral-700 dark:bg-coral-900/30 dark:text-coral-400', médio: 'bg-stargold-100 text-stargold-700 dark:bg-stargold-900/30 dark:text-stargold-400', baixo: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' }
 
 function ScoreBar({ label, value }) {
-  const color = value >= 7 ? '#1B6B3A' : value >= 5 ? '#C9A84C' : '#B80E02'
+  const color = value >= 7 ? '#5FA372' : value >= 5 ? '#F5B942' : '#E8845F'
   return (
     <div className="flex items-center gap-3">
       <span className="text-xs text-gray-600 dark:text-gray-400 w-28 shrink-0">{label}</span>
@@ -100,19 +100,19 @@ export default function MonetizationDiag({ project, onSave }) {
       <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
       <div className="flex items-center gap-2">
         <input type="number" min="0" value={form[k]} onChange={e => set(k, e.target.value)}
-          className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
+          className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300" />
         {suffix && <span className="text-xs text-gray-500 shrink-0">{suffix}</span>}
       </div>
     </div>
   )
 
   const scoreGeral = result?.score_geral || 0
-  const scoreColor = scoreGeral >= 70 ? '#1B6B3A' : scoreGeral >= 45 ? '#C9A84C' : '#B80E02'
+  const scoreColor = scoreGeral >= 70 ? '#5FA372' : scoreGeral >= 45 ? '#F5B942' : '#E8845F'
 
   return (
     <div className="space-y-6">
       {(nicheData || mvpData) && (
-        <div className="flex items-center gap-2 px-4 py-2.5 bg-[#E8F5EE] dark:bg-[#0F4A28]/20 rounded-xl text-xs text-[#1B6B3A] dark:text-green-400 font-medium">
+        <div className="flex items-center gap-2 px-4 py-2.5 bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 rounded-xl text-xs text-[#5B2A6E] dark:text-magic-light font-medium">
           ✓ Dados das ferramentas anteriores importados
         </div>
       )}
@@ -127,18 +127,18 @@ export default function MonetizationDiag({ project, onSave }) {
           <div>
             <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Canais de aquisição</label>
             <input value={form.canais} onChange={e => set('canais', e.target.value)} placeholder="Ex: Instagram, Google Ads, indicação"
-              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
+              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Descreva seu funil atual</label>
             <textarea value={form.funil} onChange={e => set('funil', e.target.value)} rows={2}
               placeholder="Ex: anúncio → landing page → trial 7 dias → plano pago"
-              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400 resize-none" />
+              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400 resize-none" />
           </div>
         </div>
-        {error && <p className="mt-3 text-xs text-red-600 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
+        {error && <p className="mt-3 text-xs text-coral-600 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
         <button onClick={analyze} disabled={loading}
-          className="mt-4 flex items-center gap-2 px-6 py-2.5 bg-[#0F4A28] hover:bg-[#1B6B3A] text-white text-xs font-semibold rounded-xl transition-colors disabled:opacity-50">
+          className="mt-4 flex items-center gap-2 px-6 py-2.5 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white text-xs font-semibold rounded-xl transition-colors disabled:opacity-50">
           {loading ? <><Loader2 size={13} className="animate-spin" />Diagnosticando...</> : 'Diagnosticar Monetização →'}
         </button>
       </div>
@@ -174,13 +174,13 @@ export default function MonetizationDiag({ project, onSave }) {
               {result.gargalos?.map((g, i) => (
                 <div key={i} className="p-3 bg-gray-50 dark:bg-[#111] rounded-lg">
                   <div className="flex items-start gap-2 mb-1">
-                    <AlertTriangle size={12} className="text-[#B80E02] shrink-0 mt-0.5" />
+                    <AlertTriangle size={12} className="text-[#C2298A] shrink-0 mt-0.5" />
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-xs font-bold text-gray-900 dark:text-white">{g.problema}</span>
                         <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase ${impactColor[g.impacto] || ''}`}>{g.impacto}</span>
                       </div>
-                      <p className="text-xs text-[#1B6B3A] dark:text-green-400 flex items-start gap-1">
+                      <p className="text-xs text-[#5B2A6E] dark:text-magic-light flex items-start gap-1">
                         <CheckCircle size={11} className="shrink-0 mt-0.5" />{g.solucao}
                       </p>
                     </div>
@@ -195,7 +195,7 @@ export default function MonetizationDiag({ project, onSave }) {
             <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Plano de 30 Dias</h4>
             <div className="grid sm:grid-cols-2 gap-3">
               {result.plano_30_dias?.map((semana, i) => (
-                <div key={i} className={`p-3 rounded-lg border-l-4 ${['border-[#0F4A28] bg-[#E8F5EE]/40 dark:bg-[#0F4A28]/10','border-[#1B6B3A] bg-green-50/30 dark:bg-green-900/10','border-[#C9A84C] bg-yellow-50/30 dark:bg-yellow-900/10','border-[#B80E02] bg-red-50/30 dark:bg-red-900/10'][i % 4]}`}>
+                <div key={i} className={`p-3 rounded-lg border-l-4 ${['border-[#5B2A6E] bg-[#F2E4FA]/40 dark:bg-[#5B2A6E]/10','border-[#C2298A] bg-[#FCE4F1]/30 dark:bg-[#C2298A]/10','border-[#F5B942] bg-stargold-50/30 dark:bg-stargold-900/10','border-coral-500 bg-coral-50/30 dark:bg-coral-900/10'][i % 4]}`}>
                   <p className="text-xs font-bold text-gray-900 dark:text-white mb-2">{semana.semana}</p>
                   <ul className="space-y-1">
                     {semana.acoes?.map((a, j) => <li key={j} className="text-xs text-gray-600 dark:text-gray-400">→ {a}</li>)}
@@ -226,7 +226,7 @@ export default function MonetizationDiag({ project, onSave }) {
             <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Upsells Sugeridos</h4>
             <div className="flex flex-wrap gap-2">
               {result.upsells_sugeridos?.map((u, i) => (
-                <span key={i} className="text-xs bg-[#E8F5EE] dark:bg-[#0F4A28]/20 text-[#1B6B3A] dark:text-green-400 px-3 py-1 rounded-full">
+                <span key={i} className="text-xs bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 text-[#5B2A6E] dark:text-magic-light px-3 py-1 rounded-full">
                   <TrendingUp size={10} className="inline mr-1" />{u}
                 </span>
               ))}
@@ -235,11 +235,11 @@ export default function MonetizationDiag({ project, onSave }) {
 
           <div className="flex items-center gap-3 flex-wrap">
             <button onClick={analyze} disabled={loading}
-              className="flex items-center gap-1.5 text-xs px-4 py-2 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#1B6B3A] hover:text-[#1B6B3A] rounded-xl transition-colors">
+              className="flex items-center gap-1.5 text-xs px-4 py-2 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#5B2A6E] hover:text-[#5B2A6E] rounded-xl transition-colors">
               <RefreshCw size={12} /> Regenerar
             </button>
             <button onClick={handleSave}
-              className={`flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl transition-colors ${savedOk ? 'bg-[#E8F5EE] text-[#1B6B3A]' : 'bg-[#C9A84C] hover:bg-yellow-600 text-white'}`}>
+              className={`flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl transition-colors ${savedOk ? 'bg-[#F2E4FA] text-[#5B2A6E]' : 'bg-[#F5B942] hover:bg-stargold-600 text-white'}`}>
               <Save size={12} /> {savedOk ? 'Salvo!' : 'Salvar Resultado'}
             </button>
           </div>

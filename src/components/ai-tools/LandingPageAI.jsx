@@ -38,8 +38,8 @@ function CopyButton({ text }) {
   const [copied, setCopied] = useState(false)
   const copy = () => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000) }
   return (
-    <button onClick={copy} title="Copiar" className="shrink-0 p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-400 hover:text-[#1B6B3A]">
-      {copied ? <CheckCheck size={13} className="text-[#1B6B3A]" /> : <Copy size={13} />}
+    <button onClick={copy} title="Copiar" className="shrink-0 p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-400 hover:text-[#5B2A6E]">
+      {copied ? <CheckCheck size={13} className="text-[#5B2A6E]" /> : <Copy size={13} />}
     </button>
   )
 }
@@ -91,7 +91,7 @@ export default function LandingPageAI({ project, onSave, onNext }) {
   return (
     <div className="space-y-6">
       {(nicheData || mvpData) && (
-        <div className="flex items-center gap-2 px-4 py-2.5 bg-[#E8F5EE] dark:bg-[#0F4A28]/20 rounded-xl text-xs text-[#1B6B3A] dark:text-green-400 font-medium">
+        <div className="flex items-center gap-2 px-4 py-2.5 bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 rounded-xl text-xs text-[#5B2A6E] dark:text-magic-light font-medium">
           ✓ Dados das ferramentas anteriores importados
         </div>
       )}
@@ -102,17 +102,17 @@ export default function LandingPageAI({ project, onSave, onNext }) {
           <div className="sm:col-span-2">
             <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Promessa principal *</label>
             <input value={form.promessa} onChange={e => set('promessa', e.target.value)} placeholder="Ex: Crie e assine contratos em 2 minutos sem sair do celular"
-              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
+              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">CTA principal</label>
             <input value={form.cta} onChange={e => set('cta', e.target.value)} placeholder="Ex: Começar grátis"
-              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
+              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Tom da marca</label>
             <select value={form.tom} onChange={e => set('tom', e.target.value)}
-              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300">
+              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300">
               <option value="profissional">Profissional</option>
               <option value="descontraído">Descontraído</option>
               <option value="urgente">Urgente</option>
@@ -122,14 +122,14 @@ export default function LandingPageAI({ project, onSave, onNext }) {
           <div>
             <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de funil</label>
             <select value={form.funil} onChange={e => set('funil', e.target.value)}
-              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300">
+              className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300">
               {['SaaS','ebook','mentoria','automação','lead magnet','webinar','waitlist'].map(v => <option key={v} value={v}>{v}</option>)}
             </select>
           </div>
         </div>
-        {error && <p className="mt-3 text-xs text-red-600 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
+        {error && <p className="mt-3 text-xs text-coral-600 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
         <button onClick={generate} disabled={loading}
-          className="mt-4 flex items-center gap-2 px-6 py-2.5 bg-[#0F4A28] hover:bg-[#1B6B3A] text-white text-xs font-semibold rounded-xl transition-colors disabled:opacity-50">
+          className="mt-4 flex items-center gap-2 px-6 py-2.5 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white text-xs font-semibold rounded-xl transition-colors disabled:opacity-50">
           {loading ? <><Loader2 size={13} className="animate-spin" />Gerando...</> : 'Gerar Landing Page →'}
         </button>
       </div>
@@ -137,11 +137,11 @@ export default function LandingPageAI({ project, onSave, onNext }) {
       {result && (
         <div className="space-y-4">
           {/* Hero */}
-          <div className="bg-gradient-to-br from-[#0F4A28] to-[#1B6B3A] rounded-2xl p-6 text-white">
+          <div className="bg-gradient-to-br from-[#3E1B4D] to-[#5B2A6E] rounded-2xl p-6 text-white">
             <p className="text-[10px] uppercase tracking-wider opacity-60 mb-2">Hero Section</p>
             <h3 className="font-playfair text-xl font-bold mb-2">{result.hero?.headline}</h3>
             <p className="text-sm opacity-80 mb-4">{result.hero?.subheadline}</p>
-            <span className="inline-block bg-[#C9A84C] text-white text-xs font-bold px-4 py-2 rounded-xl">{result.hero?.cta}</span>
+            <span className="inline-block bg-[#F5B942] text-white text-xs font-bold px-4 py-2 rounded-xl">{result.hero?.cta}</span>
           </div>
 
           {/* Copy versions */}
@@ -159,7 +159,7 @@ export default function LandingPageAI({ project, onSave, onNext }) {
             <ul className="space-y-2">
               {result.secao_dores?.map((d, i) => (
                 <li key={i} className="flex items-start gap-2 text-xs text-gray-700 dark:text-gray-300">
-                  <span className="text-[#B80E02] shrink-0">✗</span>{d}
+                  <span className="text-coral-500 shrink-0">✗</span>{d}
                 </li>
               ))}
             </ul>
@@ -169,8 +169,8 @@ export default function LandingPageAI({ project, onSave, onNext }) {
           <Section title="Benefícios">
             <div className="grid sm:grid-cols-2 gap-3">
               {result.beneficios?.map((b, i) => (
-                <div key={i} className="p-3 bg-[#E8F5EE] dark:bg-[#0F4A28]/20 rounded-lg">
-                  <p className="text-xs font-bold text-[#0F4A28] dark:text-green-400 mb-1">✓ {b.titulo}</p>
+                <div key={i} className="p-3 bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 rounded-lg">
+                  <p className="text-xs font-bold text-[#3E1B4D] dark:text-magic-light mb-1">✓ {b.titulo}</p>
                   <p className="text-xs text-gray-600 dark:text-gray-400">{b.descricao}</p>
                 </div>
               ))}
@@ -178,12 +178,12 @@ export default function LandingPageAI({ project, onSave, onNext }) {
           </Section>
 
           {/* Oferta */}
-          <div className="border-2 border-[#C9A84C] rounded-2xl p-5 bg-yellow-50/40 dark:bg-yellow-900/10">
-            <p className="text-[10px] uppercase tracking-wider text-[#C9A84C] font-bold mb-2">Oferta</p>
+          <div className="border-2 border-[#F5B942] rounded-2xl p-5 bg-stargold-50/40 dark:bg-stargold-900/10">
+            <p className="text-[10px] uppercase tracking-wider text-[#F5B942] font-bold mb-2">Oferta</p>
             <h4 className="font-bold text-sm text-gray-900 dark:text-white mb-1">{result.oferta?.titulo}</h4>
             <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">{result.oferta?.descricao}</p>
             <div className="flex items-center gap-3">
-              <span className="text-lg font-bold text-[#1B6B3A]">{result.oferta?.preco_sugerido}</span>
+              <span className="text-lg font-bold text-[#5B2A6E]">{result.oferta?.preco_sugerido}</span>
               <span className="text-xs text-gray-500">• {result.oferta?.garantia}</span>
             </div>
           </div>
@@ -193,7 +193,7 @@ export default function LandingPageAI({ project, onSave, onNext }) {
             <div className="space-y-3">
               {result.objecoes?.map((o, i) => (
                 <div key={i} className="p-3 bg-gray-50 dark:bg-[#111] rounded-lg">
-                  <p className="text-xs font-bold text-[#B80E02] mb-1">❝ {o.objecao}</p>
+                  <p className="text-xs font-bold text-coral-600 mb-1">❝ {o.objecao}</p>
                   <p className="text-xs text-gray-700 dark:text-gray-300">{o.resposta}</p>
                 </div>
               ))}
@@ -217,7 +217,7 @@ export default function LandingPageAI({ project, onSave, onNext }) {
             {[['Lovable', result.prompt_lovable], ['Bolt', result.prompt_bolt]].map(([label, prompt]) => (
               <div key={label} className="mb-3">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold text-[#C9A84C]">{label}</span>
+                  <span className="text-[10px] font-bold text-[#F5B942]">{label}</span>
                   {prompt && <CopyButton text={prompt} />}
                 </div>
                 <p className="text-xs text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-[#111] rounded-lg p-3 leading-relaxed">{prompt}</p>
@@ -227,16 +227,16 @@ export default function LandingPageAI({ project, onSave, onNext }) {
 
           <div className="flex items-center gap-3 flex-wrap">
             <button onClick={generate} disabled={loading}
-              className="flex items-center gap-1.5 text-xs px-4 py-2 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#1B6B3A] hover:text-[#1B6B3A] rounded-xl transition-colors">
+              className="flex items-center gap-1.5 text-xs px-4 py-2 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#5B2A6E] hover:text-[#5B2A6E] rounded-xl transition-colors">
               <RefreshCw size={12} /> Regenerar
             </button>
             <button onClick={handleSave}
-              className={`flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl transition-colors ${savedOk ? 'bg-[#E8F5EE] text-[#1B6B3A]' : 'bg-[#C9A84C] hover:bg-yellow-600 text-white'}`}>
+              className={`flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl transition-colors ${savedOk ? 'bg-[#F2E4FA] text-[#5B2A6E]' : 'bg-[#F5B942] hover:bg-stargold-600 text-white'}`}>
               <Save size={12} /> {savedOk ? 'Salvo!' : 'Salvar Resultado'}
             </button>
             {project && (
               <button onClick={onNext}
-                className="ml-auto flex items-center gap-1.5 text-xs px-5 py-2 bg-[#0F4A28] hover:bg-[#1B6B3A] text-white rounded-xl transition-colors font-semibold">
+                className="ml-auto flex items-center gap-1.5 text-xs px-5 py-2 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white rounded-xl transition-colors font-semibold">
                 Próxima ferramenta <ArrowRight size={13} />
               </button>
             )}

@@ -39,10 +39,10 @@ Retorne APENAS este JSON (sem markdown, sem texto extra):
 }`
 }
 
-const scoreColor = (s) => s >= 70 ? '#1B6B3A' : s >= 45 ? '#C9A84C' : '#B80E02'
-const satTag = { 'oceano vermelho': 'bg-red-100 text-red-700', 'nicho validado': 'bg-green-100 text-[#1B6B3A]', 'oportunidade emergente': 'bg-yellow-100 text-yellow-700' }
-const potTag = { baixo: 'bg-red-100 text-red-700', médio: 'bg-yellow-100 text-yellow-700', alto: 'bg-green-100 text-[#1B6B3A]' }
-const aqTag = { fácil: 'bg-green-100 text-[#1B6B3A]', moderada: 'bg-yellow-100 text-yellow-700', difícil: 'bg-red-100 text-red-700' }
+const scoreColor = (s) => s >= 70 ? '#5FA372' : s >= 45 ? '#F5B942' : '#E8845F'
+const satTag = { 'oceano vermelho': 'bg-coral-100 text-coral-700', 'nicho validado': 'bg-success-100 text-[#5B2A6E]', 'oportunidade emergente': 'bg-stargold-100 text-stargold-700' }
+const potTag = { baixo: 'bg-coral-100 text-coral-700', médio: 'bg-stargold-100 text-stargold-700', alto: 'bg-success-100 text-[#5B2A6E]' }
+const aqTag = { fácil: 'bg-success-100 text-[#5B2A6E]', moderada: 'bg-stargold-100 text-stargold-700', difícil: 'bg-coral-100 text-coral-700' }
 
 function Badge({ label, colorClass }) {
   return <span className={`inline-flex text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide ${colorClass}`}>{label}</span>
@@ -115,9 +115,9 @@ export default function NicheValidator({ project, onSave, onNext }) {
       <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
       {multiline
         ? <textarea value={form[k]} onChange={e => set(k, e.target.value)} placeholder={placeholder} rows={2}
-            className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400 resize-none" />
+            className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400 resize-none" />
         : <input value={form[k]} onChange={e => set(k, e.target.value)} placeholder={placeholder}
-            className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
+            className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
       }
     </div>
   )
@@ -126,7 +126,7 @@ export default function NicheValidator({ project, onSave, onNext }) {
     <div>
       <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
       <select value={form[k]} onChange={e => set(k, e.target.value)}
-        className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300">
+        className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300">
         {opts.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
     </div>
@@ -151,10 +151,10 @@ export default function NicheValidator({ project, onSave, onNext }) {
           <Select label="Existe comunidade ativa?" k="comunidade" opts={[{value:'sim',label:'Sim'},{value:'não',label:'Não'}]} />
           <Field label="O nicho cresce ou está saturado?" k="crescimento" placeholder="Ex: cresce com boom de freelancers pós-pandemia" />
         </div>
-        {error && <p className="mt-3 text-xs text-red-600 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
+        {error && <p className="mt-3 text-xs text-coral-600 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
         <button
           onClick={analyze} disabled={loading}
-          className="mt-4 flex items-center gap-2 px-6 py-2.5 bg-[#0F4A28] hover:bg-[#1B6B3A] text-white text-xs font-semibold rounded-xl transition-colors disabled:opacity-50"
+          className="mt-4 flex items-center gap-2 px-6 py-2.5 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white text-xs font-semibold rounded-xl transition-colors disabled:opacity-50"
         >
           {loading ? <><Loader2 size={13} className="animate-spin" />Analisando...</> : 'Analisar Nicho →'}
         </button>
@@ -190,16 +190,16 @@ export default function NicheValidator({ project, onSave, onNext }) {
 
           <div className="grid sm:grid-cols-2 gap-4">
             <ResultCard title="Pontos Fortes">
-              <StringList items={result.pontos_fortes} icon={CheckCircle} color="text-[#1B6B3A]" />
+              <StringList items={result.pontos_fortes} icon={CheckCircle} color="text-[#5B2A6E]" />
             </ResultCard>
             <ResultCard title="Pontos Fracos">
-              <StringList items={result.pontos_fracos} icon={AlertCircle} color="text-[#B80E02]" />
+              <StringList items={result.pontos_fracos} icon={AlertCircle} color="text-coral-500" />
             </ResultCard>
             <ResultCard title="Sugestões de Posicionamento">
-              <StringList items={result.sugestoes_posicionamento} icon={TrendingUp} color="text-[#C9A84C]" />
+              <StringList items={result.sugestoes_posicionamento} icon={TrendingUp} color="text-[#F5B942]" />
             </ResultCard>
             <ResultCard title="Sugestões de Monetização">
-              <StringList items={result.sugestoes_monetizacao} icon={TrendingUp} color="text-[#1B6B3A]" />
+              <StringList items={result.sugestoes_monetizacao} icon={TrendingUp} color="text-[#5B2A6E]" />
             </ResultCard>
           </div>
 
@@ -208,12 +208,12 @@ export default function NicheValidator({ project, onSave, onNext }) {
             <div className="grid sm:grid-cols-2 gap-3">
               {result.ideias_derivadas?.map((idea, i) => (
                 <div key={i} className="bg-gray-50 dark:bg-[#111] rounded-lg p-3 space-y-1">
-                  <p className="text-xs font-bold text-[#0F4A28] dark:text-green-400">{idea.nome}</p>
+                  <p className="text-xs font-bold text-[#3E1B4D] dark:text-magic-light">{idea.nome}</p>
                   <p className="text-xs text-gray-600 dark:text-gray-400">{idea.descricao}</p>
-                  <p className="text-[10px] text-[#C9A84C] font-medium flex items-center gap-1"><Lightbulb size={10}/> {idea.angulo_marketing}</p>
+                  <p className="text-[10px] text-[#F5B942] font-medium flex items-center gap-1"><Lightbulb size={10}/> {idea.angulo_marketing}</p>
                   <div className="flex flex-wrap gap-1 pt-1">
                     {idea.funcionalidades?.map((f, j) => (
-                      <span key={j} className="text-[9px] bg-[#E8F5EE] dark:bg-[#0F4A28]/30 text-[#1B6B3A] px-1.5 py-0.5 rounded">{f}</span>
+                      <span key={j} className="text-[9px] bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 text-[#5B2A6E] px-1.5 py-0.5 rounded">{f}</span>
                     ))}
                   </div>
                 </div>
@@ -224,16 +224,16 @@ export default function NicheValidator({ project, onSave, onNext }) {
           {/* Actions */}
           <div className="flex items-center gap-3 flex-wrap">
             <button onClick={analyze} disabled={loading}
-              className="flex items-center gap-1.5 text-xs px-4 py-2 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#1B6B3A] hover:text-[#1B6B3A] rounded-xl transition-colors">
+              className="flex items-center gap-1.5 text-xs px-4 py-2 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#5B2A6E] hover:text-[#5B2A6E] rounded-xl transition-colors">
               <RefreshCw size={12} /> Regenerar
             </button>
             <button onClick={handleSave}
-              className={`flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl transition-colors ${saved_ok ? 'bg-[#E8F5EE] text-[#1B6B3A]' : 'bg-[#C9A84C] hover:bg-yellow-600 text-white'}`}>
+              className={`flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl transition-colors ${saved_ok ? 'bg-[#F2E4FA] text-[#5B2A6E]' : 'bg-[#F5B942] hover:bg-stargold-600 text-white'}`}>
               <Save size={12} /> {saved_ok ? 'Salvo!' : 'Salvar Resultado'}
             </button>
             {project && (
               <button onClick={onNext}
-                className="ml-auto flex items-center gap-1.5 text-xs px-5 py-2 bg-[#0F4A28] hover:bg-[#1B6B3A] text-white rounded-xl transition-colors font-semibold">
+                className="ml-auto flex items-center gap-1.5 text-xs px-5 py-2 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white rounded-xl transition-colors font-semibold">
                 Próxima ferramenta <ArrowRight size={13} />
               </button>
             )}

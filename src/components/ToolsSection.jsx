@@ -11,7 +11,7 @@ const TOOLS = [
         emoji: '🤖',
         desc: 'A IA que a Thayane usa para desenvolver SaaS do zero. Melhor para raciocínio, código complexo e contextos longos. Supera o GPT-4o em tarefas de engenharia e análise de negócios.',
         tag: 'Recomendada no ebook',
-        tagColor: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400',
+        tagColor: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light',
         url: 'https://claude.ai',
         badge: 'top',
       },
@@ -20,7 +20,7 @@ const TOOLS = [
         emoji: '💻',
         desc: 'CLI oficial da Anthropic que roda no terminal e executa tarefas de desenvolvimento de forma autônoma. Cresceu 6x em 6 meses (abr/2025 → jan/2026) — 18% de adoção entre devs. Melhor que Cursor para automação de ponta a ponta.',
         tag: 'Mencionado no ebook',
-        tagColor: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400',
+        tagColor: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light',
         url: 'https://claude.ai/code',
         badge: 'top',
       },
@@ -29,7 +29,7 @@ const TOOLS = [
         emoji: '⚡',
         desc: 'Editor favorito dos desenvolvedores vibe coders. Indexa o repositório local com alta precisão (92%), multi-file editing com o Composer, 8 agentes paralelos. Melhor flow state do mercado. Mais caro que concorrentes ($20-200/mês).',
         tag: 'Mencionado no ebook',
-        tagColor: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400',
+        tagColor: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light',
         url: 'https://cursor.com',
         badge: 'top',
       },
@@ -54,7 +54,7 @@ const TOOLS = [
         emoji: '🆓',
         desc: 'Tier gratuito ilimitado, 1000+ integrações, resposta mais rápida (30ms vs 45ms do Cursor). Menor precisão (85%) e contexto mais fraco. Ótimo para quem está começando e quer testar sem pagar.',
         tag: 'Gratuito',
-        tagColor: 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400',
+        tagColor: 'bg-success-100 text-success-700 dark:bg-success-900/20 dark:text-success-400',
         url: 'https://codeium.com',
       },
       {
@@ -85,7 +85,7 @@ const TOOLS = [
         emoji: '💜',
         desc: 'Melhor para SaaS completo sem código. Full-stack real: auth, banco, pagamentos. Em testes diretos (2025) entregou app funcional enquanto Bolt falhou no mesmo prompt. Top 3 do mercado em 2026. Créditos de mensagens podem ser escassos em projetos pesados.',
         tag: 'Mencionado no ebook',
-        tagColor: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400',
+        tagColor: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light',
         url: 'https://lovable.dev',
         badge: 'top',
       },
@@ -111,7 +111,7 @@ const TOOLS = [
         emoji: '🔁',
         desc: 'Ambiente completo no navegador: código, banco, auth e hospedagem. Replit Agent 3 cria apps web a partir de linguagem natural. Curva maior que Lovable/Bolt. Melhor para educação, times e quem quer ambiente integrado sem instalar nada.',
         tag: 'Mencionado no ebook',
-        tagColor: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400',
+        tagColor: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light',
         url: 'https://replit.com',
       },
       {
@@ -119,7 +119,7 @@ const TOOLS = [
         emoji: '🆓',
         desc: 'IDE com IA do ByteDance — clone gratuito do Cursor com modo SOLO para automação completa de projetos. Suporta Claude e GPT. Totalmente grátis. Ponto de atenção: telemetria da ByteDance gera preocupações de privacidade para uso empresarial.',
         tag: 'Grátis',
-        tagColor: 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400',
+        tagColor: 'bg-success-100 text-success-700 dark:bg-success-900/20 dark:text-success-400',
         url: 'https://trae.ai',
         badge: 'rising',
       },
@@ -186,7 +186,7 @@ const TOOLS = [
         emoji: '🤖',
         desc: 'Engenheiro de software autônomo da Cognition. Planeja, codifica, testa e faz deploy sozinho. ARR cresceu de $1M para $73M em 9 meses (2024-2025). Adotado por Goldman Sachs, Citi e Palantir. Avaliado em $25B (mai/2026). Foco corporativo, preço premium.',
         tag: 'IA Autônoma',
-        tagColor: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400',
+        tagColor: 'bg-stargold-100 text-stargold-700 dark:bg-stargold-900/20 dark:text-stargold-400',
         url: 'https://devin.ai',
         badge: 'top',
       },
@@ -203,15 +203,15 @@ const TOOLS = [
   },
   {
     category: 'Backend & Banco de Dados',
-    color: 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800/40',
-    headerColor: 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400',
+    color: 'bg-success-50 dark:bg-success-900/10 border-success-200 dark:border-success-800/40',
+    headerColor: 'bg-success-100 dark:bg-success-900/20 text-success-700 dark:text-success-400',
     items: [
       {
         name: 'Supabase',
         emoji: '🗄️',
         desc: 'Stack completo: PostgreSQL, auth, storage, realtime e edge functions. Padrão do mercado indie hacker. Open source com mínimo lock-in. 500 MB de banco gratuito. Melhor quando você precisa de tudo junto.',
         tag: 'Usado nesta plataforma',
-        tagColor: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400',
+        tagColor: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light',
         url: 'https://supabase.com',
         badge: 'top',
       },
@@ -229,7 +229,7 @@ const TOOLS = [
         emoji: '⚡',
         desc: 'SQLite na borda (edge). Bancos ilimitados, 8 GB/mês gratuito, replicação multi-região. Ideal para apps leves, read-heavy ou mobile sync. Pior: não substitui Postgres para dados relacionais complexos ou alta concorrência de escrita.',
         tag: 'Edge / Leve',
-        tagColor: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400',
+        tagColor: 'bg-stargold-100 text-stargold-700 dark:bg-stargold-900/20 dark:text-stargold-400',
         url: 'https://turso.tech',
         badge: 'rising',
       },
@@ -246,7 +246,7 @@ const TOOLS = [
         emoji: '🪐',
         desc: 'MySQL serverless altamente escalável (base Vitess). Removeu o plano gratuito em 2024, perdendo muito do mercado indie hacker. Ainda é referência para performance extrema em MySQL. Melhor para grandes empresas.',
         tag: 'Empresarial',
-        tagColor: 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400',
+        tagColor: 'bg-coral-100 text-coral-700 dark:bg-coral-900/20 dark:text-coral-400',
         url: 'https://planetscale.com',
         badge: 'alert',
       },
@@ -262,7 +262,7 @@ const TOOLS = [
         emoji: '▲',
         desc: 'Criadora do Next.js. Melhor DX para frontend e SSR. Deploy automático a cada push. $200M ARR em 2025. Fraqueza: muito ruim para backend (Rails, Django, APIs pesadas) e caro em escala. Use para front, não para back.',
         tag: 'Usado nesta plataforma',
-        tagColor: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400',
+        tagColor: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light',
         url: 'https://vercel.com',
       },
       {
@@ -303,15 +303,15 @@ const TOOLS = [
   },
   {
     category: 'Pagamentos & Vendas',
-    color: 'bg-yellow-50 dark:bg-yellow-900/10 border-yellow-200 dark:border-yellow-800/40',
-    headerColor: 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400',
+    color: 'bg-stargold-50 dark:bg-stargold-900/10 border-stargold-200 dark:border-stargold-800/40',
+    headerColor: 'bg-stargold-100 dark:bg-stargold-900/20 text-stargold-700 dark:text-stargold-400',
     items: [
       {
         name: 'Stripe',
         emoji: '💳',
         desc: 'Padrão global de pagamentos para SaaS. API robusta, planos recorrentes, trials e upgrades nativos. 3,99% + R$0,39 (2025). Melhor para SaaS internacional. Fraqueza no Brasil: sem PIX nativo ainda, integração com Mercado Pago separada.',
         tag: 'Mencionado no ebook',
-        tagColor: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400',
+        tagColor: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light',
         url: 'https://stripe.com',
       },
       {
@@ -319,7 +319,7 @@ const TOOLS = [
         emoji: '🍋',
         desc: 'Favorito dos indie hackers globais. 21 métodos de pagamento, checkout moderno, 5% + 50¢ (mais barato que Stripe). Adquirido pela Stripe em abr/2024. Fraqueza: sem Mercado Pago ainda — principal pedido da comunidade brasileira.',
         tag: 'Indie Hackers',
-        tagColor: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400',
+        tagColor: 'bg-stargold-100 text-stargold-700 dark:bg-stargold-900/20 dark:text-stargold-400',
         url: 'https://lemonsqueezy.com',
         badge: 'top',
       },
@@ -328,7 +328,7 @@ const TOOLS = [
         emoji: '🥝',
         desc: 'Estrela em ascensão no Brasil. Menor taxa do mercado nacional (7,9%), checkout com melhor conversão que Hotmart, interface mais limpa. Crescendo aceleradamente e comendo market share da Hotmart em 2025-2026.',
         tag: 'Melhor taxa Brasil',
-        tagColor: 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400',
+        tagColor: 'bg-success-100 text-success-700 dark:bg-success-900/20 dark:text-success-400',
         url: 'https://kiwify.com.br',
         badge: 'rising',
       },
@@ -337,7 +337,7 @@ const TOOLS = [
         emoji: '🔥',
         desc: 'Plataforma brasileira mais conhecida de produtos digitais. 9,9% + R$1. Aumentou taxa de parcelamento de 2,89% para 3,49% em 2025, gerando insatisfação. Perdendo terreno para Kiwify. Ainda tem o maior ecossistema de afiliados do Brasil.',
         tag: 'Mencionado no ebook',
-        tagColor: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400',
+        tagColor: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light',
         url: 'https://hotmart.com',
         badge: 'alert',
       },
@@ -369,7 +369,7 @@ const TOOLS = [
         emoji: '🔗',
         desc: 'Automação open source auto-hospedável com 70 nós LangChain — o melhor para workflows com IA. 40-50% mais barato que Zapier em escala. Pode orquestrar múltiplos modelos de IA. Pior: curva de aprendizado maior e comunidade menor.',
         tag: 'IA-nativo',
-        tagColor: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400',
+        tagColor: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light',
         url: 'https://n8n.io',
         badge: 'top',
       },
@@ -378,7 +378,7 @@ const TOOLS = [
         emoji: '⚙️',
         desc: 'Meio-termo entre n8n e Zapier. Interface visual excelente, 1000+ integrações. Bom para receber webhook da Hotmart e criar usuário no Supabase. Melhor que Zapier em preço, pior que n8n em IA e controle.',
         tag: 'Mencionado no ebook',
-        tagColor: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400',
+        tagColor: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light',
         url: 'https://make.com',
       },
       {
@@ -443,9 +443,9 @@ const TOOLS = [
 ]
 
 const badgeConfig = {
-  top:     { label: '⭐ Top 2025',      className: 'bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/40 dark:text-green-400' },
+  top:     { label: '⭐ Top 2025',      className: 'bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/40 dark:text-magic-light' },
   rising:  { label: '📈 Em alta',       className: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
-  alert:   { label: '⚠️ Atenção',       className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' },
+  alert:   { label: '⚠️ Atenção',       className: 'bg-stargold-100 text-stargold-700 dark:bg-stargold-900/30 dark:text-stargold-400' },
 }
 
 function ToolCard({ item }) {
@@ -455,16 +455,16 @@ function ToolCard({ item }) {
       href={item.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col gap-2 bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-200 dark:border-gray-700 p-4 hover:border-[#1B6B3A] dark:hover:border-green-600 hover:shadow-md transition-all"
+      className="group flex flex-col gap-2 bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-200 dark:border-gray-700 p-4 hover:border-[#5B2A6E] dark:hover:border-success-600 hover:shadow-md transition-all"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="text-xl leading-none">{item.emoji}</span>
-          <span className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors">
+          <span className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-[#5B2A6E] dark:group-hover:text-magic-light transition-colors">
             {item.name}
           </span>
         </div>
-        <ExternalLink size={12} className="text-gray-400 group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 shrink-0 mt-0.5 transition-colors" />
+        <ExternalLink size={12} className="text-gray-400 group-hover:text-[#5B2A6E] dark:group-hover:text-magic-light shrink-0 mt-0.5 transition-colors" />
       </div>
       <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{item.desc}</p>
       <div className="flex flex-wrap gap-1.5 mt-auto pt-1">
@@ -492,9 +492,9 @@ export default function ToolsSection() {
           Ecossistema completo para criar seu SaaS — com avaliação comparativa baseada em feedback real do mercado em 2025-2026.
         </p>
         <div className="flex flex-wrap gap-2 text-[10px]">
-          <span className="flex items-center gap-1 bg-[#E8F5EE] dark:bg-[#0F4A28]/30 text-[#1B6B3A] dark:text-green-400 px-2.5 py-1 rounded-full font-semibold">⭐ Top 2025 — destaque do mercado</span>
+          <span className="flex items-center gap-1 bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 text-[#5B2A6E] dark:text-magic-light px-2.5 py-1 rounded-full font-semibold">⭐ Top 2025 — destaque do mercado</span>
           <span className="flex items-center gap-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2.5 py-1 rounded-full font-semibold">📈 Em alta — crescendo rápido</span>
-          <span className="flex items-center gap-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-2.5 py-1 rounded-full font-semibold">⚠️ Atenção — mudança recente</span>
+          <span className="flex items-center gap-1 bg-stargold-100 dark:bg-stargold-900/30 text-stargold-700 dark:text-stargold-400 px-2.5 py-1 rounded-full font-semibold">⚠️ Atenção — mudança recente</span>
         </div>
       </div>
 

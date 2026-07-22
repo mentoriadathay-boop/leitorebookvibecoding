@@ -60,7 +60,7 @@ export default function AdminVibeNews() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <Newspaper size={18} className="text-[#1B6B3A]" /> Vibe News
+            <Newspaper size={18} className="text-[#5B2A6E]" /> Vibe News
           </h2>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
             Geração automática às 7h (Brasília). Use o botão abaixo para gerar manualmente quando necessário.
@@ -70,7 +70,7 @@ export default function AdminVibeNews() {
         <button
           onClick={handleGenerate}
           disabled={generating || hasToday}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#0F4A28] hover:bg-[#1B6B3A] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50 shrink-0"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50 shrink-0"
         >
           {generating
             ? <><Loader size={14} className="animate-spin" /> Gerando...</>
@@ -84,8 +84,8 @@ export default function AdminVibeNews() {
       {/* Status do dia */}
       <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-sm font-medium ${
         hasToday
-          ? 'bg-[#E8F5EE] dark:bg-[#0F4A28]/20 border-[#1B6B3A]/30 text-[#1B6B3A] dark:text-green-400'
-          : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-300 dark:border-yellow-700 text-yellow-700 dark:text-yellow-400'
+          ? 'bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 border-[#5B2A6E]/30 text-[#5B2A6E] dark:text-magic-light'
+          : 'bg-stargold-50 dark:bg-stargold-900/20 border-stargold-300 dark:border-stargold-700 text-stargold-700 dark:text-stargold-400'
       }`}>
         {hasToday
           ? <><CheckCircle size={16} /> Notícia de hoje já foi gerada ✓</>
@@ -97,8 +97,8 @@ export default function AdminVibeNews() {
       {result && (
         <div className={`px-4 py-3 rounded-xl text-sm flex items-start gap-2 ${
           result.ok
-            ? 'bg-[#E8F5EE] dark:bg-[#0F4A28]/20 text-[#1B6B3A] dark:text-green-400'
-            : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400'
+            ? 'bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 text-[#5B2A6E] dark:text-magic-light'
+            : 'bg-coral-50 dark:bg-coral-900/20 text-coral-700 dark:text-coral-400'
         }`}>
           {result.ok
             ? <><CheckCircle size={15} className="shrink-0 mt-0.5" />
@@ -149,7 +149,7 @@ export default function AdminVibeNews() {
                   </div>
                   <div className="flex items-center gap-2">
                     {isToday && (
-                      <span className="text-[10px] bg-[#E8F5EE] dark:bg-[#0F4A28]/30 text-[#1B6B3A] dark:text-green-400 px-2 py-0.5 rounded-full font-bold">hoje</span>
+                      <span className="text-[10px] bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 text-[#5B2A6E] dark:text-magic-light px-2 py-0.5 rounded-full font-bold">hoje</span>
                     )}
                     <span className="text-[10px] text-gray-400 flex items-center gap-1">
                       <Clock size={10} />

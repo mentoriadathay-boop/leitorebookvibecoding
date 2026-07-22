@@ -13,7 +13,7 @@ const TOOLS = [
     id: 0, key: 'niche_data',
     label: 'Validador de Nicho',
     desc: 'Analise seu nicho com IA e descubra o potencial de monetização antes de construir.',
-    icon: Target, color: 'bg-[#E8F5EE] dark:bg-[#0F4A28]/20', iconColor: 'text-[#1B6B3A] dark:text-green-400',
+    icon: Target, color: 'bg-[#F2E4FA] dark:bg-[#3E1B4D]/20', iconColor: 'text-[#5B2A6E] dark:text-magic-light',
   },
   {
     id: 1, key: 'mvp_data',
@@ -31,13 +31,13 @@ const TOOLS = [
     id: 3, key: 'landing_data',
     label: 'IA para Landing Pages',
     desc: 'Gere copy de alta conversão, hero section, FAQ e prompts para construir sua página.',
-    icon: Layout, color: 'bg-yellow-50 dark:bg-yellow-900/10', iconColor: 'text-[#C9A84C]',
+    icon: Layout, color: 'bg-stargold-50 dark:bg-stargold-900/10', iconColor: 'text-[#F5B942]',
   },
   {
     id: 4, key: 'monetization_data',
     label: 'Diagnóstico de Monetização',
     desc: 'Identifique gargalos, gere um plano de 30 dias e defina a estratégia ideal de escala.',
-    icon: TrendingUp, color: 'bg-red-50 dark:bg-red-900/10', iconColor: 'text-[#B80E02]',
+    icon: TrendingUp, color: 'bg-coral-50 dark:bg-coral-900/10', iconColor: 'text-[#C2298A]',
   },
 ]
 
@@ -75,7 +75,7 @@ export default function AIToolsHub({ userId }) {
 
   if (loading) return (
     <div className="flex items-center justify-center py-20">
-      <Loader2 size={24} className="animate-spin text-[#1B6B3A]" />
+      <Loader2 size={24} className="animate-spin text-[#5B2A6E]" />
     </div>
   )
 
@@ -96,7 +96,7 @@ export default function AIToolsHub({ userId }) {
         {/* Header */}
         <div className="flex items-center gap-3">
           <button onClick={() => setActiveTool(null)}
-            className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-[#1B6B3A] dark:hover:text-green-400 transition-colors">
+            className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light transition-colors">
             <ArrowLeft size={14} /> Ferramentas IA
           </button>
           <span className="text-gray-300 dark:text-gray-600">/</span>
@@ -114,7 +114,7 @@ export default function AIToolsHub({ userId }) {
         </div>
 
         {!activeProject && (
-          <div className="px-4 py-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/40 rounded-xl text-xs text-yellow-700 dark:text-yellow-400">
+          <div className="px-4 py-3 bg-stargold-50 dark:bg-stargold-900/20 border border-stargold-200 dark:border-stargold-800/40 rounded-xl text-xs text-stargold-700 dark:text-stargold-400">
             ⚠️ Crie ou selecione um projeto para salvar os resultados.
           </div>
         )}
@@ -138,7 +138,7 @@ export default function AIToolsHub({ userId }) {
           <div className="flex-1 relative">
             <button
               onClick={() => setShowDropdown(d => !d)}
-              className="w-full flex items-center justify-between gap-2 px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-xl text-xs hover:border-[#1B6B3A] transition-colors bg-gray-50 dark:bg-[#111]"
+              className="w-full flex items-center justify-between gap-2 px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-xl text-xs hover:border-[#5B2A6E] transition-colors bg-gray-50 dark:bg-[#111]"
             >
               <span className="font-medium text-gray-700 dark:text-gray-300 truncate">
                 {activeProject ? activeProject.name : 'Selecionar projeto'}
@@ -149,9 +149,9 @@ export default function AIToolsHub({ userId }) {
               <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden">
                 {projects.map(p => (
                   <button key={p.id} onClick={() => { setActiveProject(p); setShowDropdown(false) }}
-                    className={`w-full text-left px-3 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${activeProject?.id === p.id ? 'text-[#1B6B3A] font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
+                    className={`w-full text-left px-3 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${activeProject?.id === p.id ? 'text-[#5B2A6E] font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
                     {p.name}
-                    {activeProject?.id === p.id && <CheckCircle size={11} className="inline ml-2 text-[#1B6B3A]" />}
+                    {activeProject?.id === p.id && <CheckCircle size={11} className="inline ml-2 text-[#5B2A6E]" />}
                   </button>
                 ))}
                 {projects.length === 0 && (
@@ -162,9 +162,9 @@ export default function AIToolsHub({ userId }) {
                     <input value={newName} onChange={e => setNewName(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && handleCreate()}
                       placeholder="Nome do novo projeto..." autoFocus
-                      className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
+                      className="flex-1 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
                     <button onClick={handleCreate} disabled={!newName.trim() || creating}
-                      className="flex items-center gap-1 text-xs px-3 py-1.5 bg-[#0F4A28] hover:bg-[#1B6B3A] text-white rounded-lg transition-colors disabled:opacity-50 shrink-0">
+                      className="flex items-center gap-1 text-xs px-3 py-1.5 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white rounded-lg transition-colors disabled:opacity-50 shrink-0">
                       {creating ? <Loader2 size={11} className="animate-spin" /> : <Plus size={11} />}
                       Criar
                     </button>
@@ -178,14 +178,14 @@ export default function AIToolsHub({ userId }) {
             <div className="flex items-center gap-2">
               {!confirmDelete ? (
                 <button onClick={() => setConfirmDelete(true)}
-                  className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#B80E02] transition-colors px-2 py-2">
+                  className="flex items-center gap-1 text-xs text-gray-400 hover:text-coral-600 transition-colors px-2 py-2">
                   <Trash2 size={13} />
                 </button>
               ) : (
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-gray-500">Excluir?</span>
                   <button onClick={async () => { await deleteProject(activeProject.id); setConfirmDelete(false) }}
-                    className="text-xs text-[#B80E02] font-bold">Sim</button>
+                    className="text-xs text-coral-600 font-bold">Sim</button>
                   <button onClick={() => setConfirmDelete(false)} className="text-xs text-gray-400">Não</button>
                 </div>
               )}
@@ -199,7 +199,7 @@ export default function AIToolsHub({ userId }) {
               const done = !!activeProject[tool.key]
               return (
                 <div key={tool.id} title={tool.label}
-                  className={`flex-1 h-1.5 rounded-full transition-all ${done ? 'bg-[#1B6B3A]' : 'bg-gray-200 dark:bg-gray-700'}`} />
+                  className={`flex-1 h-1.5 rounded-full transition-all ${done ? 'bg-[#5B2A6E]' : 'bg-gray-200 dark:bg-gray-700'}`} />
               )
             })}
           </div>
@@ -213,7 +213,7 @@ export default function AIToolsHub({ userId }) {
           const status = getStatus(tool)
           return (
             <button key={tool.id} onClick={() => setActiveTool(i)}
-              className="w-full text-left bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 p-5 hover:border-[#1B6B3A] dark:hover:border-green-600 hover:shadow-md transition-all group">
+              className="w-full text-left bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 p-5 hover:border-[#5B2A6E] dark:hover:border-success-600 hover:shadow-md transition-all group">
               <div className="flex items-start gap-4">
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${tool.color}`}>
                   <Icon size={18} className={tool.iconColor} />
@@ -222,7 +222,7 @@ export default function AIToolsHub({ userId }) {
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Ferramenta {i + 1}</span>
                     {status === 'done'
-                      ? <span className="flex items-center gap-1 text-[9px] font-bold bg-[#E8F5EE] text-[#1B6B3A] dark:bg-[#0F4A28]/30 dark:text-green-400 px-1.5 py-0.5 rounded-full uppercase">
+                      ? <span className="flex items-center gap-1 text-[9px] font-bold bg-[#F2E4FA] text-[#5B2A6E] dark:bg-[#3E1B4D]/30 dark:text-magic-light px-1.5 py-0.5 rounded-full uppercase">
                           <CheckCircle size={8} /> Concluída
                         </span>
                       : <span className="flex items-center gap-1 text-[9px] font-bold bg-gray-100 dark:bg-gray-700 text-gray-400 px-1.5 py-0.5 rounded-full uppercase">
@@ -230,12 +230,12 @@ export default function AIToolsHub({ userId }) {
                         </span>
                     }
                   </div>
-                  <h3 className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors mb-1">
+                  <h3 className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-[#5B2A6E] dark:group-hover:text-magic-light transition-colors mb-1">
                     {tool.label}
                   </h3>
                   <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{tool.desc}</p>
                 </div>
-                <span className="text-gray-300 dark:text-gray-600 group-hover:text-[#1B6B3A] dark:group-hover:text-green-400 transition-colors text-lg shrink-0">→</span>
+                <span className="text-gray-300 dark:text-gray-600 group-hover:text-[#5B2A6E] dark:group-hover:text-magic-light transition-colors text-lg shrink-0">→</span>
               </div>
             </button>
           )

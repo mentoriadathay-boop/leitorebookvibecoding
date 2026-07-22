@@ -14,13 +14,13 @@ export default function QuoteShare({ quote }) {
 
     // Background gradient
     const grad = ctx.createLinearGradient(0, 0, W, H)
-    grad.addColorStop(0, '#0F4A28')
-    grad.addColorStop(1, '#1B6B3A')
+    grad.addColorStop(0, '#3E1B4D')
+    grad.addColorStop(1, '#5B2A6E')
     ctx.fillStyle = grad
     ctx.fillRect(0, 0, W, H)
 
     // Gold accent bar
-    ctx.fillStyle = '#C9A84C'
+    ctx.fillStyle = '#F5B942'
     ctx.fillRect(0, 0, 6, H)
 
     // Quote text
@@ -52,7 +52,7 @@ export default function QuoteShare({ quote }) {
 
     // Brand
     ctx.font = '500 16px sans-serif'
-    ctx.fillStyle = '#C9A84C'
+    ctx.fillStyle = '#F5B942'
     ctx.textAlign = 'right'
     ctx.fillText('TFA Soluções com IA — thayanefidelis.com', W - 40, H - 24)
 
@@ -68,7 +68,7 @@ export default function QuoteShare({ quote }) {
       <canvas ref={canvasRef} className="hidden" />
       <button
         onClick={generate}
-        className="ml-2 inline-flex items-center gap-1 text-[10px] text-[#C9A84C] hover:text-yellow-600 transition-colors opacity-70 hover:opacity-100"
+        className="ml-2 inline-flex items-center gap-1 text-[10px] text-[#F5B942] hover:text-stargold-600 transition-colors opacity-70 hover:opacity-100"
         title="Baixar imagem desta citação"
       >
         <Download size={11} />

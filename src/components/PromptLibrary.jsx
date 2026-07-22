@@ -12,7 +12,7 @@ function PromptCard({ item }) {
   }
 
   return (
-    <div className="bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col gap-3 hover:border-[#1B6B3A]/50 dark:hover:border-green-700/50 transition-colors">
+    <div className="bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col gap-3 hover:border-[#5B2A6E]/50 dark:hover:border-success-700/50 transition-colors">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="font-semibold text-sm text-gray-900 dark:text-white leading-snug">{item.title}</h3>
@@ -23,8 +23,8 @@ function PromptCard({ item }) {
           title="Copiar prompt"
           className={`shrink-0 flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
             copied
-              ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
-              : 'bg-[#E8F5EE] text-[#1B6B3A] hover:bg-[#1B6B3A] hover:text-white dark:bg-[#0F4A28]/30 dark:text-green-400 dark:hover:bg-[#1B6B3A] dark:hover:text-white'
+              ? 'bg-success-100 text-success-700 dark:bg-success-900/20 dark:text-success-400'
+              : 'bg-[#F2E4FA] text-[#5B2A6E] hover:bg-[#5B2A6E] hover:text-white dark:bg-[#3E1B4D]/30 dark:text-magic-light dark:hover:bg-[#5B2A6E] dark:hover:text-white'
           }`}
         >
           {copied ? <><Check size={12} /> Copiado</> : <><Copy size={12} /> Copiar</>}
@@ -66,7 +66,7 @@ export default function PromptLibrary() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Buscar prompt..."
-          className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:border-[#1B6B3A] bg-white dark:bg-[#1A1A1A] text-gray-700 dark:text-gray-300 placeholder-gray-400"
+          className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#1A1A1A] text-gray-700 dark:text-gray-300 placeholder-gray-400"
         />
       </div>
 
@@ -78,8 +78,8 @@ export default function PromptLibrary() {
             onClick={() => setActiveCategory(cat)}
             className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors ${
               activeCategory === cat
-                ? 'bg-[#1B6B3A] text-white'
-                : 'bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#1B6B3A] hover:text-[#1B6B3A] dark:hover:text-green-400'
+                ? 'bg-[#5B2A6E] text-white'
+                : 'bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-[#5B2A6E] hover:text-[#5B2A6E] dark:hover:text-magic-light'
             }`}
           >
             {cat}
