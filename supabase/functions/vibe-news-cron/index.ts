@@ -30,6 +30,7 @@ Deno.serve(async (req: Request) => {
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
+  try {
   let force = false
   try {
     const body = await req.json()
@@ -231,4 +232,12 @@ REGRA CRÍTICA SOBRE URLs: NUNCA invente, complete ou "adivinhe" uma URL. Use ex
 
   console.log(`[vibe-news-cron] Sucesso: ${sanitizedArticles.length} artigos para ${today}`)
   return json({ success: true, date: today, articles: sanitizedArticles.length })
+  } catch (err) {
+    console.error('[vibe-news-cron] Erro inesperado:', err instanceof Error ? err.stack : err)
+    return json({
+      error: 'Erro inesperado',
+      detail: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? (err.stack || '').slice(0, 800) : undefined,
+    }, 500)
+  }
 })
