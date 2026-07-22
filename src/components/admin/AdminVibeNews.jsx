@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Newspaper, RefreshCw, CheckCircle, AlertCircle, Loader, Clock, Calendar } from 'lucide-react'
+import { Newspaper, Loader, Clock, Calendar } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 
 function fmtDate(d) {
@@ -9,119 +9,33 @@ function fmtDate(d) {
 export default function AdminVibeNews() {
   const [editions, setEditions] = useState([])
   const [loading, setLoading] = useState(true)
-  const [generating, setGenerating] = useState(false)
-  const [result, setResult] = useState(null)
 
-  const load = async () => {
-    setLoading(true)
-    const { data } = await supabase
+  useEffect(() => {
+    supabase
       .from('vibe_news')
       .select('id, date, created_at')
-      .order('date', { ascending: false })
-      .limit(10)
-    if (data) setEditions(data)
-    setLoading(false)
-  }
-
-  useEffect(() => { load() }, [])
-
-  const brasiliaToday = () => {
-    const now = new Date()
-    const offset = -3 * 60
-    const bt = new Date(now.getTime() + (offset + now.getTimezoneOffset()) * 60000)
-    return bt.toISOString().split('T')[0]
-  }
-
-  const hasToday = editions.some(e => e.date === brasiliaToday())
-
-  const handleGenerate = async () => {
-    setGenerating(true)
-    setResult(null)
-    try {
-      const { data, error } = await supabase.functions.invoke('vibe-news-cron', {
-        method: 'POST',
-        body: {},
-      })
-      if (error) {
-        setResult({ ok: false, error: error.message || JSON.stringify(error) })
-      } else {
-        setResult({ ok: !data?.error, ...data })
-        if (!data?.error) load()
-      }
-    } catch (e) {
-      setResult({ ok: false, error: e.message })
-    } finally {
-      setGenerating(false)
-    }
-  }
+      .order('created_at', { ascending: false })
+      .limit(20)
+      .then(({ data }) => { if (data) setEditions(data); setLoading(false) })
+  }, [])
 
   return (
     <div className="space-y-6 max-w-2xl">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <Newspaper size={18} className="text-[#5B2A6E]" /> Vibe News
-          </h2>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-            Geração automática às 7h (Brasília). Clique no botão sempre que quiser gerar uma nova leva — sem limite por dia.
-          </p>
-        </div>
-
-        <button
-          onClick={handleGenerate}
-          disabled={generating}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50 shrink-0"
-        >
-          {generating
-            ? <><Loader size={14} className="animate-spin" /> Gerando...</>
-            : <><RefreshCw size={14} /> Gerar notícias agora</>
-          }
-        </button>
+      <div>
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <Newspaper size={18} className="text-[#5B2A6E]" /> Vibe News
+        </h2>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+          A busca de novidades agora é liberada pra qualquer usuário logado, direto na aba "Vibe News" da plataforma —
+          não depende mais de ação do admin. Aqui embaixo fica só o histórico do que já foi gerado.
+        </p>
       </div>
-
-      {/* Status do dia */}
-      <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-sm font-medium ${
-        hasToday
-          ? 'bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 border-[#5B2A6E]/30 text-[#5B2A6E] dark:text-magic-light'
-          : 'bg-stargold-50 dark:bg-stargold-900/20 border-stargold-300 dark:border-stargold-700 text-stargold-700 dark:text-stargold-400'
-      }`}>
-        {hasToday
-          ? <><CheckCircle size={16} /> Notícia de hoje já foi gerada ✓</>
-          : <><AlertCircle size={16} /> Notícia de hoje ainda não foi gerada — clique em "Gerar notícias agora"</>
-        }
-      </div>
-
-      {/* Resultado da geração */}
-      {result && (
-        <div className={`px-4 py-3 rounded-xl text-sm flex items-start gap-2 ${
-          result.ok
-            ? 'bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 text-[#5B2A6E] dark:text-magic-light'
-            : 'bg-coral-50 dark:bg-coral-900/20 text-coral-700 dark:text-coral-400'
-        }`}>
-          {result.ok
-            ? <><CheckCircle size={15} className="shrink-0 mt-0.5" />
-                {result.message
-                  ? `${result.message} (${result.date})`
-                  : `✓ ${result.articles} artigos gerados para ${result.date}`
-                }</>
-            : <div>
-                <div className="flex items-center gap-1.5 font-semibold mb-1">
-                  <AlertCircle size={15} className="shrink-0" />
-                  Erro (status {result.status})
-                </div>
-                <p className="text-xs opacity-80 font-mono break-all">
-                  {result.error || result.detail || result.preview || 'Falha desconhecida'}
-                </p>
-              </div>
-          }
-        </div>
-      )}
 
       {/* Histórico */}
       <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
           <p className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-            Últimas edições
+            Últimas gerações
           </p>
         </div>
 
@@ -131,39 +45,31 @@ export default function AdminVibeNews() {
           </div>
         ) : editions.length === 0 ? (
           <div className="text-center py-10 text-sm text-gray-400">
-            Nenhuma edição gerada ainda.
+            Nenhuma geração ainda.
           </div>
         ) : (
           <div className="divide-y divide-gray-100 dark:divide-gray-700">
-            {editions.map(e => {
-              const isToday = e.date === brasiliaToday()
-              return (
-                <div key={e.id} className="flex items-center justify-between px-4 py-3">
-                  <div className="flex items-center gap-3">
-                    <Calendar size={14} className="text-gray-400 shrink-0" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">
-                      {fmtDate(e.date + 'T12:00:00')}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {isToday && (
-                      <span className="text-[10px] bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 text-[#5B2A6E] dark:text-magic-light px-2 py-0.5 rounded-full font-bold">hoje</span>
-                    )}
-                    <span className="text-[10px] text-gray-400 flex items-center gap-1">
-                      <Clock size={10} />
-                      {new Date(e.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                  </div>
+            {editions.map(e => (
+              <div key={e.id} className="flex items-center justify-between px-4 py-3">
+                <div className="flex items-center gap-3">
+                  <Calendar size={14} className="text-gray-400 shrink-0" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">
+                    {fmtDate(e.date + 'T12:00:00')}
+                  </span>
                 </div>
-              )
-            })}
+                <span className="text-[10px] text-gray-400 flex items-center gap-1">
+                  <Clock size={10} />
+                  {new Date(e.created_at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                </span>
+              </div>
+            ))}
           </div>
         )}
       </div>
 
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/40 rounded-xl px-4 py-3 text-xs text-blue-700 dark:text-blue-400 space-y-1">
-        <p className="font-bold">⏰ Para geração automática às 7h:</p>
-        <p>Supabase Dashboard → <strong>Edge Functions</strong> → <strong>vibe-news-cron</strong> → aba <strong>Schedule</strong> → Add Schedule → cron: <code className="bg-blue-100 dark:bg-blue-900/40 px-1 rounded">0 10 * * *</code> (10h UTC = 7h Brasília)</p>
+        <p className="font-bold">⏰ Geração automática de base (opcional):</p>
+        <p>Supabase Dashboard → <strong>Edge Functions</strong> → <strong>vibe-news-cron</strong> → aba <strong>Schedule</strong> → Add Schedule → cron: <code className="bg-blue-100 dark:bg-blue-900/40 px-1 rounded">0 10 * * *</code> (10h UTC = 7h Brasília) — garante que sempre exista algo mais recente, mesmo se nenhum usuário buscar no dia.</p>
       </div>
     </div>
   )
