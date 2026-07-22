@@ -89,7 +89,8 @@ function isToday(dateStr) {
 export default function VibeNews() {
   const [news, setNews] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
+  const [generating, setGenerating] = useState(false)
+  const [genError, setGenError] = useState('')
   const [view, setView] = useState('today')
   const [userId, setUserId] = useState(null)
   const [savedNews, setSavedNews] = useState([])
@@ -113,43 +114,37 @@ export default function VibeNews() {
   }, [userId])
 
   const fetchNews = async () => {
-    const now = new Date()
-    const brasiliaOffset = -3 * 60
-    const brasiliaTime = new Date(now.getTime() + (brasiliaOffset + now.getTimezoneOffset()) * 60000)
-    const today = brasiliaTime.toISOString().split('T')[0]
-
-    // Tenta buscar a notícia de hoje primeiro
-    const { data: todayData } = await supabase
+    // Mostra a edição mais recente já gerada (por qualquer usuário) como
+    // ponto de partida, enquanto a busca ao vivo não é acionada.
+    const { data } = await supabase
       .from('vibe_news')
       .select('*')
-      .eq('date', today)
-      .single()
-
-    if (todayData) {
-      setNews(todayData)
-      setLoading(false)
-      setRefreshing(false)
-      return
-    }
-
-    // Fallback: exibe a notícia mais recente disponível (máx 7 dias atrás)
-    const { data: latestData } = await supabase
-      .from('vibe_news')
-      .select('*')
-      .order('date', { ascending: false })
+      .order('created_at', { ascending: false })
       .limit(1)
       .single()
 
-    setNews(latestData || null)
+    setNews(data || null)
     setLoading(false)
-    setRefreshing(false)
   }
 
   useEffect(() => { fetchNews() }, [])
 
-  const handleRefresh = () => {
-    setRefreshing(true)
-    fetchNews()
+  const generateNow = async () => {
+    setGenerating(true)
+    setGenError('')
+    try {
+      const { data, error } = await supabase.functions.invoke('vibe-news-cron', {
+        method: 'POST',
+        body: {},
+      })
+      if (error) throw new Error(error.message || 'Falha ao buscar notícias')
+      if (data?.error) throw new Error(data.error)
+      setNews({ date: data.date, summary: data.summary, articles: data.articles })
+    } catch (e) {
+      setGenError(e.message || 'Não foi possível buscar as notícias agora. Tente novamente em alguns segundos.')
+    } finally {
+      setGenerating(false)
+    }
   }
 
   const saveNews = useCallback(async (newsDate, article) => {
@@ -215,15 +210,22 @@ export default function VibeNews() {
         </div>
         {view === 'today' && (
           <button
-            onClick={handleRefresh}
-            disabled={refreshing}
-            className="p-2 text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light transition-colors disabled:opacity-50"
-            title="Atualizar"
+            onClick={generateNow}
+            disabled={generating}
+            className="flex items-center gap-2 text-xs font-semibold px-3 py-2 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white rounded-xl transition-colors disabled:opacity-50 shrink-0"
+            title="Buscar as novidades de agora com IA"
           >
-            <RefreshCw size={15} className={refreshing ? 'animate-spin' : ''} />
+            <RefreshCw size={13} className={generating ? 'animate-spin' : ''} />
+            {generating ? 'Buscando...' : 'Buscar novidades'}
           </button>
         )}
       </div>
+
+      {genError && (
+        <div className="flex items-center gap-2 px-4 py-2.5 bg-coral-50 dark:bg-coral-900/20 border border-coral-200 dark:border-coral-800/40 rounded-xl text-xs text-coral-700 dark:text-coral-400">
+          {genError}
+        </div>
+      )}
 
       {/* Sub-tabs */}
       <div className="flex gap-1 border-b border-gray-200 dark:border-gray-700">
@@ -321,29 +323,29 @@ export default function VibeNews() {
                 <Newspaper size={24} className="text-[#5B2A6E] dark:text-magic-light" />
               </div>
               <h3 className="font-playfair font-bold text-lg text-gray-900 dark:text-white mb-2">
-                As notícias de hoje ainda estão sendo preparadas
+                Ainda não há notícias por aqui
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                A curadoria é gerada automaticamente todo dia às 7h (horário de Brasília).
+                Clique no botão pra buscar as novidades de IA e vibe coding agora mesmo.
               </p>
               <button
-                onClick={handleRefresh}
-                disabled={refreshing}
-                className="flex items-center gap-2 mx-auto text-sm px-4 py-2 border border-[#5B2A6E] text-[#5B2A6E] hover:bg-[#F2E4FA] dark:hover:bg-[#3E1B4D]/20 rounded-xl transition-colors disabled:opacity-50"
+                onClick={generateNow}
+                disabled={generating}
+                className="flex items-center gap-2 mx-auto text-sm px-4 py-2 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white rounded-xl transition-colors disabled:opacity-50"
               >
-                <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
-                Verificar novamente
+                <RefreshCw size={14} className={generating ? 'animate-spin' : ''} />
+                {generating ? 'Buscando...' : 'Buscar novidades'}
               </button>
             </div>
           ) : (
             <>
-              {/* Banner quando não é de hoje */}
+              {/* Banner incentivando buscar algo mais fresco */}
               {!isToday(news.date) && (
                 <div className="flex items-center justify-between gap-3 px-4 py-2.5 bg-stargold-50 dark:bg-stargold-900/20 border border-stargold-200 dark:border-stargold-800/40 rounded-xl text-xs text-stargold-700 dark:text-stargold-400">
-                  <span>⏳ As notícias de hoje ainda estão sendo preparadas — exibindo a edição mais recente.</span>
-                  <button onClick={handleRefresh} disabled={refreshing}
+                  <span>⏳ Exibindo a última busca disponível — clique para buscar novidades de agora.</span>
+                  <button onClick={generateNow} disabled={generating}
                     className="flex items-center gap-1 shrink-0 font-semibold hover:underline disabled:opacity-50">
-                    <RefreshCw size={11} className={refreshing ? 'animate-spin' : ''} /> Atualizar
+                    <RefreshCw size={11} className={generating ? 'animate-spin' : ''} /> Buscar agora
                   </button>
                 </div>
               )}
@@ -405,7 +407,7 @@ export default function VibeNews() {
               </div>
 
               <p className="text-center text-[10px] text-gray-400 dark:text-gray-600">
-                Curadoria gerada por IA · Atualiza todo dia às 7h (Brasília) · Verifique as fontes antes de compartilhar
+                Curadoria gerada por IA em tempo real · Verifique as fontes antes de compartilhar
               </p>
 
               {/* Chat IA */}
