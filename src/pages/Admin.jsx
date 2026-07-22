@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { LayoutDashboard, Users, BookOpen, Bell, Mail, Newspaper, ArrowLeft, Shield } from 'lucide-react'
 import AdminDashboard from '../components/admin/AdminDashboard'
 import AdminUsers from '../components/admin/AdminUsers'
-import AdminContent from '../components/admin/AdminContent'
+import AdminEbooks from '../components/admin/AdminEbooks'
 import AdminNotifications from '../components/admin/AdminNotifications'
 import AdminEmailMarketing from '../components/admin/AdminEmailMarketing'
 import AdminVibeNews from '../components/admin/AdminVibeNews'
@@ -10,7 +10,7 @@ import AdminVibeNews from '../components/admin/AdminVibeNews'
 const TABS = [
   { id: 'dashboard',      label: 'Dashboard',       icon: LayoutDashboard },
   { id: 'users',          label: 'Usuários',         icon: Users },
-  { id: 'content',        label: 'Conteúdo',         icon: BookOpen },
+  { id: 'ebooks',         label: 'Ebooks',           icon: BookOpen },
   { id: 'notifications',  label: 'Notificações',     icon: Bell },
   { id: 'email',          label: 'Newsletter',       icon: Mail },
   { id: 'vibenews',       label: 'Vibe News',        icon: Newspaper },
@@ -63,7 +63,7 @@ export default function Admin({ profile, onExit }) {
       <main className="flex-1 p-4 md:p-6 max-w-7xl mx-auto w-full">
         {tab === 'dashboard'     && <AdminDashboard />}
         {tab === 'users'         && <AdminUsers />}
-        {tab === 'content'       && <AdminContent />}
+        {tab === 'ebooks'        && <AdminEbooks />}
         {tab === 'notifications' && <AdminNotifications />}
         {tab === 'email'         && <AdminEmailMarketing />}
         {tab === 'vibenews'      && <AdminVibeNews />}

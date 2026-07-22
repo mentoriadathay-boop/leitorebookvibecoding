@@ -1,4 +1,4 @@
-import { Newspaper, BookOpen, Lightbulb, Cpu, Map, Wrench, Calculator, Zap, FileText, MessageSquare, Layout, FileText as FileText2, Users, FolderOpen, ExternalLink, Mail } from 'lucide-react'
+import { BookOpen, Lightbulb, Cpu, Map, Wrench, Calculator, Zap, MessageSquare, ExternalLink, Mail } from 'lucide-react'
 
 const WhatsAppIcon = ({ size = 14 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -7,23 +7,15 @@ const WhatsAppIcon = ({ size = 14 }) => (
 )
 
 const NAV_ITEMS = [
-  { id: 'news',         label: 'Vibe News',        icon: Newspaper },
-  { id: 'reading',      label: 'Ebooks',            icon: BookOpen },
-  { id: 'ideas',        label: 'Minhas Ideias',     icon: Lightbulb },
-  { id: 'generator',    label: 'Gerador de Ideias', icon: Cpu },
-  { id: 'tools',        label: 'Jornada SaaS',      icon: Map },
-  { id: 'calculator',   label: 'Calculadora',       icon: Calculator },
-  { id: 'prompts',      label: 'Prompts',           icon: Zap },
-  { id: 'ai-support',   label: 'Suporte IA',        icon: MessageSquare },
-  { id: 'ext-tools',    label: 'Ferramentas',       icon: Wrench },
-  { id: 'email',        label: 'Newsletter',        icon: Mail },
-]
-
-const NAV_SOON = [
-  { id: 'templates',  label: 'Templates',   icon: Layout },
-  { id: 'articles',   label: 'Artigos',     icon: FileText2 },
-  { id: 'community',  label: 'Comunidade',  icon: Users },
-  { id: 'projects',   label: 'Projetos',    icon: FolderOpen },
+  { id: 'ebooks',        label: 'Ebooks',            icon: BookOpen },
+  { id: 'ideas',         label: 'Minhas Ideias',     icon: Lightbulb },
+  { id: 'generator',     label: 'Gerador de Ideias', icon: Cpu },
+  { id: 'tools',         label: 'Jornada SaaS',      icon: Map },
+  { id: 'calculator',    label: 'Calculadora',       icon: Calculator },
+  { id: 'prompts',       label: 'Prompts',           icon: Zap },
+  { id: 'ai-support',    label: 'Suporte IA',        icon: MessageSquare },
+  { id: 'ext-tools',     label: 'Ferramentas',       icon: Wrench },
+  { id: 'email',         label: 'Newsletter',        icon: Mail },
 ]
 
 export default function NavSidebar({ activeTab, onNavigate, onClose }) {
@@ -51,22 +43,6 @@ export default function NavSidebar({ activeTab, onNavigate, onClose }) {
               <Icon size={15} className="shrink-0" />
               <span className="flex-1 truncate">{item.label}</span>
             </button>
-          )
-        })}
-
-        <div className="mx-1 my-2 border-t border-gray-200 dark:border-gray-700" />
-
-        {NAV_SOON.map(item => {
-          const Icon = item.icon
-          return (
-            <div key={item.id}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium rounded-lg border border-dashed border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600 cursor-default bg-white dark:bg-[#1A1A1A]">
-              <Icon size={15} className="shrink-0" />
-              <span className="flex-1 truncate">{item.label}</span>
-              <span className="text-[9px] bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide shrink-0">
-                em breve
-              </span>
-            </div>
           )
         })}
       </nav>

@@ -1,306 +1,35 @@
-import { useState, useEffect, useRef } from 'react'
-import { BookOpen, FileText, Menu, PanelLeft, PanelRight, Maximize2, Minimize2, ArrowLeft, Clock, CheckCircle2, Volume2, Square, Headphones, Loader2 } from 'lucide-react'
-import {
-  hasOpenAI, speakWithOpenAI, OPENAI_VOICES,
-  hasElevenLabs, speakWithElevenLabs, ELEVENLABS_VOICES,
-  speakWithKokoro, KOKORO_VOICES,
-} from '../lib/ttsService'
+import { useState, useEffect } from 'react'
+import { Menu, PanelLeft, PanelRight } from 'lucide-react'
 import Header from '../components/Header'
 import NavSidebar from '../components/NavSidebar'
-import Sidebar from '../components/Sidebar'
-import ChapterContent from '../components/ChapterContent'
-import NotesPanel from '../components/NotesPanel'
 import AISupportChat from '../components/AISupportChat'
-import Checklist from '../components/Checklist'
 import RevenueCalculator from '../components/RevenueCalculator'
 import AIToolsHub from '../components/ai-tools/AIToolsHub'
 import ToolsSection from '../components/ToolsSection'
 import EmailMarketing from '../components/EmailMarketing'
-import VibeNews from '../components/VibeNews'
 import PromptLibrary from '../components/PromptLibrary'
-import PDFReader from '../components/PDFReader'
 import MySaas from '../components/MySaas'
 import Onboarding from '../components/Onboarding'
+import Ebooks from '../components/Ebooks'
 import IdeasSection from '../components/IdeasSection'
 import IdeaGenerator from '../components/IdeaGenerator'
 import { useStreak } from '../hooks/useStreak'
-import { useChapters } from '../hooks/useChapters'
-import { useProgress } from '../hooks/useProgress'
-import { useNotes } from '../hooks/useNotes'
-import { useBookmarks } from '../hooks/useBookmarks'
-import { useChecklist } from '../hooks/useChecklist'
 import { useIdeas } from '../hooks/useIdeas'
 
-function ComingSoon({ label }) {
-  return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="text-center max-w-sm">
-        <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4">
-          <span className="text-3xl">🚧</span>
-        </div>
-        <h2 className="font-playfair text-xl font-bold text-gray-900 dark:text-white mb-2">{label}</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Esta seção está sendo preparada e chegará em breve.</p>
-      </div>
-    </div>
-  )
-}
-
-function ReadingHub({ chapters, currentChapter, completedCount, onEnterReading, onEnterAudio, onEnterPDF }) {
-  const total = chapters.length
-  const progress = total > 0 ? Math.round((completedCount / total) * 100) : 0
-  const chapter = chapters[currentChapter]
-
-  return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div>
-        <h2 className="font-playfair text-2xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
-          <BookOpen size={22} className="text-[#5B2A6E] dark:text-magic-light" />
-          Ebooks
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Selecione um ebook para começar ou continuar.</p>
-      </div>
-
-      {/* ── Ebook: 20 Passos ── */}
-      <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-        {/* Header do ebook — capa + título */}
-        <div className="flex items-center gap-4 p-5 border-b border-gray-100 dark:border-gray-700">
-          <img
-            src="/ebook-cover.png"
-            alt="Capa do Ebook 20 Passos"
-            className="w-16 h-20 object-cover rounded-xl shadow-md shrink-0"
-            onError={e => { e.target.style.display = 'none' }}
-          />
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-1">Ebook</p>
-            <h3 className="font-playfair font-bold text-sm text-gray-900 dark:text-white leading-snug mb-1">
-              20 Passos para Criar seu App SaaS com Vibe Coding
-            </h3>
-            <p className="text-[10px] text-gray-400 leading-snug">Do Planejamento à Monetização sem Frustração</p>
-
-            {/* Progresso */}
-            {total > 0 && (
-              <div className="flex items-center gap-2 mt-2">
-                <div className="flex-1 h-1 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                  <div className="h-full rounded-full transition-all"
-                    style={{ width: `${progress}%`, background: 'linear-gradient(to right, #5B2A6E, #F5B942)' }} />
-                </div>
-                <span className="text-[10px] text-gray-400 shrink-0">{completedCount}/{total}</span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Continuar lendo */}
-        {chapter && (
-          <button onClick={onEnterReading}
-            className="w-full text-left px-5 py-3 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
-            <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-0.5 flex items-center gap-1">
-              <Clock size={9} /> Continuar lendo
-            </p>
-            <p className="text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-[#5B2A6E] dark:group-hover:text-magic-light transition-colors truncate">
-              {chapter.title}
-            </p>
-          </button>
-        )}
-
-        {/* Opções */}
-        <div className="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700">
-          <button onClick={onEnterReading}
-            className="flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group text-left">
-            <div className="w-9 h-9 rounded-xl bg-[#F2E4FA] dark:bg-[#3E1B4D]/30 flex items-center justify-center shrink-0">
-              <BookOpen size={16} className="text-[#5B2A6E] dark:text-magic-light" />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-gray-900 dark:text-white group-hover:text-[#5B2A6E] dark:group-hover:text-magic-light transition-colors">
-                Leitura Interativa
-              </p>
-              <p className="text-[10px] text-gray-400 leading-tight">Progresso e anotações</p>
-            </div>
-          </button>
-
-          <button onClick={onEnterAudio}
-            className="flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group text-left">
-            <div className="w-9 h-9 rounded-xl bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center shrink-0">
-              <Headphones size={16} className="text-purple-600 dark:text-purple-400" />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                Leitura com Áudio
-              </p>
-              <p className="text-[10px] text-gray-400 leading-tight">Ouça enquanto lê</p>
-            </div>
-          </button>
-
-          <button onClick={onEnterPDF}
-            className="flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group text-left">
-            <div className="w-9 h-9 rounded-xl bg-[#FFF6E0] dark:bg-stargold-900/20 flex items-center justify-center shrink-0">
-              <FileText size={16} className="text-[#F5B942]" />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-gray-900 dark:text-white group-hover:text-[#5B2A6E] dark:group-hover:text-magic-light transition-colors">
-                Ler em PDF
-              </p>
-              <p className="text-[10px] text-gray-400 leading-tight">Versão completa em PDF</p>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      {/* Placeholder para futuros ebooks */}
-      <div className="text-center py-6 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-2xl">
-        <p className="text-xs text-gray-400 dark:text-gray-500">Mais ebooks em breve</p>
-      </div>
-    </div>
-  )
-}
-
 export default function Platform({ user, profile, onAdminClick }) {
-  const [activeTab, setActiveTab] = useState('news')
-  const [currentChapter, setCurrentChapter] = useState(0)
+  const [activeTab, setActiveTab] = useState('ebooks')
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [leftPanelOpen, setLeftPanelOpen] = useState(true)
   const [rightPanelOpen, setRightPanelOpen] = useState(false)
-  const [rightPanelTab, setRightPanelTab] = useState('notes')
-  const [readingMode, setReadingMode] = useState(false)
-  const [audioMode, setAudioMode] = useState(false)
-  const [audioPlaying, setAudioPlaying] = useState(false)
-  const [audioLoading, setAudioLoading] = useState(false)
-  const [audioLoadMsg, setAudioLoadMsg] = useState('')
-  const [audioEngine, setAudioEngine] = useState(hasElevenLabs() ? 'elevenlabs' : hasOpenAI() ? 'openai' : 'kokoro')
-  const [openaiVoice, setOpenaiVoice] = useState('nova')
-  const [elevenlabsVoice, setElevenlabsVoice] = useState('EXAVITQu4vr4xnSDxMaL')
-  const [kokoroVoice, setKokoroVoice] = useState('pf_dora')
-  const [browserVoices, setBrowserVoices] = useState([])
-  const [selectedBrowserVoice, setSelectedBrowserVoice] = useState(null)
-  const [audioRate, setAudioRate] = useState(1.0)
-  const audioUttRef = useRef(null)
-  const audioElRef = useRef(null)
-
-  useEffect(() => {
-    const loadVoices = () => {
-      const all = window.speechSynthesis.getVoices()
-      const pt = all.filter(v => v.lang.startsWith('pt'))
-      const rest = all.filter(v => !v.lang.startsWith('pt'))
-      const sorted = [...pt, ...rest]
-      setBrowserVoices(sorted)
-      if (!selectedBrowserVoice && pt.length > 0) setSelectedBrowserVoice(pt[0])
-    }
-    loadVoices()
-    window.speechSynthesis.onvoiceschanged = loadVoices
-  }, [])
-  const [focusMode, setFocusMode] = useState(false)
   const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem('welcomeSeen'))
 
-  const { chapters, chapterGroups } = useChapters()
   const streak = useStreak()
-  const { completed, completedCount, markCompleted } = useProgress(user?.id)
-  const { notes, saveNote, noteCount } = useNotes(user?.id)
-  const { bookmarks, toggleBookmark } = useBookmarks(user?.id)
-  const { steps: checklistSteps, toggleStep } = useChecklist(user?.id)
   const { ideas, saveIdea, deleteIdea } = useIdeas(user?.id)
-
-  const readingProgress = chapters.length > 0 ? Math.round((completedCount / chapters.length) * 100) : 0
 
   const handleNavigate = (tab) => {
     setActiveTab(tab)
-    if (tab !== 'reading') setReadingMode(false)
     setDrawerOpen(false)
-  }
-
-  const handleChapterSelect = (idx) => {
-    setCurrentChapter(idx)
-    setReadingMode(true)
-    setActiveTab('reading')
-    setDrawerOpen(false)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  const handleChapterRead = () => markCompleted(currentChapter)
-
-  const stopAudio = () => {
-    window.speechSynthesis.cancel()
-    if (audioElRef.current) { audioElRef.current.pause(); audioElRef.current = null }
-    setAudioPlaying(false)
-    setAudioLoading(false)
-  }
-
-  const handleEnterReading = () => {
-    stopAudio()
-    setAudioMode(false)
-    setReadingMode(true)
-    setActiveTab('reading')
-  }
-
-  const handleEnterAudio = () => {
-    setAudioMode(true)
-    setReadingMode(true)
-    setActiveTab('reading')
-  }
-
-  const playChapterAudio = async (chapter) => {
-    stopAudio()
-    if (!chapter?.content) return
-    const text = chapter.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
-
-    const playUrl = async (url) => {
-      const audio = new Audio(url)
-      audio.onended = () => { setAudioPlaying(false); URL.revokeObjectURL(url) }
-      audio.onerror = () => { setAudioPlaying(false); setAudioLoading(false) }
-      audioElRef.current = audio
-      await audio.play()
-      setAudioLoading(false)
-      setAudioPlaying(true)
-    }
-
-    setAudioLoading(true)
-    setAudioLoadMsg('')
-    try {
-      if (audioEngine === 'openai') {
-        const url = await speakWithOpenAI(text, openaiVoice, audioRate)
-        await playUrl(url)
-      } else if (audioEngine === 'elevenlabs') {
-        const url = await speakWithElevenLabs(text, elevenlabsVoice, audioRate)
-        await playUrl(url)
-      } else if (audioEngine === 'kokoro') {
-        setAudioLoadMsg('Carregando modelo...')
-        await speakWithKokoro(text, kokoroVoice, audioRate, msg => setAudioLoadMsg(msg || ''))
-        setAudioLoading(false)
-        setAudioPlaying(false) // Kokoro é síncrono — onended interno
-      } else {
-        // browser
-        setAudioLoading(false)
-        const utt = new SpeechSynthesisUtterance(text)
-        utt.lang = selectedBrowserVoice?.lang || 'pt-BR'
-        utt.rate = audioRate
-        if (selectedBrowserVoice) utt.voice = selectedBrowserVoice
-        utt.onend = () => setAudioPlaying(false)
-        utt.onerror = () => setAudioPlaying(false)
-        audioUttRef.current = utt
-        window.speechSynthesis.speak(utt)
-        setAudioPlaying(true)
-      }
-    } catch (e) {
-      setAudioLoading(false)
-      setAudioLoadMsg('')
-      console.error('[TTS]', e.message)
-    }
-  }
-
-  const handleEnterPDF = () => {
-    setActiveTab('pdf')
-    setReadingMode(false)
-  }
-
-  const handleBackToMenu = () => { stopAudio(); setReadingMode(false); setAudioMode(false) }
-
-  const toggleFocusMode = () => {
-    setFocusMode(f => {
-      const next = !f
-      if (next) { setLeftPanelOpen(false); setRightPanelOpen(false) }
-      else setLeftPanelOpen(true)
-      return next
-    })
   }
 
   const dismissWelcome = () => {
@@ -314,38 +43,12 @@ export default function Platform({ user, profile, onAdminClick }) {
     localStorage.setItem('darkMode', darkMode)
   }, [darkMode])
 
-  const showChapterSidebar = activeTab === 'reading' && readingMode
-
-  const SidebarContent = ({ onClose }) => showChapterSidebar ? (
-    <div className="flex flex-col h-full bg-[#FAFAFA] dark:bg-[#111]">
-      <button
-        onClick={() => { handleBackToMenu(); onClose?.() }}
-        className="flex items-center gap-2 px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-[#C2298A] border-b border-gray-100 dark:border-gray-700 transition-colors shrink-0"
-      >
-        <ArrowLeft size={13} /> Voltar ao menu
-      </button>
-      <div className="flex-1 overflow-hidden">
-        <Sidebar
-          currentChapter={currentChapter}
-          onSelect={handleChapterSelect}
-          completed={completed}
-          onClose={onClose}
-          chapters={chapters}
-          chapterGroups={chapterGroups}
-          onChecklist={() => { handleNavigate('checklist'); onClose?.() }}
-        />
-      </div>
-    </div>
-  ) : (
-    <NavSidebar activeTab={activeTab} onNavigate={handleNavigate} onClose={onClose} />
-  )
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#111] flex flex-col">
       <Header
         darkMode={darkMode}
         toggleDark={() => setDarkMode(d => !d)}
-        progress={readingProgress}
+        progress={0}
         user={user}
         streak={streak}
         onAdminClick={onAdminClick}
@@ -361,58 +64,39 @@ export default function Platform({ user, profile, onAdminClick }) {
       <div className="flex flex-1 pt-16">
         {/* Desktop left sidebar */}
         <div className={`hidden lg:flex flex-col shrink-0 fixed left-0 top-16 bottom-0 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] transition-all duration-300 overflow-hidden ${
-          leftPanelOpen && !focusMode ? 'w-56 xl:w-64' : 'w-0 border-r-0'
+          leftPanelOpen ? 'w-56 xl:w-64' : 'w-0 border-r-0'
         }`}>
-          <SidebarContent />
+          <NavSidebar activeTab={activeTab} onNavigate={handleNavigate} />
         </div>
 
         {/* Mobile drawer */}
         <div className={`fixed left-0 top-16 bottom-0 z-50 w-72 transition-transform duration-300 lg:hidden shadow-xl ${
           drawerOpen ? 'translate-x-0' : '-translate-x-full'
         }`}>
-          <SidebarContent onClose={() => setDrawerOpen(false)} />
+          <NavSidebar activeTab={activeTab} onNavigate={handleNavigate} onClose={() => setDrawerOpen(false)} />
         </div>
 
         {/* Main content */}
-        <main className={`flex-1 min-w-0 transition-all duration-300 ${leftPanelOpen && !focusMode ? 'lg:ml-56 xl:ml-64' : 'lg:ml-0'}`}>
+        <main className={`flex-1 min-w-0 transition-all duration-300 ${leftPanelOpen ? 'lg:ml-56 xl:ml-64' : 'lg:ml-0'}`}>
 
           {/* Sticky top bar */}
-          {!focusMode && (
-            <div className="hidden lg:flex items-center gap-2 px-3 py-2 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] sticky top-16 z-30">
-              <button
-                onClick={() => setLeftPanelOpen(o => !o)}
-                title={leftPanelOpen ? 'Recolher menu' : 'Expandir menu'}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
-              >
-                <PanelLeft size={15} />
-              </button>
-              {showChapterSidebar && (
-                <button
-                  onClick={handleBackToMenu}
-                  className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light transition-colors"
-                >
-                  <ArrowLeft size={13} /> Leitura
-                </button>
-              )}
-              <div className="flex-1" />
-              <button
-                onClick={() => setRightPanelOpen(o => !o)}
-                title="Anotações / Meu SaaS"
-                className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
-              >
-                <PanelRight size={15} />
-              </button>
-              {showChapterSidebar && (
-                <button
-                  onClick={toggleFocusMode}
-                  title="Modo foco"
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
-                >
-                  <Maximize2 size={15} />
-                </button>
-              )}
-            </div>
-          )}
+          <div className="hidden lg:flex items-center gap-2 px-3 py-2 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] sticky top-16 z-30">
+            <button
+              onClick={() => setLeftPanelOpen(o => !o)}
+              title={leftPanelOpen ? 'Recolher menu' : 'Expandir menu'}
+              className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
+            >
+              <PanelLeft size={15} />
+            </button>
+            <div className="flex-1" />
+            <button
+              onClick={() => setRightPanelOpen(o => !o)}
+              title="Meu SaaS"
+              className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
+            >
+              <PanelRight size={15} />
+            </button>
+          </div>
 
           <div className="p-4 md:p-6 pb-24 lg:pb-8">
             {/* Mobile menu button */}
@@ -423,150 +107,11 @@ export default function Platform({ user, profile, onAdminClick }) {
               >
                 <Menu size={13} /> Menu
               </button>
-              {showChapterSidebar && (
-                <span className="text-xs text-gray-400 dark:text-gray-500 font-playfair italic truncate">
-                  {chapters[currentChapter]?.title}
-                </span>
-              )}
             </div>
-
-            {/* Focus mode exit */}
-            {focusMode && showChapterSidebar && (
-              <div className="hidden lg:flex justify-end mb-3">
-                <button
-                  onClick={toggleFocusMode}
-                  className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#5B2A6E] dark:hover:text-magic-light border border-gray-200 dark:border-gray-600 px-3 py-1.5 rounded-lg hover:border-[#5B2A6E] transition-colors"
-                >
-                  <Minimize2 size={13} /> Sair do foco
-                </button>
-              </div>
-            )}
 
             {/* ── Content ── */}
 
-            {activeTab === 'news' && <VibeNews />}
-
-            {activeTab === 'reading' && !readingMode && (
-              <ReadingHub
-                chapters={chapters}
-                currentChapter={currentChapter}
-                completedCount={completedCount}
-                onEnterReading={handleEnterReading}
-                onEnterAudio={handleEnterAudio}
-                onEnterPDF={handleEnterPDF}
-              />
-            )}
-
-            {activeTab === 'reading' && readingMode && audioMode && (
-              <div className="mb-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/40 rounded-xl overflow-hidden">
-                {/* Linha principal */}
-                <div className="flex items-center gap-3 px-4 py-3">
-                  <Headphones size={15} className="text-purple-600 dark:text-purple-400 shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-purple-700 dark:text-purple-300 truncate">{chapters[currentChapter]?.title}</p>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    {audioLoading ? (
-                      <button disabled className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-400 text-white rounded-lg max-w-[160px] truncate">
-                        <Loader2 size={12} className="animate-spin shrink-0" />
-                        <span className="truncate">{audioLoadMsg || 'Gerando...'}</span>
-                      </button>
-                    ) : !audioPlaying ? (
-                      <button onClick={() => playChapterAudio(chapters[currentChapter])}
-                        className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
-                        <Volume2 size={12} /> Reproduzir
-                      </button>
-                    ) : (
-                      <button onClick={stopAudio}
-                        className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
-                        <Square size={12} /> Parar
-                      </button>
-                    )}
-                    <button onClick={() => { stopAudio(); setAudioMode(false) }}
-                      className="text-[10px] text-purple-400 hover:text-purple-600 dark:hover:text-purple-300 transition-colors">
-                      ✕
-                    </button>
-                  </div>
-                </div>
-
-                {/* Controles */}
-                <div className="flex flex-wrap items-center gap-3 px-4 pb-3 border-t border-purple-100 dark:border-purple-800/40 pt-2">
-
-                  {/* Engine selector */}
-                  <div className="flex items-center gap-0.5 rounded-lg border border-purple-200 dark:border-purple-700 overflow-hidden text-[10px] font-semibold">
-                    <button onClick={() => { stopAudio(); setAudioEngine('kokoro') }}
-                      title="Grátis — roda no navegador, PT-BR nativo (1ª vez: ~80MB download)"
-                      className={`px-2 py-1.5 transition-colors ${audioEngine === 'kokoro' ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'}`}>
-                      🆓 Kokoro
-                    </button>
-                    <button onClick={() => { stopAudio(); setAudioEngine('elevenlabs') }}
-                      disabled={!hasElevenLabs()}
-                      title={!hasElevenLabs() ? 'Adicione VITE_ELEVENLABS_API_KEY (grátis em elevenlabs.io)' : 'ElevenLabs — 10k chars/mês grátis'}
-                      className={`px-2 py-1.5 transition-colors ${audioEngine === 'elevenlabs' ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 disabled:opacity-40 disabled:cursor-not-allowed'}`}>
-                      🎙 ElevenLabs {!hasElevenLabs() && '🔑'}
-                    </button>
-                    <button onClick={() => { stopAudio(); setAudioEngine('openai') }}
-                      disabled={!hasOpenAI()}
-                      title={!hasOpenAI() ? 'Adicione VITE_OPENAI_API_KEY' : 'OpenAI TTS'}
-                      className={`px-2 py-1.5 transition-colors ${audioEngine === 'openai' ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 disabled:opacity-40 disabled:cursor-not-allowed'}`}>
-                      ✨ OpenAI {!hasOpenAI() && '🔑'}
-                    </button>
-                    <button onClick={() => { stopAudio(); setAudioEngine('browser') }}
-                      className={`px-2 py-1.5 transition-colors ${audioEngine === 'browser' ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'}`}>
-                      🔊 Sistema
-                    </button>
-                  </div>
-
-                  {/* Seletor de voz */}
-                  {audioEngine === 'kokoro' && (
-                    <select value={kokoroVoice} onChange={e => { setKokoroVoice(e.target.value); if (audioPlaying) stopAudio() }}
-                      className="text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500">
-                      {KOKORO_VOICES.map(v => <option key={v.id} value={v.id}>{v.name} — {v.desc}</option>)}
-                    </select>
-                  )}
-                  {audioEngine === 'elevenlabs' && (
-                    <select value={elevenlabsVoice} onChange={e => { setElevenlabsVoice(e.target.value); if (audioPlaying) stopAudio() }}
-                      className="text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500">
-                      {ELEVENLABS_VOICES.map(v => <option key={v.id} value={v.id}>{v.name} — {v.desc}</option>)}
-                    </select>
-                  )}
-                  {audioEngine === 'openai' && (
-                    <select value={openaiVoice} onChange={e => { setOpenaiVoice(e.target.value); if (audioPlaying) stopAudio() }}
-                      className="text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500">
-                      {OPENAI_VOICES.map(v => <option key={v.id} value={v.id}>{v.name} — {v.desc}</option>)}
-                    </select>
-                  )}
-                  {audioEngine === 'browser' && browserVoices.length > 0 && (
-                    <select value={selectedBrowserVoice?.name || ''} onChange={e => { const v = browserVoices.find(v => v.name === e.target.value); setSelectedBrowserVoice(v || null); if (audioPlaying) stopAudio() }}
-                      className="flex-1 min-w-0 max-w-[200px] text-[10px] border border-purple-200 dark:border-purple-700 rounded-lg px-2 py-1 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500">
-                      {browserVoices.map(v => <option key={v.name} value={v.name}>{v.name} ({v.lang})</option>)}
-                    </select>
-                  )}
-
-                  {/* Velocidade */}
-                  <div className="flex items-center gap-1 ml-auto">
-                    {[0.75, 1.0, 1.25, 1.5].map(r => (
-                      <button key={r} onClick={() => { setAudioRate(r); if (audioPlaying) stopAudio() }}
-                        className={`text-[10px] px-2 py-0.5 rounded font-semibold transition-colors ${audioRate === r ? 'bg-purple-600 text-white' : 'text-purple-500 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/30'}`}>
-                        {r}×
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'reading' && readingMode && (
-              <ChapterContent
-                chapter={chapters[currentChapter]}
-                chapterIndex={currentChapter}
-                hasNext={currentChapter < chapters.length - 1}
-                hasPrev={currentChapter > 0}
-                onNext={() => { setCurrentChapter(i => i + 1); handleChapterRead(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-                onPrev={() => { setCurrentChapter(i => i - 1); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-                onChapterRead={handleChapterRead}
-              />
-            )}
+            {activeTab === 'ebooks' && <Ebooks />}
 
             {activeTab === 'ideas' && (
               <IdeasSection
@@ -584,14 +129,6 @@ export default function Platform({ user, profile, onAdminClick }) {
 
             {activeTab === 'email' && <EmailMarketing />}
 
-            {activeTab === 'checklist' && (
-              <Checklist
-                checklistSteps={checklistSteps}
-                onToggleStep={toggleStep}
-                onNavigate={(idx) => handleChapterSelect(idx)}
-              />
-            )}
-
             {activeTab === 'calculator' && <RevenueCalculator />}
 
             {activeTab === 'ai-support' && (
@@ -600,24 +137,13 @@ export default function Platform({ user, profile, onAdminClick }) {
                   Suporte IA
                 </h2>
                 <AISupportChat
-                  chapter={chapters[currentChapter]}
+                  chapter={{ title: 'Suporte IA' }}
                   containerClass="h-[600px]"
                 />
               </div>
             )}
 
             {activeTab === 'prompts' && <PromptLibrary />}
-
-            {activeTab === 'pdf' && <PDFReader />}
-
-            {['projects', 'templates', 'articles', 'community'].includes(activeTab) && (
-              <ComingSoon label={
-                activeTab === 'projects' ? 'Projetos'
-                : activeTab === 'templates' ? 'Templates'
-                : activeTab === 'articles' ? 'Artigos'
-                : 'Comunidade'
-              } />
-            )}
           </div>
 
           {/* Page footer */}
@@ -641,38 +167,13 @@ export default function Platform({ user, profile, onAdminClick }) {
           />
         )}
 
-        {/* Right panel — Anotações + Meu SaaS */}
+        {/* Right panel — Meu SaaS */}
         <div className={`hidden lg:flex flex-col w-64 xl:w-80 shrink-0 fixed right-0 top-16 bottom-0 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] overflow-y-auto scrollbar-thin transition-transform duration-300 z-30 shadow-xl ${rightPanelOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-          <div className="flex border-b border-gray-100 dark:border-gray-700 shrink-0">
-            {[{ id: 'notes', label: 'Anotações' }, { id: 'saas', label: 'Meu SaaS' }].map(t => (
-              <button
-                key={t.id}
-                onClick={() => setRightPanelTab(t.id)}
-                className={`flex-1 py-2.5 text-xs font-medium transition-colors ${
-                  rightPanelTab === t.id
-                    ? 'text-[#5B2A6E] dark:text-magic-light border-b-2 border-[#5B2A6E]'
-                    : 'text-gray-500 dark:text-gray-400'
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
+          <div className="border-b border-gray-100 dark:border-gray-700 shrink-0 py-2.5 px-3">
+            <p className="text-xs font-semibold text-[#5B2A6E] dark:text-magic-light">Meu SaaS</p>
           </div>
           <div className="flex-1 p-3 overflow-y-auto scrollbar-thin">
-            {rightPanelTab === 'notes' && (
-              <NotesPanel
-                chapterIndex={currentChapter}
-                notes={notes}
-                onSaveNote={saveNote}
-                bookmarks={bookmarks}
-                onToggleBookmark={toggleBookmark}
-                completedCount={completedCount}
-                totalChapters={chapters.length}
-                noteCount={noteCount}
-                ideasCount={ideas.length}
-              />
-            )}
-            {rightPanelTab === 'saas' && <MySaas />}
+            <MySaas />
           </div>
         </div>
       </div>
