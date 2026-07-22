@@ -31,35 +31,12 @@ Deno.serve(async (req: Request) => {
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
   try {
-  let force = false
-  try {
-    const body = await req.json()
-    force = body?.force === true
-  } catch { /* corpo vazio é ok */ }
-
   // Data em horário de Brasília (UTC-3)
   const now = new Date()
   const brasiliaTime = new Date(now.getTime() - 3 * 60 * 60 * 1000)
   const today = brasiliaTime.toISOString().split('T')[0]
 
-  console.log(`[vibe-news-cron] Iniciando para data: ${today}${force ? ' (force)' : ''}`)
-
-  // Evita duplicar se já rodou hoje — a menos que seja um regeneração forçada
-  const { data: existing } = await supabase
-    .from('vibe_news')
-    .select('id')
-    .eq('date', today)
-    .single()
-
-  if (existing && !force) {
-    console.log('[vibe-news-cron] Notícias já geradas hoje.')
-    return json({ message: 'Já gerado hoje', date: today })
-  }
-
-  if (existing && force) {
-    console.log('[vibe-news-cron] Regenerando edição de hoje (force=true).')
-    await supabase.from('vibe_news').delete().eq('id', existing.id)
-  }
+  console.log(`[vibe-news-cron] Iniciando para data: ${today}`)
 
   // Busca as últimas edições para evitar repetir os mesmos temas/ferramentas
   const { data: recentEditions } = await supabase
@@ -219,11 +196,15 @@ REGRA CRÍTICA SOBRE URLs: NUNCA invente, complete ou "adivinhe" uma URL. Use ex
       return true
     })
 
-  const { error: insertError } = await supabase.from('vibe_news').insert({
-    date: today,
-    summary: newsData.summary,
-    articles: sanitizedArticles,
-  })
+  // upsert: se já existir uma edição hoje, substitui; senão, cria. Sem trava,
+  // sem checagem prévia — cada clique gera e publica uma leva nova na hora.
+  const { error: insertError } = await supabase
+    .from('vibe_news')
+    .upsert({
+      date: today,
+      summary: newsData.summary,
+      articles: sanitizedArticles,
+    }, { onConflict: 'date' })
 
   if (insertError) {
     console.error('[vibe-news-cron] Erro ao salvar:', insertError.message)

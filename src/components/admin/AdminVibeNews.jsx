@@ -34,13 +34,13 @@ export default function AdminVibeNews() {
 
   const hasToday = editions.some(e => e.date === brasiliaToday())
 
-  const handleGenerate = async (force = false) => {
+  const handleGenerate = async () => {
     setGenerating(true)
     setResult(null)
     try {
       const { data, error } = await supabase.functions.invoke('vibe-news-cron', {
         method: 'POST',
-        body: { force },
+        body: {},
       })
       if (error) {
         setResult({ ok: false, error: error.message || JSON.stringify(error) })
@@ -63,35 +63,20 @@ export default function AdminVibeNews() {
             <Newspaper size={18} className="text-[#5B2A6E]" /> Vibe News
           </h2>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-            Geração automática às 7h (Brasília). Use o botão abaixo para gerar manualmente quando necessário.
+            Geração automática às 7h (Brasília). Clique no botão sempre que quiser gerar uma nova leva — sem limite por dia.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          {hasToday && (
-            <button
-              onClick={() => handleGenerate(true)}
-              disabled={generating}
-              title="Apaga a edição de hoje e gera uma nova (use se algum link estiver quebrado ou repetido)"
-              className="flex items-center gap-2 px-3 py-2.5 border border-[#5B2A6E] text-[#5B2A6E] dark:text-magic-light hover:bg-[#F2E4FA] dark:hover:bg-[#3E1B4D]/20 text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
-            >
-              {generating ? <Loader size={14} className="animate-spin" /> : <RefreshCw size={14} />}
-              Regerar hoje
-            </button>
-          )}
-          <button
-            onClick={() => handleGenerate(false)}
-            disabled={generating || hasToday}
-            className="flex items-center gap-2 px-4 py-2.5 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
-          >
-            {generating
-              ? <><Loader size={14} className="animate-spin" /> Gerando...</>
-              : hasToday
-              ? <><CheckCircle size={14} /> Já gerada hoje</>
-              : <><RefreshCw size={14} /> Gerar notícias de hoje</>
-            }
-          </button>
-        </div>
+        <button
+          onClick={handleGenerate}
+          disabled={generating}
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50 shrink-0"
+        >
+          {generating
+            ? <><Loader size={14} className="animate-spin" /> Gerando...</>
+            : <><RefreshCw size={14} /> Gerar notícias agora</>
+          }
+        </button>
       </div>
 
       {/* Status do dia */}
@@ -102,7 +87,7 @@ export default function AdminVibeNews() {
       }`}>
         {hasToday
           ? <><CheckCircle size={16} /> Notícia de hoje já foi gerada ✓</>
-          : <><AlertCircle size={16} /> Notícia de hoje ainda não foi gerada — clique em "Gerar notícias de hoje"</>
+          : <><AlertCircle size={16} /> Notícia de hoje ainda não foi gerada — clique em "Gerar notícias agora"</>
         }
       </div>
 
