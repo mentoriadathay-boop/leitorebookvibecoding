@@ -47,6 +47,25 @@ Deno.serve(async (req: Request) => {
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
+  // Só admins podem disparar envio de e-mail em massa — evita que qualquer
+  // usuário logado dispare notificações pra toda a base.
+  const authHeader = req.headers.get('Authorization') || ''
+  const token = authHeader.replace(/^Bearer\s+/i, '')
+  if (token !== SUPABASE_SERVICE_ROLE_KEY) {
+    const { data: { user }, error: callerAuthError } = await supabase.auth.getUser(token)
+    if (callerAuthError || !user) {
+      return new Response(JSON.stringify({ error: 'Não autenticado' }), { status: 401 })
+    }
+    const { data: callerProfile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+    if (callerProfile?.role !== 'admin') {
+      return new Response(JSON.stringify({ error: 'Acesso restrito a administradores' }), { status: 403 })
+    }
+  }
+
   // Busca todos os usuários ativos com email
   const [{ data: authData, error: authErr }, { data: profiles }] = await Promise.all([
     supabase.auth.admin.listUsers({ page: 1, perPage: 1000 }),
