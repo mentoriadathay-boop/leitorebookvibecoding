@@ -30,6 +30,27 @@ Deno.serve(async (req: Request) => {
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
+  // Só admins (ou o próprio cron, autenticado com a service role key) podem
+  // disparar a geração — evita que qualquer usuário logado gaste crédito de IA.
+  const authHeader = req.headers.get('Authorization') || ''
+  const token = authHeader.replace(/^Bearer\s+/i, '')
+  const isServiceRole = token === SUPABASE_SERVICE_ROLE_KEY
+
+  if (!isServiceRole) {
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    if (authError || !user) {
+      return json({ error: 'Não autenticado' }, 401)
+    }
+    const { data: callerProfile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+    if (callerProfile?.role !== 'admin') {
+      return json({ error: 'Acesso restrito a administradores' }, 403)
+    }
+  }
+
   try {
   // Data em horário de Brasília (UTC-3)
   const now = new Date()
