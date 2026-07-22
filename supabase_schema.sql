@@ -149,3 +149,53 @@ create policy "Admins manage emails" on email_marketing
   for all to authenticated
   using (exists (select 1 from profiles where id = auth.uid() and role = 'admin'))
   with check (exists (select 1 from profiles where id = auth.uid() and role = 'admin'));
+
+-- Ebooks (catálogo com capa + link/PDF de acesso — substitui o leitor embutido)
+create table if not exists ebooks (
+  id            uuid primary key default gen_random_uuid(),
+  title         text not null,
+  description   text,
+  cover_url     text,
+  pdf_url       text,
+  external_url  text,
+  sort_order    integer default 0,
+  published     boolean default true,
+  created_at    timestamptz default now()
+);
+alter table ebooks enable row level security;
+create policy "Authenticated read published ebooks" on ebooks
+  for select to authenticated using (published = true);
+create policy "Admins manage ebooks" on ebooks
+  for all to authenticated
+  using (exists (select 1 from profiles where id = auth.uid() and role = 'admin'))
+  with check (exists (select 1 from profiles where id = auth.uid() and role = 'admin'));
+
+-- Storage bucket para capas e PDFs enviados pelo admin
+insert into storage.buckets (id, name, public)
+  values ('ebooks', 'ebooks', true)
+  on conflict (id) do nothing;
+
+create policy "Public read ebooks bucket" on storage.objects
+  for select using (bucket_id = 'ebooks');
+create policy "Admins upload ebooks bucket" on storage.objects
+  for insert to authenticated with check (
+    bucket_id = 'ebooks' and exists (select 1 from profiles where id = auth.uid() and role = 'admin')
+  );
+create policy "Admins update ebooks bucket" on storage.objects
+  for update to authenticated using (
+    bucket_id = 'ebooks' and exists (select 1 from profiles where id = auth.uid() and role = 'admin')
+  );
+create policy "Admins delete ebooks bucket" on storage.objects
+  for delete to authenticated using (
+    bucket_id = 'ebooks' and exists (select 1 from profiles where id = auth.uid() and role = 'admin')
+  );
+
+-- Migra o ebook atual (arquivos já hospedados em /public do próprio app) como
+-- primeiro item do catálogo. Ajuste a URL base se o domínio for outro.
+insert into ebooks (title, description, cover_url, pdf_url)
+values (
+  '20 Passos para Criar seu App SaaS com Vibe Coding',
+  'Do Planejamento à Monetização sem Frustração',
+  'https://hubvibecoding.vercel.app/ebook-cover.png',
+  'https://hubvibecoding.vercel.app/ebook-vibe-coding.pdf'
+);
