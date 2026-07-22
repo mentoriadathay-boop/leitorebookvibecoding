@@ -137,7 +137,16 @@ export default function VibeNews() {
         method: 'POST',
         body: {},
       })
-      if (error) throw new Error(error.message || 'Falha ao buscar notícias')
+      if (error) {
+        // O cliente do Supabase não expõe o corpo JSON do erro por padrão —
+        // precisa ler manualmente da Response bruta pra ver o detalhe real.
+        let detail = error.message
+        try {
+          const body = await error.context?.json()
+          if (body?.error) detail = body.detail ? `${body.error}: ${body.detail}` : body.error
+        } catch { /* mantém a mensagem genérica se não conseguir ler */ }
+        throw new Error(detail || 'Falha ao buscar notícias')
+      }
       if (data?.error) throw new Error(data.error)
       setNews({ date: data.date, summary: data.summary, articles: data.articles })
     } catch (e) {
