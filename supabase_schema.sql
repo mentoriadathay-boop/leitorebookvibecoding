@@ -294,6 +294,11 @@ create policy "Admins delete audiobooks bucket" on storage.objects
     bucket_id = 'audiobooks' and exists (select 1 from profiles where id = auth.uid() and role = 'admin')
   );
 
+-- Campos extras coletados no cadastro pela landing /hub (idempotente)
+alter table profiles add column if not exists profession text;
+alter table profiles add column if not exists age integer;
+alter table profiles add column if not exists whatsapp text;
+
 -- Vídeos do YouTube (armazena só o link + metadados; player é embed no front)
 create table if not exists youtube_videos (
   id            uuid primary key default gen_random_uuid(),

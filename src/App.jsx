@@ -4,6 +4,7 @@ import { useAuth } from './hooks/useAuth'
 import Login from './pages/Login'
 import Platform from './pages/Platform'
 import Admin from './pages/Admin'
+import SalesPage from './pages/SalesPage'
 import { BookOpen } from 'lucide-react'
 import { supabase } from './lib/supabaseClient'
 
@@ -45,6 +46,11 @@ function Blocked() {
 function App() {
   const { user, profile, loading } = useAuth()
   const [adminView, setAdminView] = useState(false)
+
+  // Rota pública /hub — landing de vendas, acessível sem login.
+  // (Como o app é uma SPA sem router, roteia direto pelo pathname.)
+  const isSalesRoute = typeof window !== 'undefined' && window.location.pathname === '/hub'
+  if (isSalesRoute) return <SalesPage />
 
   if (loading) return <Loading />
   if (!user) return <Login />
