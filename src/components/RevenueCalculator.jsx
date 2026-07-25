@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { TrendingUp } from 'lucide-react'
+import { TrendingUp, Lightbulb } from 'lucide-react'
 
 const TOOLTIPS = {
   mrr: 'MRR — Monthly Recurring Revenue. É a receita que o seu SaaS gera todo mês com os clientes ativos. Fórmula: Clientes × Valor do plano.',
@@ -50,11 +50,39 @@ function SliderField({ label, min, max, step, value, onChange, display }) {
   )
 }
 
-export default function RevenueCalculator() {
+// Extrai um valor numérico de ticket a partir de textos como
+// "Assinatura mensal (R$97-R$297/mês)" ou "Por assento: R$49/usuário/mês".
+function extractTicket(idea) {
+  const source = `${idea?.monetizacao || ''} ${idea?.text || ''} ${idea?.body || ''}`
+  const matches = source.match(/R\$\s?(\d{1,4})/g)
+  if (!matches?.length) return null
+  const values = matches.map(m => parseInt(m.replace(/[^\d]/g, ''), 10)).filter(v => v > 0)
+  if (!values.length) return null
+  // Usa a média entre o menor e o maior valor mencionado.
+  return Math.round((Math.min(...values) + Math.max(...values)) / 2)
+}
+
+export default function RevenueCalculator({ ideas = [] }) {
   const [clients, setClients] = useState(100)
   const [price, setPrice] = useState(97)
   const [churn, setChurn] = useState(5)
   const [growth, setGrowth] = useState(10)
+  const [selectedIdeaId, setSelectedIdeaId] = useState('')
+
+  const importIdea = (ideaId) => {
+    setSelectedIdeaId(ideaId)
+    if (!ideaId) return
+    const idea = ideas.find(i => String(i.id) === String(ideaId))
+    if (!idea) return
+    const ticket = extractTicket(idea)
+    if (ticket) setPrice(ticket)
+  }
+
+  const ideaLabel = (idea) => {
+    const text = idea.text || ''
+    const title = text.split(':')[0] || text.slice(0, 40)
+    return title.length > 50 ? `${title.slice(0, 50)}…` : title
+  }
 
   const { mrr, arr, months } = useMemo(() => {
     const mrr0 = clients * price
@@ -80,6 +108,21 @@ export default function RevenueCalculator() {
           Simule o potencial financeiro do seu SaaS com dados reais.
         </p>
       </div>
+
+      {ideas.length > 0 && (
+        <div className="mb-6 flex items-center gap-2 flex-wrap bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 border border-[#5B2A6E]/20 rounded-xl px-4 py-3">
+          <Lightbulb size={14} className="text-[#5B2A6E] dark:text-magic-light shrink-0" />
+          <span className="text-xs font-medium text-[#5B2A6E] dark:text-magic-light shrink-0">Basear numa ideia salva:</span>
+          <select
+            value={selectedIdeaId}
+            onChange={e => importIdea(e.target.value)}
+            className="flex-1 min-w-[180px] text-xs border border-[#5B2A6E]/30 rounded-lg px-2 py-1.5 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-[#5B2A6E]"
+          >
+            <option value="">— escolher —</option>
+            {ideas.map(i => <option key={i.id} value={i.id}>{ideaLabel(i)}</option>)}
+          </select>
+        </div>
+      )}
 
       <div className="grid md:grid-cols-2 gap-6">
         {/* Inputs */}
