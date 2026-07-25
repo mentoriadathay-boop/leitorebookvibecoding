@@ -6,11 +6,10 @@ import AISupportChat from '../components/AISupportChat'
 import RevenueCalculator from '../components/RevenueCalculator'
 import AIToolsHub from '../components/ai-tools/AIToolsHub'
 import ToolsSection from '../components/ToolsSection'
-import EmailMarketing from '../components/EmailMarketing'
 import PromptLibrary from '../components/PromptLibrary'
 import MySaas from '../components/MySaas'
 import Onboarding from '../components/Onboarding'
-import Ebooks from '../components/Ebooks'
+import StudiesHub from '../components/StudiesHub'
 import IdeasSection from '../components/IdeasSection'
 import IdeaGenerator from '../components/IdeaGenerator'
 import VibeLab from '../components/VibeLab'
@@ -19,7 +18,7 @@ import { useStreak } from '../hooks/useStreak'
 import { useIdeas } from '../hooks/useIdeas'
 
 export default function Platform({ user, profile, onAdminClick }) {
-  const [activeTab, setActiveTab] = useState('ideas')
+  const [activeTab, setActiveTab] = useState('studies')
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [leftPanelOpen, setLeftPanelOpen] = useState(true)
@@ -120,7 +119,7 @@ export default function Platform({ user, profile, onAdminClick }) {
 
             {/* ── Content ── */}
 
-            {activeTab === 'ebooks' && <Ebooks />}
+            {activeTab === 'studies' && <StudiesHub />}
 
             {activeTab === 'ideas' && (
               <IdeasSection
@@ -143,8 +142,6 @@ export default function Platform({ user, profile, onAdminClick }) {
             )}
 
             {activeTab === 'ext-tools' && <ToolsSection />}
-
-            {activeTab === 'email' && <EmailMarketing />}
 
             {activeTab === 'calculator' && <RevenueCalculator ideas={ideas} />}
 

@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { LayoutDashboard, Users, BookOpen, Bell, Mail, Newspaper, ArrowLeft, Shield, Rocket } from 'lucide-react'
+import { LayoutDashboard, Users, BookOpen, Bell, Mail, Newspaper, ArrowLeft, Shield, Rocket, Headphones, Video } from 'lucide-react'
 import AdminDashboard from '../components/admin/AdminDashboard'
 import AdminUsers from '../components/admin/AdminUsers'
 import AdminEbooks from '../components/admin/AdminEbooks'
+import AdminAudiobooks from '../components/admin/AdminAudiobooks'
+import AdminYoutubeVideos from '../components/admin/AdminYoutubeVideos'
 import AdminSaasPlatforms from '../components/admin/AdminSaasPlatforms'
 import AdminNotifications from '../components/admin/AdminNotifications'
 import AdminEmailMarketing from '../components/admin/AdminEmailMarketing'
@@ -12,6 +14,8 @@ const TABS = [
   { id: 'dashboard',      label: 'Dashboard',        icon: LayoutDashboard },
   { id: 'users',          label: 'Usuários',          icon: Users },
   { id: 'ebooks',         label: 'Ebooks',            icon: BookOpen },
+  { id: 'audiobooks',     label: 'Audiobooks',        icon: Headphones },
+  { id: 'videos',         label: 'Vídeos YouTube',    icon: Video },
   { id: 'platforms',      label: 'Plataformas SaaS',  icon: Rocket },
   { id: 'notifications',  label: 'Notificações',      icon: Bell },
   { id: 'email',          label: 'Newsletter',        icon: Mail },
@@ -66,6 +70,8 @@ export default function Admin({ profile, onExit }) {
         {tab === 'dashboard'     && <AdminDashboard />}
         {tab === 'users'         && <AdminUsers />}
         {tab === 'ebooks'        && <AdminEbooks />}
+        {tab === 'audiobooks'    && <AdminAudiobooks />}
+        {tab === 'videos'        && <AdminYoutubeVideos />}
         {tab === 'platforms'     && <AdminSaasPlatforms />}
         {tab === 'notifications' && <AdminNotifications />}
         {tab === 'email'         && <AdminEmailMarketing />}
