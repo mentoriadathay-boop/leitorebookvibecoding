@@ -253,3 +253,61 @@ create policy "Admins delete platforms bucket" on storage.objects
   for delete to authenticated using (
     bucket_id = 'platforms' and exists (select 1 from profiles where id = auth.uid() and role = 'admin')
   );
+
+-- Audiobooks (catálogo com capa + arquivo de áudio ou link externo)
+create table if not exists audiobooks (
+  id            uuid primary key default gen_random_uuid(),
+  title         text not null,
+  description   text,
+  cover_url     text,
+  audio_url     text,
+  external_url  text,
+  sort_order    integer default 0,
+  published     boolean default true,
+  created_at    timestamptz default now()
+);
+alter table audiobooks enable row level security;
+create policy "Authenticated read published audiobooks" on audiobooks
+  for select to authenticated using (published = true);
+create policy "Admins manage audiobooks" on audiobooks
+  for all to authenticated
+  using (exists (select 1 from profiles where id = auth.uid() and role = 'admin'))
+  with check (exists (select 1 from profiles where id = auth.uid() and role = 'admin'));
+
+-- Storage bucket para capas e arquivos de áudio dos audiobooks
+insert into storage.buckets (id, name, public)
+  values ('audiobooks', 'audiobooks', true)
+  on conflict (id) do nothing;
+
+create policy "Public read audiobooks bucket" on storage.objects
+  for select using (bucket_id = 'audiobooks');
+create policy "Admins upload audiobooks bucket" on storage.objects
+  for insert to authenticated with check (
+    bucket_id = 'audiobooks' and exists (select 1 from profiles where id = auth.uid() and role = 'admin')
+  );
+create policy "Admins update audiobooks bucket" on storage.objects
+  for update to authenticated using (
+    bucket_id = 'audiobooks' and exists (select 1 from profiles where id = auth.uid() and role = 'admin')
+  );
+create policy "Admins delete audiobooks bucket" on storage.objects
+  for delete to authenticated using (
+    bucket_id = 'audiobooks' and exists (select 1 from profiles where id = auth.uid() and role = 'admin')
+  );
+
+-- Vídeos do YouTube (armazena só o link + metadados; player é embed no front)
+create table if not exists youtube_videos (
+  id            uuid primary key default gen_random_uuid(),
+  title         text not null,
+  description   text,
+  url           text not null,
+  sort_order    integer default 0,
+  published     boolean default true,
+  created_at    timestamptz default now()
+);
+alter table youtube_videos enable row level security;
+create policy "Authenticated read published videos" on youtube_videos
+  for select to authenticated using (published = true);
+create policy "Admins manage videos" on youtube_videos
+  for all to authenticated
+  using (exists (select 1 from profiles where id = auth.uid() and role = 'admin'))
+  with check (exists (select 1 from profiles where id = auth.uid() and role = 'admin'));

@@ -53,37 +53,31 @@ export default function Ebooks() {
       .then(({ data }) => { setEbooks(data || []); setLoading(false) })
   }, [])
 
-  return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div>
-        <h2 className="font-playfair text-2xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
-          <BookOpen size={22} className="text-[#5B2A6E] dark:text-magic-light" />
-          Ebooks
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Clique num ebook para acessar o conteúdo.</p>
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <div className="w-8 h-8 border-2 border-[#5B2A6E] border-t-transparent rounded-full animate-spin" />
       </div>
+    )
+  }
 
-      {loading ? (
-        <div className="flex items-center justify-center py-16">
-          <div className="w-8 h-8 border-2 border-[#5B2A6E] border-t-transparent rounded-full animate-spin" />
+  if (ebooks.length === 0) {
+    return (
+      <div className="text-center py-16 bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700">
+        <div className="w-14 h-14 rounded-2xl bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 flex items-center justify-center mx-auto mb-4">
+          <BookOpen size={24} className="text-[#5B2A6E] dark:text-magic-light" />
         </div>
-      ) : ebooks.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700">
-          <div className="w-14 h-14 rounded-2xl bg-[#F2E4FA] dark:bg-[#3E1B4D]/20 flex items-center justify-center mx-auto mb-4">
-            <BookOpen size={24} className="text-[#5B2A6E] dark:text-magic-light" />
-          </div>
-          <h3 className="font-playfair font-bold text-lg text-gray-900 dark:text-white mb-2">
-            Nenhum ebook disponível ainda
-          </h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Novos ebooks aparecerão aqui em breve.
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {ebooks.map(e => <EbookCard key={e.id} ebook={e} />)}
-        </div>
-      )}
+        <h3 className="font-playfair font-bold text-lg text-gray-900 dark:text-white mb-2">
+          Nenhum ebook disponível ainda
+        </h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Novos ebooks aparecerão aqui em breve.</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      {ebooks.map(e => <EbookCard key={e.id} ebook={e} />)}
     </div>
   )
 }

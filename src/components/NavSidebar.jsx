@@ -1,4 +1,4 @@
-import { BookOpen, Lightbulb, Cpu, Map, Wrench, Calculator, Zap, MessageSquare, ExternalLink, Mail, FlaskConical, Rocket } from 'lucide-react'
+import { Lightbulb, Cpu, Map, Wrench, Calculator, Zap, MessageSquare, ExternalLink, FlaskConical, Rocket, GraduationCap } from 'lucide-react'
 
 const WhatsAppIcon = ({ size = 14 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -7,17 +7,16 @@ const WhatsAppIcon = ({ size = 14 }) => (
 )
 
 const NAV_ITEMS = [
-  { id: 'ideas',         label: 'Minhas Ideias',      icon: Lightbulb },
-  { id: 'generator',     label: 'Gerador de Ideias',  icon: Cpu },
-  { id: 'tools',         label: 'Jornada SaaS',       icon: Map },
-  { id: 'calculator',    label: 'Calculadora',        icon: Calculator },
-  { id: 'prompts',       label: 'Prompts',            icon: Zap },
-  { id: 'ext-tools',     label: 'Ferramentas',        icon: Wrench },
-  { id: 'ebooks',        label: 'Ebooks',             icon: BookOpen },
-  { id: 'email',         label: 'Newsletter',         icon: Mail },
-  { id: 'vibe-lab',      label: 'Laboratório Vibe',   icon: FlaskConical },
-  { id: 'platforms',     label: 'Plataformas SaaS',   icon: Rocket },
-  { id: 'ai-support',    label: 'Suporte IA',         icon: MessageSquare },
+  { id: 'studies',       label: 'Estudos Vibe',        icon: GraduationCap },
+  { id: 'ideas',         label: 'Minhas Ideias',       icon: Lightbulb },
+  { id: 'generator',     label: 'Gerador de Ideias',   icon: Cpu },
+  { id: 'tools',         label: 'Jornada SaaS',        icon: Map },
+  { id: 'calculator',    label: 'Calculadora',         icon: Calculator },
+  { id: 'ext-tools',     label: 'Ferramentas Vibe',    icon: Wrench },
+  { id: 'prompts',       label: 'Prompts',             icon: Zap },
+  { id: 'vibe-lab',      label: 'Laboratório Vibe',    icon: FlaskConical },
+  { id: 'platforms',     label: 'Plataformas SaaS',    icon: Rocket },
+  { id: 'ai-support',    label: 'Suporte IA',          icon: MessageSquare },
 ]
 
 export default function NavSidebar({ activeTab, onNavigate, onClose }) {
