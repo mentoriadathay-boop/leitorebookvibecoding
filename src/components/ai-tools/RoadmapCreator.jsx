@@ -5,6 +5,19 @@ import { callAIForJSON } from '../../lib/aiToolsUtils'
 const SYSTEM = `Você é especialista em estratégia de lançamento de SaaS para empreendedores brasileiros.
 Retorne APENAS JSON válido, sem texto extra, sem markdown.`
 
+// Fora do componente pai — evita remontagem/perda de foco a cada render.
+function Select({ label, value, onChange, opts }) {
+  return (
+    <div>
+      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
+      <select value={value} onChange={onChange}
+        className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300">
+        {opts.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+      </select>
+    </div>
+  )
+}
+
 function buildPrompt(form, niche, mvp) {
   const ctx = []
   if (niche) ctx.push(`Nicho: ${niche.input?.nicho}, Problema: ${niche.input?.problema}, Público: ${niche.input?.publico}`)
@@ -77,16 +90,6 @@ export default function RoadmapCreator({ project, onSave, onNext }) {
     setSavedOk(true)
   }
 
-  const Select = ({ label, k, opts }) => (
-    <div>
-      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
-      <select value={form[k]} onChange={e => set(k, e.target.value)}
-        className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300">
-        {opts.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-      </select>
-    </div>
-  )
-
   return (
     <div className="space-y-6">
       {(nicheData || mvpData) && (
@@ -98,17 +101,17 @@ export default function RoadmapCreator({ project, onSave, onNext }) {
       <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
         <h3 className="font-semibold text-sm text-gray-900 dark:text-white mb-4">Seu Perfil</h3>
         <div className="grid sm:grid-cols-2 gap-4">
-          <Select label="Estágio atual" k="estagio" opts={[
+          <Select label="Estágio atual" value={form.estagio} onChange={e => set('estagio', e.target.value)} opts={[
             {value:'iniciante',label:'Iniciante (nunca lancei nada)'},
             {value:'intermediário',label:'Intermediário (já lancei algo)'},
             {value:'avançado',label:'Avançado (tenho receita)'},
           ]} />
-          <Select label="Conhecimento técnico" k="conhecimento" opts={[
+          <Select label="Conhecimento técnico" value={form.conhecimento} onChange={e => set('conhecimento', e.target.value)} opts={[
             {value:'nenhum',label:'Nenhum (só arrasto e solto)'},
             {value:'básico',label:'Básico (já usei Lovable/Bolt)'},
             {value:'intermediário',label:'Intermediário (sei um pouco de código)'},
           ]} />
-          <Select label="Objetivo financeiro" k="objetivo_financeiro" opts={[
+          <Select label="Objetivo financeiro" value={form.objetivo_financeiro} onChange={e => set('objetivo_financeiro', e.target.value)} opts={[
             {value:'renda extra',label:'Renda extra (R$1k-3k/mês)'},
             {value:'substituir salário',label:'Substituir salário (R$5k-15k/mês)'},
             {value:'escalar negócio',label:'Escalar negócio (R$30k+/mês)'},
