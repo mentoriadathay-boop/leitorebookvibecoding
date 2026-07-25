@@ -199,3 +199,57 @@ values (
   'https://hubvibecoding.vercel.app/ebook-cover.png',
   'https://hubvibecoding.vercel.app/ebook-vibe-coding.pdf'
 );
+
+-- Laboratório Vibe (registros de experiências com IA + análise gerada pela IA)
+create table if not exists vibe_lab_entries (
+  id              uuid primary key default gen_random_uuid(),
+  user_id         uuid references auth.users(id) on delete cascade not null,
+  title           text not null,
+  body            text not null,
+  outcome         text not null default 'insight' check (outcome in ('acerto', 'erro', 'insight')),
+  ai_analysis     jsonb,
+  ai_analyzed_at  timestamptz,
+  created_at      timestamptz default now()
+);
+alter table vibe_lab_entries enable row level security;
+create policy "Users manage own lab entries" on vibe_lab_entries
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Plataformas SaaS TFA (cadastradas pelo admin, visíveis a todos usuários)
+create table if not exists saas_platforms (
+  id            uuid primary key default gen_random_uuid(),
+  name          text not null,
+  description   text,
+  logo_url      text,
+  url           text not null,
+  sort_order    integer default 0,
+  published     boolean default true,
+  created_at    timestamptz default now()
+);
+alter table saas_platforms enable row level security;
+create policy "Authenticated read published platforms" on saas_platforms
+  for select to authenticated using (published = true);
+create policy "Admins manage platforms" on saas_platforms
+  for all to authenticated
+  using (exists (select 1 from profiles where id = auth.uid() and role = 'admin'))
+  with check (exists (select 1 from profiles where id = auth.uid() and role = 'admin'));
+
+-- Storage bucket para logos das plataformas
+insert into storage.buckets (id, name, public)
+  values ('platforms', 'platforms', true)
+  on conflict (id) do nothing;
+
+create policy "Public read platforms bucket" on storage.objects
+  for select using (bucket_id = 'platforms');
+create policy "Admins upload platforms bucket" on storage.objects
+  for insert to authenticated with check (
+    bucket_id = 'platforms' and exists (select 1 from profiles where id = auth.uid() and role = 'admin')
+  );
+create policy "Admins update platforms bucket" on storage.objects
+  for update to authenticated using (
+    bucket_id = 'platforms' and exists (select 1 from profiles where id = auth.uid() and role = 'admin')
+  );
+create policy "Admins delete platforms bucket" on storage.objects
+  for delete to authenticated using (
+    bucket_id = 'platforms' and exists (select 1 from profiles where id = auth.uid() and role = 'admin')
+  );

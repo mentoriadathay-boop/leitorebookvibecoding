@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Sparkles, RotateCcw, Bookmark } from 'lucide-react'
+import { Sparkles, RotateCcw, Bookmark, ArrowRight } from 'lucide-react'
 import { askAI } from '../lib/anthropicClient'
 
 const publicoOptions = [
@@ -46,7 +46,7 @@ function fallbackIdeas(nicho, dor, publico) {
   ]
 }
 
-export default function IdeaGenerator({ onSaveIdea }) {
+export default function IdeaGenerator({ onSaveIdea, onSendToJourney }) {
   const [nicho, setNicho] = useState('')
   const [dor, setDor] = useState('')
   const [publico, setPublico] = useState(publicoOptions[0])
@@ -207,18 +207,28 @@ export default function IdeaGenerator({ onSaveIdea }) {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => handleSave(idea, i)}
-                  disabled={saved[i]}
-                  className={`flex items-center gap-1.5 text-xs px-4 py-2 rounded-lg border transition-all ${
-                    saved[i]
-                      ? 'bg-success-100 text-success-700 border-success-300 dark:bg-success-900/20 dark:text-success-300'
-                      : 'border-[#5B2A6E] text-[#5B2A6E] hover:bg-[#F2E4FA] dark:hover:bg-[#3E1B4D]/20'
-                  }`}
-                >
-                  <Bookmark size={12} />
-                  {saved[i] ? 'Ideia salva!' : 'Salvar esta ideia'}
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={() => handleSave(idea, i)}
+                    disabled={saved[i]}
+                    className={`flex items-center gap-1.5 text-xs px-4 py-2 rounded-lg border transition-all ${
+                      saved[i]
+                        ? 'bg-success-100 text-success-700 border-success-300 dark:bg-success-900/20 dark:text-success-300'
+                        : 'border-[#5B2A6E] text-[#5B2A6E] hover:bg-[#F2E4FA] dark:hover:bg-[#3E1B4D]/20'
+                    }`}
+                  >
+                    <Bookmark size={12} />
+                    {saved[i] ? 'Ideia salva!' : 'Salvar esta ideia'}
+                  </button>
+                  {onSendToJourney && (
+                    <button
+                      onClick={() => onSendToJourney({ idea, form: { nicho, dor, publico } })}
+                      className="flex items-center gap-1.5 text-xs px-4 py-2 rounded-lg bg-[#3E1B4D] hover:bg-[#5B2A6E] text-white transition-all"
+                    >
+                      Levar pra Jornada SaaS <ArrowRight size={12} />
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>

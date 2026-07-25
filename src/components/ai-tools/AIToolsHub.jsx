@@ -1,7 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Plus, ChevronDown, Trash2, ArrowLeft, Target, Cpu, Map, Layout, TrendingUp, CheckCircle, Circle, Loader2 } from 'lucide-react'
 import { useProjects } from '../../hooks/useProjects'
-import { supabase } from '../../lib/supabaseClient'
 import NicheValidator from './NicheValidator'
 import MVPGenerator from './MVPGenerator'
 import RoadmapCreator from './RoadmapCreator'
@@ -41,13 +40,36 @@ const TOOLS = [
   },
 ]
 
-export default function AIToolsHub({ userId }) {
+export default function AIToolsHub({ userId, seed, onSeedConsumed }) {
   const { projects, activeProject, setActiveProject, loading, createProject, saveToolData, deleteProject } = useProjects(userId)
   const [activeTool, setActiveTool] = useState(null)
   const [creating, setCreating] = useState(false)
   const [newName, setNewName] = useState('')
   const [showDropdown, setShowDropdown] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [nicheSeed, setNicheSeed] = useState(null)
+
+  // Quando o usuário chega vindo do Gerador de Ideias com uma ideia, cria um
+  // projeto novo com o nome da ideia e leva direto pro Validador de Nicho
+  // já pré-preenchido.
+  useEffect(() => {
+    if (!seed || loading) return
+    (async () => {
+      const created = await createProject(seed.idea?.title || 'Nova ideia')
+      if (created) {
+        setNicheSeed({
+          problema: seed.form?.dor || '',
+          publico: seed.form?.publico || '',
+          nicho: seed.form?.nicho || '',
+          transformacao: seed.idea?.body || '',
+          concorrentes: '',
+          solucao_atual: '',
+        })
+        setActiveTool(0)
+      }
+      onSeedConsumed?.()
+    })()
+  }, [seed, loading]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCreate = async () => {
     if (!newName.trim()) return
@@ -87,6 +109,9 @@ export default function AIToolsHub({ userId }) {
       project: activeProject,
       onSave: handleSaveToolData,
       onNext: () => handleNext(activeTool),
+      // Só o Validador de Nicho recebe seed (as demais ferramentas puxam do
+      // projeto pelo project.niche_data etc.)
+      ...(activeTool === 0 ? { seed: nicheSeed, onSeedConsumed: () => setNicheSeed(null) } : {}),
     }
     const components = [NicheValidator, MVPGenerator, RoadmapCreator, LandingPageAI, MonetizationDiag]
     const ToolComponent = components[activeTool]

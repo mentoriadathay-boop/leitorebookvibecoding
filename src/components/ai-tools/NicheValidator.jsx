@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Loader2, RefreshCw, Save, ArrowRight, CheckCircle, AlertCircle, TrendingUp, Lightbulb } from 'lucide-react'
 import { callAIForJSON } from '../../lib/aiToolsUtils'
 
@@ -98,7 +98,7 @@ function Select({ label, value, onChange, opts }) {
   )
 }
 
-export default function NicheValidator({ project, onSave, onNext }) {
+export default function NicheValidator({ project, onSave, onNext, seed, onSeedConsumed }) {
   const saved = project?.niche_data
   const [form, setForm] = useState({
     problema: saved?.input?.problema || '',
@@ -118,6 +118,16 @@ export default function NicheValidator({ project, onSave, onNext }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [saved_ok, setSavedOk] = useState(!!saved)
+
+  // Pré-preenche o formulário quando vem uma ideia do Gerador de Ideias.
+  useEffect(() => {
+    if (!seed) return
+    setForm(prev => ({
+      ...prev,
+      ...Object.fromEntries(Object.entries(seed).filter(([, v]) => v)),
+    }))
+    onSeedConsumed?.()
+  }, [seed]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }))
 

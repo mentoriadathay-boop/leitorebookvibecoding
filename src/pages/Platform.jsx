@@ -13,22 +13,31 @@ import Onboarding from '../components/Onboarding'
 import Ebooks from '../components/Ebooks'
 import IdeasSection from '../components/IdeasSection'
 import IdeaGenerator from '../components/IdeaGenerator'
+import VibeLab from '../components/VibeLab'
+import SaasPlatforms from '../components/SaasPlatforms'
 import { useStreak } from '../hooks/useStreak'
 import { useIdeas } from '../hooks/useIdeas'
 
 export default function Platform({ user, profile, onAdminClick }) {
-  const [activeTab, setActiveTab] = useState('ebooks')
+  const [activeTab, setActiveTab] = useState('ideas')
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [leftPanelOpen, setLeftPanelOpen] = useState(true)
   const [rightPanelOpen, setRightPanelOpen] = useState(false)
   const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem('welcomeSeen'))
+  const [journeySeed, setJourneySeed] = useState(null)
 
   const streak = useStreak()
   const { ideas, saveIdea, deleteIdea } = useIdeas(user?.id)
 
   const handleNavigate = (tab) => {
     setActiveTab(tab)
+    setDrawerOpen(false)
+  }
+
+  const sendIdeaToJourney = (payload) => {
+    setJourneySeed(payload)
+    setActiveTab('tools')
     setDrawerOpen(false)
   }
 
@@ -121,15 +130,27 @@ export default function Platform({ user, profile, onAdminClick }) {
               />
             )}
 
-            {activeTab === 'generator' && <IdeaGenerator onSaveIdea={saveIdea} />}
+            {activeTab === 'generator' && (
+              <IdeaGenerator onSaveIdea={saveIdea} onSendToJourney={sendIdeaToJourney} />
+            )}
 
-            {activeTab === 'tools' && <AIToolsHub userId={user?.id} />}
+            {activeTab === 'tools' && (
+              <AIToolsHub
+                userId={user?.id}
+                seed={journeySeed}
+                onSeedConsumed={() => setJourneySeed(null)}
+              />
+            )}
 
             {activeTab === 'ext-tools' && <ToolsSection />}
 
             {activeTab === 'email' && <EmailMarketing />}
 
-            {activeTab === 'calculator' && <RevenueCalculator />}
+            {activeTab === 'calculator' && <RevenueCalculator ideas={ideas} />}
+
+            {activeTab === 'vibe-lab' && <VibeLab userId={user?.id} />}
+
+            {activeTab === 'platforms' && <SaasPlatforms />}
 
             {activeTab === 'ai-support' && (
               <div className="max-w-2xl mx-auto space-y-4">
