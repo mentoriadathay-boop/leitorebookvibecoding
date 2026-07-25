@@ -5,6 +5,22 @@ import { callAIForJSON } from '../../lib/aiToolsUtils'
 const SYSTEM = `Você é especialista em desenvolvimento de MVPs para SaaS com Vibe Coding.
 Retorne APENAS JSON válido, sem texto extra, sem markdown.`
 
+// Fora do componente pai — se ficar dentro do render, o React remonta o input
+// a cada tecla e o campo perde o foco.
+function Field({ label, value, onChange, placeholder, multiline }) {
+  return (
+    <div>
+      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
+      {multiline
+        ? <textarea value={value} onChange={onChange} placeholder={placeholder} rows={2}
+            className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400 resize-none" />
+        : <input value={value} onChange={onChange} placeholder={placeholder}
+            className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
+      }
+    </div>
+  )
+}
+
 function buildPrompt(form, niche) {
   const nicheCtx = niche ? `
 Dados do nicho validado:
@@ -85,18 +101,6 @@ export default function MVPGenerator({ project, onSave, onNext }) {
     setSavedOk(true)
   }
 
-  const Field = ({ label, k, placeholder, multiline }) => (
-    <div>
-      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
-      {multiline
-        ? <textarea value={form[k]} onChange={e => set(k, e.target.value)} placeholder={placeholder} rows={2}
-            className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400 resize-none" />
-        : <input value={form[k]} onChange={e => set(k, e.target.value)} placeholder={placeholder}
-            className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
-      }
-    </div>
-  )
-
   return (
     <div className="space-y-6">
       {nicheData && (
@@ -108,10 +112,10 @@ export default function MVPGenerator({ project, onSave, onNext }) {
       <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
         <h3 className="font-semibold text-sm text-gray-900 dark:text-white mb-4">Dados do Projeto</h3>
         <div className="grid sm:grid-cols-2 gap-4">
-          <Field label="Nome do projeto *" k="nome" placeholder="Ex: ContractFlow" />
-          <Field label="Tipo de usuário *" k="tipo_usuario" placeholder="Ex: designer freelancer" />
-          <Field label="Objetivo principal *" k="objetivo" placeholder="Ex: enviar e assinar contratos em 2 min" multiline />
-          <Field label="Problema principal" k="problema" placeholder="Ex: criar contratos é burocrático e lento" multiline />
+          <Field label="Nome do projeto *" value={form.nome} onChange={e => set('nome', e.target.value)} placeholder="Ex: ContractFlow" />
+          <Field label="Tipo de usuário *" value={form.tipo_usuario} onChange={e => set('tipo_usuario', e.target.value)} placeholder="Ex: designer freelancer" />
+          <Field label="Objetivo principal *" value={form.objetivo} onChange={e => set('objetivo', e.target.value)} placeholder="Ex: enviar e assinar contratos em 2 min" multiline />
+          <Field label="Problema principal" value={form.problema} onChange={e => set('problema', e.target.value)} placeholder="Ex: criar contratos é burocrático e lento" multiline />
         </div>
         {error && <p className="mt-3 text-xs text-coral-600 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
         <button onClick={generate} disabled={loading}

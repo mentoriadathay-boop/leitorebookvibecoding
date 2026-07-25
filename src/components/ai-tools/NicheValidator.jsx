@@ -70,6 +70,34 @@ function ResultCard({ title, children }) {
   )
 }
 
+// Definidos fora do componente pai — se ficarem dentro do render, o React
+// recria o tipo a cada tecla digitada, remonta o input e faz perder o foco.
+function Field({ label, value, onChange, placeholder, multiline }) {
+  return (
+    <div>
+      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
+      {multiline
+        ? <textarea value={value} onChange={onChange} placeholder={placeholder} rows={2}
+            className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400 resize-none" />
+        : <input value={value} onChange={onChange} placeholder={placeholder}
+            className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
+      }
+    </div>
+  )
+}
+
+function Select({ label, value, onChange, opts }) {
+  return (
+    <div>
+      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
+      <select value={value} onChange={onChange}
+        className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300">
+        {opts.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+      </select>
+    </div>
+  )
+}
+
 export default function NicheValidator({ project, onSave, onNext }) {
   const saved = project?.niche_data
   const [form, setForm] = useState({
@@ -110,46 +138,24 @@ export default function NicheValidator({ project, onSave, onNext }) {
     setSavedOk(true)
   }
 
-  const Field = ({ label, k, placeholder, multiline }) => (
-    <div>
-      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
-      {multiline
-        ? <textarea value={form[k]} onChange={e => set(k, e.target.value)} placeholder={placeholder} rows={2}
-            className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400 resize-none" />
-        : <input value={form[k]} onChange={e => set(k, e.target.value)} placeholder={placeholder}
-            className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 placeholder-gray-400" />
-      }
-    </div>
-  )
-
-  const Select = ({ label, k, opts }) => (
-    <div>
-      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
-      <select value={form[k]} onChange={e => set(k, e.target.value)}
-        className="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:border-[#5B2A6E] bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300">
-        {opts.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-      </select>
-    </div>
-  )
-
   return (
     <div className="space-y-6">
       {/* Form */}
       <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
         <h3 className="font-semibold text-sm text-gray-900 dark:text-white mb-4">Dados do Nicho</h3>
         <div className="grid sm:grid-cols-2 gap-4">
-          <Field label="Qual problema resolve? *" k="problema" placeholder="Ex: freelancers perdem tempo com contratos" multiline />
-          <Field label="Para quem? *" k="publico" placeholder="Ex: designers e fotógrafos autônomos" multiline />
-          <Field label="Qual nicho? *" k="nicho" placeholder="Ex: gestão de contratos para criativos" />
-          <Field label="Já existem concorrentes?" k="concorrentes" placeholder="Ex: Honeybook, Dubsado (mas caros)" />
-          <Field label="Como resolvem hoje?" k="solucao_atual" placeholder="Ex: planilhas, WhatsApp e e-mail" multiline />
-          <Field label="Qual transformação entrega?" k="transformacao" placeholder="Ex: contratos assinados em 2 minutos" multiline />
-          <Select label="É recorrente?" k="recorrente" opts={[{value:'sim',label:'Sim'},{value:'não',label:'Não'}]} />
-          <Select label="Resolve dor urgente?" k="dor_urgente" opts={[{value:'sim',label:'Sim'},{value:'não',label:'Não'}]} />
-          <Select label="Ticket possível?" k="ticket" opts={[{value:'baixo',label:'Baixo (até R$50/mês)'},{value:'médio',label:'Médio (R$50-200/mês)'},{value:'alto',label:'Alto (R$200+/mês)'}]} />
-          <Select label="Público compra online?" k="compra_online" opts={[{value:'sim',label:'Sim'},{value:'não',label:'Não'},{value:'parcialmente',label:'Parcialmente'}]} />
-          <Select label="Existe comunidade ativa?" k="comunidade" opts={[{value:'sim',label:'Sim'},{value:'não',label:'Não'}]} />
-          <Field label="O nicho cresce ou está saturado?" k="crescimento" placeholder="Ex: cresce com boom de freelancers pós-pandemia" />
+          <Field label="Qual problema resolve? *" value={form.problema} onChange={e => set('problema', e.target.value)} placeholder="Ex: freelancers perdem tempo com contratos" multiline />
+          <Field label="Para quem? *" value={form.publico} onChange={e => set('publico', e.target.value)} placeholder="Ex: designers e fotógrafos autônomos" multiline />
+          <Field label="Qual nicho? *" value={form.nicho} onChange={e => set('nicho', e.target.value)} placeholder="Ex: gestão de contratos para criativos" />
+          <Field label="Já existem concorrentes?" value={form.concorrentes} onChange={e => set('concorrentes', e.target.value)} placeholder="Ex: Honeybook, Dubsado (mas caros)" />
+          <Field label="Como resolvem hoje?" value={form.solucao_atual} onChange={e => set('solucao_atual', e.target.value)} placeholder="Ex: planilhas, WhatsApp e e-mail" multiline />
+          <Field label="Qual transformação entrega?" value={form.transformacao} onChange={e => set('transformacao', e.target.value)} placeholder="Ex: contratos assinados em 2 minutos" multiline />
+          <Select label="É recorrente?" value={form.recorrente} onChange={e => set('recorrente', e.target.value)} opts={[{value:'sim',label:'Sim'},{value:'não',label:'Não'}]} />
+          <Select label="Resolve dor urgente?" value={form.dor_urgente} onChange={e => set('dor_urgente', e.target.value)} opts={[{value:'sim',label:'Sim'},{value:'não',label:'Não'}]} />
+          <Select label="Ticket possível?" value={form.ticket} onChange={e => set('ticket', e.target.value)} opts={[{value:'baixo',label:'Baixo (até R$50/mês)'},{value:'médio',label:'Médio (R$50-200/mês)'},{value:'alto',label:'Alto (R$200+/mês)'}]} />
+          <Select label="Público compra online?" value={form.compra_online} onChange={e => set('compra_online', e.target.value)} opts={[{value:'sim',label:'Sim'},{value:'não',label:'Não'},{value:'parcialmente',label:'Parcialmente'}]} />
+          <Select label="Existe comunidade ativa?" value={form.comunidade} onChange={e => set('comunidade', e.target.value)} opts={[{value:'sim',label:'Sim'},{value:'não',label:'Não'}]} />
+          <Field label="O nicho cresce ou está saturado?" value={form.crescimento} onChange={e => set('crescimento', e.target.value)} placeholder="Ex: cresce com boom de freelancers pós-pandemia" />
         </div>
         {error && <p className="mt-3 text-xs text-coral-600 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
         <button
