@@ -165,7 +165,7 @@ export default function SalesPage() {
       </header>
 
       {/* ── Hero ─── Gradiente Mágico (destaque total) ────────────── */}
-      <section className="relative overflow-hidden" style={{ background: gradientMagic }}>
+      <section className="relative overflow-hidden gradient-flow" style={{ background: gradientMagic }}>
         {/* Overlay decorativo sutil */}
         <div className="absolute inset-0 opacity-20 pointer-events-none"
           style={{ background: 'radial-gradient(circle at 20% 30%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255,217,102,0.2) 0%, transparent 50%)' }} />
@@ -191,7 +191,7 @@ export default function SalesPage() {
             </Btn>
           </div>
           <p className="text-xs text-white/80">
-            <span className="inline-block px-2 py-0.5 rounded-full mr-1" style={{ background: C.goldSoft, color: C.ink }}>GRÁTIS</span>
+            <span className="inline-block px-2 py-0.5 rounded-full mr-1 soft-pulse" style={{ background: C.goldSoft, color: C.ink }}>GRÁTIS</span>
             por tempo limitado · sem cartão · acesso imediato
           </p>
         </div>
@@ -225,8 +225,9 @@ export default function SalesPage() {
             { icon: Target,  title: 'Não sabe qual ferramenta usar', desc: 'Cursor? Lovable? Bolt? Cada dia sai uma nova promessa e você fica sem saber por onde começar.' },
             { icon: TrendingUp, title: 'Trava na monetização', desc: 'Cria o produto, mas não sabe cobrar quanto, como vender, nem quem é o público certo.' },
           ].map((d, i) => (
-            <div key={i} className="rounded-2xl p-6" style={{ backgroundColor: C.sand, border: cardBorder }}>
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: C.lilacBaby }}>
+            <div key={i} className="rounded-2xl p-6 reveal-up hover-lift"
+              style={{ backgroundColor: C.sand, border: cardBorder, animationDelay: `${i * 120}ms` }}>
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 float-y" style={{ backgroundColor: C.lilacBaby, animationDelay: `${i * 400}ms` }}>
                 <d.icon size={20} style={{ color: C.magic }} />
               </div>
               <h3 className="font-playfair font-bold text-lg mb-2" style={{ color: C.ink }}>{d.title}</h3>
@@ -263,8 +264,9 @@ export default function SalesPage() {
           </p>
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {MODULES.map((m) => (
-            <div key={m.title} className="rounded-2xl p-5 flex flex-col" style={{ backgroundColor: C.sand, border: cardBorder }}>
+          {MODULES.map((m, i) => (
+            <div key={m.title} className="rounded-2xl p-5 flex flex-col reveal-up hover-lift"
+              style={{ backgroundColor: C.sand, border: cardBorder, animationDelay: `${i * 70}ms` }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: gradientMagic }}>
                 <m.icon size={18} className="text-white" />
               </div>
@@ -282,8 +284,9 @@ export default function SalesPage() {
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {STEPS.map((s, i) => (
-            <div key={i} className="rounded-2xl p-6 text-center" style={{ backgroundColor: C.lilac, border: cardBorder }}>
-              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 font-playfair font-bold text-2xl text-white" style={{ background: gradientMagic }}>
+            <div key={i} className="rounded-2xl p-6 text-center reveal-up hover-lift"
+              style={{ backgroundColor: C.lilac, border: cardBorder, animationDelay: `${i * 150}ms` }}>
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 font-playfair font-bold text-2xl text-white gradient-flow" style={{ background: gradientMagic }}>
                 {s.n}
               </div>
               <h3 className="font-playfair font-bold text-lg mb-2" style={{ color: C.ink }}>{s.title}</h3>
@@ -296,7 +299,7 @@ export default function SalesPage() {
       {/* ── Autoridade / Sobre ────────────────────────────────────── */}
       <Section bg={C.lilac} id="sobre">
         <div className="grid md:grid-cols-[220px_1fr] gap-8 items-center">
-          <div className="rounded-2xl aspect-square mx-auto md:mx-0 flex items-center justify-center overflow-hidden shadow-xl w-48 md:w-full" style={{ background: gradientMagic }}>
+          <div className="rounded-2xl aspect-square mx-auto md:mx-0 flex items-center justify-center overflow-hidden shadow-xl w-48 md:w-full gradient-flow shimmer" style={{ background: gradientMagic }}>
             <span className="font-playfair font-bold text-5xl text-white">TF</span>
           </div>
           <div>
@@ -319,7 +322,7 @@ export default function SalesPage() {
 
       {/* ── Oferta principal ──────────────────────────────────────── */}
       <Section bg={C.sand} id="oferta">
-        <div className="rounded-3xl overflow-hidden shadow-2xl" style={{ background: gradientMagic }}>
+        <div className="rounded-3xl overflow-hidden shadow-2xl gradient-flow shimmer" style={{ background: gradientMagic }}>
           <div className="p-8 md:p-12 text-center text-white">
             <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-4" style={{ background: C.goldSoft, color: C.ink }}>
               🎁 Período de lançamento
@@ -361,7 +364,8 @@ export default function SalesPage() {
         </div>
         <div className="grid md:grid-cols-2 gap-3 max-w-3xl mx-auto">
           {BONUSES.map((b, i) => (
-            <div key={i} className="flex items-start gap-3 rounded-xl px-4 py-3" style={{ backgroundColor: C.sand, border: cardBorder }}>
+            <div key={i} className="flex items-start gap-3 rounded-xl px-4 py-3 reveal-up hover-lift"
+              style={{ backgroundColor: C.sand, border: cardBorder, animationDelay: `${i * 90}ms` }}>
               <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: C.lilacBaby }}>
                 <CheckCircle2 size={16} style={{ color: C.magic }} />
               </div>
@@ -374,7 +378,7 @@ export default function SalesPage() {
       {/* ── Garantia ─────────────────────────────────────────────── */}
       <Section bg={C.sand}>
         <div className="max-w-2xl mx-auto text-center">
-          <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-white" style={{ background: gradientMagic }}>
+          <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-white float-y gradient-flow" style={{ background: gradientMagic }}>
             <ShieldCheck size={36} />
           </div>
           <h2 className="font-playfair font-bold text-2xl md:text-3xl mb-3" style={{ color: C.ink }}>
@@ -398,7 +402,7 @@ export default function SalesPage() {
       </Section>
 
       {/* ── CTA final ─────────────────────────────────────────────── */}
-      <section style={{ background: gradientMagic }} className="py-16 md:py-20 px-4">
+      <section style={{ background: gradientMagic }} className="py-16 md:py-20 px-4 gradient-flow">
         <div className="max-w-3xl mx-auto text-center text-white">
           <Star size={36} className="mx-auto mb-4" style={{ color: C.goldSoft }} />
           <h2 className="font-playfair font-bold text-3xl md:text-5xl mb-4 text-white">

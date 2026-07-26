@@ -94,3 +94,82 @@
   transition: background 0.3s;
 }
 .dark .focused-para { background: rgba(255,253,231,0.07) !important; }
+
+/* ── Animações da landing /hub ──────────────────────────────────────────── */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes softPulse {
+  0%, 100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(245, 185, 66, 0.4); }
+  50%      { transform: scale(1.03); box-shadow: 0 0 0 12px rgba(245, 185, 66, 0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Aparece de baixo com stagger — o delay é aplicado via style inline no card */
+.reveal-up {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Hover elevado — usar em cards */
+.hover-lift {
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.28s ease;
+  will-change: transform;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px -12px rgba(91, 42, 110, 0.28);
+  border-color: rgba(91, 42, 110, 0.35) !important;
+}
+
+/* Ícone do card com flutuação sutil (respeita prefers-reduced-motion) */
+.float-y  { animation: floatY 5s ease-in-out infinite; }
+
+/* Gradiente “vivo” — usado no hero */
+.gradient-flow {
+  background-size: 200% 200%;
+  animation: gradientShift 14s ease infinite;
+}
+
+/* Selo/badge com pulso suave — usado no selo GRÁTIS do hero */
+.soft-pulse { animation: softPulse 2.6s ease-in-out infinite; }
+
+/* Brilho passando por cima (glass shimmer) */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 25%, rgba(255,255,255,0.18) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 4.5s linear infinite;
+  pointer-events: none;
+}
+
+/* Respeita usuários que preferem menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up, .float-y, .gradient-flow, .soft-pulse, .shimmer::after {
+    animation: none !important;
+  }
+  .hover-lift { transition: none; }
+  .reveal-up { opacity: 1; }
+}
