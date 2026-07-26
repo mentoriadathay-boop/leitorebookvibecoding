@@ -173,7 +173,7 @@ export default function SalesPage() {
         <div className="relative max-w-6xl mx-auto px-4 py-20 md:py-32 text-center text-white">
           <span className="inline-flex items-center gap-1.5 text-[10px] md:text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-6"
             style={{ background: C.goldSoft, color: C.ink }}>
-            <Sparkles size={12} /> TFA · Soluções com IA
+            <Sparkles size={12} /> Hub do Vibe Coding
           </span>
           <h1 className="font-playfair font-bold text-3xl md:text-5xl lg:text-6xl leading-tight mb-6 text-white">
             Crie seu SaaS com IA<br className="hidden sm:block" /> em semanas — não em meses
