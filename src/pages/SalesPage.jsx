@@ -19,6 +19,9 @@ const C = {
 }
 const gradientMagic = `linear-gradient(135deg, ${C.magic} 0%, ${C.blossom} 60%, ${C.gold} 100%)`
 
+// Contorno padrão pros cards da landing — Roxo Magia com baixa opacidade.
+const cardBorder = `1px solid ${C.magic}22`
+
 // ── Dados ──────────────────────────────────────────────────────────────────
 const MODULES = [
   { icon: GraduationCap, title: 'Estudos Vibe', desc: 'Ebooks, audiobooks, newsletters e vídeos curados sobre IA e vibe coding.' },
@@ -93,7 +96,7 @@ function Btn({ children, onClick, variant = 'primary', size = 'md' }) {
 function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false)
   return (
-    <div className="rounded-2xl border overflow-hidden" style={{ borderColor: C.lavender, backgroundColor: '#FFFFFF' }}>
+    <div className="rounded-2xl overflow-hidden" style={{ border: cardBorder, backgroundColor: '#FFFFFF' }}>
       <button onClick={() => setOpen(o => !o)}
         className="w-full flex items-center justify-between text-left px-5 py-4 hover:opacity-90 transition-opacity">
         <span className="font-semibold text-sm md:text-base" style={{ color: C.ink }}>{q}</span>
@@ -222,7 +225,7 @@ export default function SalesPage() {
             { icon: Target,  title: 'Não sabe qual ferramenta usar', desc: 'Cursor? Lovable? Bolt? Cada dia sai uma nova promessa e você fica sem saber por onde começar.' },
             { icon: TrendingUp, title: 'Trava na monetização', desc: 'Cria o produto, mas não sabe cobrar quanto, como vender, nem quem é o público certo.' },
           ].map((d, i) => (
-            <div key={i} className="rounded-2xl p-6" style={{ backgroundColor: C.sand }}>
+            <div key={i} className="rounded-2xl p-6" style={{ backgroundColor: C.sand, border: cardBorder }}>
               <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: C.lilacBaby }}>
                 <d.icon size={20} style={{ color: C.magic }} />
               </div>
@@ -261,7 +264,7 @@ export default function SalesPage() {
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {MODULES.map((m) => (
-            <div key={m.title} className="rounded-2xl p-5 flex flex-col" style={{ backgroundColor: C.sand }}>
+            <div key={m.title} className="rounded-2xl p-5 flex flex-col" style={{ backgroundColor: C.sand, border: cardBorder }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: gradientMagic }}>
                 <m.icon size={18} className="text-white" />
               </div>
@@ -279,7 +282,7 @@ export default function SalesPage() {
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {STEPS.map((s, i) => (
-            <div key={i} className="rounded-2xl p-6 text-center" style={{ backgroundColor: C.lilac, border: `1px solid ${C.lavender}` }}>
+            <div key={i} className="rounded-2xl p-6 text-center" style={{ backgroundColor: C.lilac, border: cardBorder }}>
               <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 font-playfair font-bold text-2xl text-white" style={{ background: gradientMagic }}>
                 {s.n}
               </div>
@@ -358,7 +361,7 @@ export default function SalesPage() {
         </div>
         <div className="grid md:grid-cols-2 gap-3 max-w-3xl mx-auto">
           {BONUSES.map((b, i) => (
-            <div key={i} className="flex items-start gap-3 rounded-xl px-4 py-3" style={{ backgroundColor: C.sand }}>
+            <div key={i} className="flex items-start gap-3 rounded-xl px-4 py-3" style={{ backgroundColor: C.sand, border: cardBorder }}>
               <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: C.lilacBaby }}>
                 <CheckCircle2 size={16} style={{ color: C.magic }} />
               </div>
