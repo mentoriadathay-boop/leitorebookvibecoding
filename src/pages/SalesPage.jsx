@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Sparkles, ArrowRight, CheckCircle2, Lightbulb, Cpu, Map, Calculator, Wrench, Zap,
   FlaskConical, Rocket, MessageSquare, GraduationCap, ShieldCheck, Star, ChevronDown,
@@ -6,18 +6,18 @@ import {
 } from 'lucide-react'
 import SignupForm from '../components/SignupForm'
 
-// ── Paleta como constantes (aplica a regra de contraste rigorosamente) ──────
+// ── Paleta enxuta (só o essencial) ─────────────────────────────────────────
 const C = {
   magic: '#5B2A6E', magicDark: '#3E1B4D',
-  blossom: '#C2298A', blossomLight: '#E0459E',
+  blossom: '#C2298A',
   gold: '#F5B942', goldSoft: '#FFD966',
-  sand: '#F7F6F3', lilac: '#F7EEFB', lilacBaby: '#F2E4FA',
-  pinkBaby: '#FCE4F1', cream: '#FFF6E0', lavender: '#EDE7F6',
+  sand: '#F7F6F3',            // Areia Clara — fundo padrão
+  lilac: '#F7EEFB',           // Lilás Alva — fundo alternativo
+  lilacBaby: '#F2E4FA',       // Lilás Bebê — cards de destaque
+  lavender: '#EDE7F6',        // Lavanda Suave — painéis
   ink: '#2E1338', inkMuted: '#7A6584',
-  success: '#7FBF8F', coral: '#F2A488',
 }
 const gradientMagic = `linear-gradient(135deg, ${C.magic} 0%, ${C.blossom} 60%, ${C.gold} 100%)`
-const gradientSoft = `linear-gradient(135deg, ${C.lilacBaby} 0%, ${C.pinkBaby} 100%)`
 
 // ── Dados ──────────────────────────────────────────────────────────────────
 const MODULES = [
@@ -36,10 +36,11 @@ const MODULES = [
 const STEPS = [
   { n: '1', title: 'Crie sua conta grátis', desc: 'Cadastro rápido, sem cartão. Confirma o e-mail e já está dentro.' },
   { n: '2', title: 'Escolha seu caminho', desc: 'Da ideia à monetização — cada módulo puxa dados do anterior pra você não recomeçar do zero.' },
-  { n: '3', title: 'Publique seu SaaS', desc: 'Use os prompts, a Jornada SaaS e as Plataformas TFA como trampolim pra sair do papel.' },
+  { n: '3', title: 'Crie seu SaaS ou Soluções para o seu Negócio', desc: 'Use os prompts, a Jornada SaaS e as Plataformas TFA como trampolim pra sair do papel.' },
 ]
 
 const BONUSES = [
+  'Jornada SaaS completa (5 ferramentas de IA conectadas)',
   'Biblioteca completa de prompts prontos para vibe coding',
   'Newsletters exclusivas com bastidores e novidades semanais',
   'Acesso ao programa de afiliados TFA (40% de comissão recorrente)',
@@ -48,7 +49,7 @@ const BONUSES = [
 ]
 
 const FAQ = [
-  { q: 'A plataforma é realmente gratuita?', a: 'Sim — durante o período de lançamento você tem acesso completo a todos os módulos sem pagar nada. Depois disso, o acesso passa a ser R$ 97/mês para novos assinantes, mas quem entrou no período gratuito mantém condições especiais.' },
+  { q: 'A plataforma é realmente gratuita?', a: 'Sim — a maioria dos conteúdos são gratuitos e algumas funções são exclusivas para membros.' },
   { q: 'Preciso saber programar pra usar?', a: 'Não. O Hub Vibe Coding foi desenhado pra quem quer criar SaaS com IA (vibe coding) — mesmo sem experiência prévia com código. A gente te guia com prompts, jornadas e ferramentas visuais.' },
   { q: 'Vou receber acesso na hora?', a: 'Sim. Após confirmar seu e-mail pelo link que te enviamos, o acesso é liberado imediatamente.' },
   { q: 'Que tipo de SaaS posso criar?', a: 'Qualquer produto digital com receita recorrente — desde ferramentas simples pra nichos específicos até plataformas mais complexas. O foco é te ajudar a validar, construir e monetizar.' },
@@ -56,11 +57,19 @@ const FAQ = [
   { q: 'Como funciona o suporte?', a: 'Você tem uma IA dedicada dentro da plataforma pra tirar dúvidas 24/7, além do canal de suporte via WhatsApp com nossa equipe.' },
 ]
 
+const NAV_SECTIONS = [
+  { id: 'modulos',    label: 'Recursos' },
+  { id: 'como',       label: 'Como funciona' },
+  { id: 'sobre',      label: 'Sobre' },
+  { id: 'oferta',     label: 'Oferta' },
+  { id: 'faq',        label: 'FAQ' },
+]
+
 // ── Componentes ─────────────────────────────────────────────────────────────
 
-function Section({ bg, children, className = '' }) {
+function Section({ bg, children, className = '', id }) {
   return (
-    <section style={{ backgroundColor: bg }} className={`py-16 md:py-20 px-4 ${className}`}>
+    <section id={id} style={{ backgroundColor: bg }} className={`py-16 md:py-20 px-4 scroll-mt-24 ${className}`}>
       <div className="max-w-6xl mx-auto">{children}</div>
     </section>
   )
@@ -73,7 +82,6 @@ function Btn({ children, onClick, variant = 'primary', size = 'md' }) {
     primary: { background: '#FFFFFF', color: C.magicDark },
     magic:   { background: gradientMagic, color: '#FFFFFF' },
     outline: { background: 'transparent', color: '#FFFFFF', border: `2px solid #FFFFFF` },
-    solid:   { background: C.magic, color: '#FFFFFF' },
   }
   return (
     <button onClick={onClick} className={`${base} ${sizes[size]} hover:opacity-90 hover:scale-[1.02]`} style={styles[variant]}>
@@ -100,7 +108,19 @@ function FaqItem({ q, a }) {
 
 export default function SalesPage() {
   const [signup, setSignup] = useState(false)
+  const [showSubnav, setShowSubnav] = useState(false)
   const openSignup = () => setSignup(true)
+
+  // Só mostra o menu de âncoras depois de sair do hero — evita competição visual.
+  useEffect(() => {
+    const onScroll = () => setShowSubnav(window.scrollY > 400)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
     <div className="font-dm" style={{ backgroundColor: C.sand, color: C.ink }}>
@@ -125,11 +145,29 @@ export default function SalesPage() {
             </button>
           </div>
         </div>
+        {/* Sub-nav de âncoras — aparece só depois do hero */}
+        {showSubnav && (
+          <div className="border-t hidden md:block" style={{ borderColor: C.lavender, backgroundColor: `${C.sand}f2` }}>
+            <div className="max-w-6xl mx-auto flex items-center justify-center gap-6 px-4 h-10">
+              {NAV_SECTIONS.map(s => (
+                <button key={s.id} onClick={() => scrollTo(s.id)}
+                  className="text-xs font-medium hover:opacity-70 transition-opacity"
+                  style={{ color: C.inkMuted }}>
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </header>
 
-      {/* ── Hero ───────────────────────────────────────────────────── */}
+      {/* ── Hero ─── Gradiente Mágico (destaque total) ────────────── */}
       <section className="relative overflow-hidden" style={{ background: gradientMagic }}>
-        <div className="max-w-6xl mx-auto px-4 py-20 md:py-28 text-center text-white">
+        {/* Overlay decorativo sutil */}
+        <div className="absolute inset-0 opacity-20 pointer-events-none"
+          style={{ background: 'radial-gradient(circle at 20% 30%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255,217,102,0.2) 0%, transparent 50%)' }} />
+
+        <div className="relative max-w-6xl mx-auto px-4 py-20 md:py-32 text-center text-white">
           <span className="inline-flex items-center gap-1.5 text-[10px] md:text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-6"
             style={{ background: C.goldSoft, color: C.ink }}>
             <Sparkles size={12} /> TFA · Soluções com IA
@@ -137,7 +175,7 @@ export default function SalesPage() {
           <h1 className="font-playfair font-bold text-3xl md:text-5xl lg:text-6xl leading-tight mb-6 text-white">
             Crie seu SaaS com IA<br className="hidden sm:block" /> em semanas — não em meses
           </h1>
-          <p className="text-base md:text-lg text-white/90 max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-base md:text-lg text-white/90 max-w-2xl mx-auto mb-10 leading-relaxed">
             Um hub completo pra sair do zero: da ideia à monetização, com <strong style={{ color: C.goldSoft }}>ferramentas de IA</strong>,
             estudos guiados, prompts prontos e uma comunidade focada em Vibe Coding.
           </p>
@@ -145,7 +183,7 @@ export default function SalesPage() {
             <Btn variant="primary" size="lg" onClick={openSignup}>
               Criar conta grátis <ArrowRight size={16} />
             </Btn>
-            <Btn variant="outline" size="lg" onClick={() => document.getElementById('modulos')?.scrollIntoView({ behavior: 'smooth' })}>
+            <Btn variant="outline" size="lg" onClick={() => scrollTo('modulos')}>
               Ver o que tem dentro
             </Btn>
           </div>
@@ -184,9 +222,9 @@ export default function SalesPage() {
             { icon: Target,  title: 'Não sabe qual ferramenta usar', desc: 'Cursor? Lovable? Bolt? Cada dia sai uma nova promessa e você fica sem saber por onde começar.' },
             { icon: TrendingUp, title: 'Trava na monetização', desc: 'Cria o produto, mas não sabe cobrar quanto, como vender, nem quem é o público certo.' },
           ].map((d, i) => (
-            <div key={i} className="rounded-2xl p-6" style={{ backgroundColor: C.pinkBaby }}>
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: `${C.coral}30` }}>
-                <d.icon size={20} style={{ color: C.coral }} />
+            <div key={i} className="rounded-2xl p-6" style={{ backgroundColor: C.sand }}>
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: C.lilacBaby }}>
+                <d.icon size={20} style={{ color: C.magic }} />
               </div>
               <h3 className="font-playfair font-bold text-lg mb-2" style={{ color: C.ink }}>{d.title}</h3>
               <p className="text-sm leading-relaxed" style={{ color: C.inkMuted }}>{d.desc}</p>
@@ -212,18 +250,18 @@ export default function SalesPage() {
       </Section>
 
       {/* ── Módulos ───────────────────────────────────────────────── */}
-      <Section bg={C.lavender}>
-        <div className="text-center mb-10" id="modulos">
+      <Section bg={C.lavender} id="modulos">
+        <div className="text-center mb-10">
           <h2 className="font-playfair font-bold text-2xl md:text-4xl mb-3" style={{ color: C.ink }}>
-            10 módulos pra você sair do zero
+            Uma Jornada com 10 Recursos pra você sair do zero ao seu App SaaS ou Soluções Vibe Coding para o seu Negócio
           </h2>
-          <p className="text-base max-w-2xl mx-auto" style={{ color: C.inkMuted }}>
-            Cada módulo puxa dados do anterior — você não recomeça do zero em nenhuma etapa.
+          <p className="text-base max-w-3xl mx-auto" style={{ color: C.inkMuted }}>
+            Um ambiente para leigos em códigos e experts em conhecimento de negócios.
           </p>
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {MODULES.map((m) => (
-            <div key={m.title} className="rounded-2xl p-5 flex flex-col" style={{ backgroundColor: C.lilacBaby }}>
+            <div key={m.title} className="rounded-2xl p-5 flex flex-col" style={{ backgroundColor: C.sand }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: gradientMagic }}>
                 <m.icon size={18} className="text-white" />
               </div>
@@ -235,14 +273,14 @@ export default function SalesPage() {
       </Section>
 
       {/* ── Como funciona ────────────────────────────────────────── */}
-      <Section bg={C.sand}>
+      <Section bg={C.sand} id="como">
         <div className="text-center mb-10">
           <h2 className="font-playfair font-bold text-2xl md:text-4xl" style={{ color: C.ink }}>Como funciona em 3 passos</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {STEPS.map((s, i) => (
-            <div key={i} className="rounded-2xl p-6 text-center" style={{ backgroundColor: '#FFFFFF', border: `1px solid ${C.lavender}` }}>
-              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 font-playfair font-bold text-2xl" style={{ background: C.gold, color: C.ink }}>
+            <div key={i} className="rounded-2xl p-6 text-center" style={{ backgroundColor: C.lilac, border: `1px solid ${C.lavender}` }}>
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 font-playfair font-bold text-2xl text-white" style={{ background: gradientMagic }}>
                 {s.n}
               </div>
               <h3 className="font-playfair font-bold text-lg mb-2" style={{ color: C.ink }}>{s.title}</h3>
@@ -253,13 +291,13 @@ export default function SalesPage() {
       </Section>
 
       {/* ── Autoridade / Sobre ────────────────────────────────────── */}
-      <Section bg={C.lilac}>
+      <Section bg={C.lilac} id="sobre">
         <div className="grid md:grid-cols-[220px_1fr] gap-8 items-center">
           <div className="rounded-2xl aspect-square mx-auto md:mx-0 flex items-center justify-center overflow-hidden shadow-xl w-48 md:w-full" style={{ background: gradientMagic }}>
             <span className="font-playfair font-bold text-5xl text-white">TF</span>
           </div>
           <div>
-            <span className="inline-block text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3" style={{ background: C.gold, color: C.ink }}>
+            <span className="inline-block text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3" style={{ background: C.lilacBaby, color: C.magic }}>
               Sobre a criadora
             </span>
             <h2 className="font-playfair font-bold text-2xl md:text-3xl mb-3" style={{ color: C.ink }}>
@@ -277,7 +315,7 @@ export default function SalesPage() {
       </Section>
 
       {/* ── Oferta principal ──────────────────────────────────────── */}
-      <Section bg={C.sand}>
+      <Section bg={C.sand} id="oferta">
         <div className="rounded-3xl overflow-hidden shadow-2xl" style={{ background: gradientMagic }}>
           <div className="p-8 md:p-12 text-center text-white">
             <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-4" style={{ background: C.goldSoft, color: C.ink }}>
@@ -311,7 +349,7 @@ export default function SalesPage() {
         </div>
       </Section>
 
-      {/* ── Bônus ─────────────────────────────────────────────────── */}
+      {/* ── Tudo incluído ─────────────────────────────────────────── */}
       <Section bg={C.lilacBaby}>
         <div className="text-center mb-8">
           <h2 className="font-playfair font-bold text-2xl md:text-4xl mb-3" style={{ color: C.ink }}>
@@ -320,9 +358,9 @@ export default function SalesPage() {
         </div>
         <div className="grid md:grid-cols-2 gap-3 max-w-3xl mx-auto">
           {BONUSES.map((b, i) => (
-            <div key={i} className="flex items-start gap-3 rounded-xl px-4 py-3" style={{ backgroundColor: '#FFFFFF' }}>
-              <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: C.cream }}>
-                <CheckCircle2 size={16} style={{ color: C.gold }} />
+            <div key={i} className="flex items-start gap-3 rounded-xl px-4 py-3" style={{ backgroundColor: C.sand }}>
+              <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: C.lilacBaby }}>
+                <CheckCircle2 size={16} style={{ color: C.magic }} />
               </div>
               <span className="text-sm leading-snug pt-1" style={{ color: C.ink }}>{b}</span>
             </div>
@@ -331,10 +369,10 @@ export default function SalesPage() {
       </Section>
 
       {/* ── Garantia ─────────────────────────────────────────────── */}
-      <Section bg={C.cream}>
+      <Section bg={C.sand}>
         <div className="max-w-2xl mx-auto text-center">
-          <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: C.gold }}>
-            <ShieldCheck size={36} style={{ color: C.ink }} />
+          <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-white" style={{ background: gradientMagic }}>
+            <ShieldCheck size={36} />
           </div>
           <h2 className="font-playfair font-bold text-2xl md:text-3xl mb-3" style={{ color: C.ink }}>
             Zero risco, zero compromisso
@@ -347,7 +385,7 @@ export default function SalesPage() {
       </Section>
 
       {/* ── FAQ ──────────────────────────────────────────────────── */}
-      <Section bg={C.sand}>
+      <Section bg={C.lilac} id="faq">
         <div className="text-center mb-8">
           <h2 className="font-playfair font-bold text-2xl md:text-4xl" style={{ color: C.ink }}>Perguntas frequentes</h2>
         </div>
