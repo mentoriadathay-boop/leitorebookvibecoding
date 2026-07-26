@@ -8,6 +8,10 @@ const publicoOptions = [
   'Profissionais autônomos',
   'Pequenos empreendedores',
   'Agências e consultores',
+  'Profissionais',
+  'Equipe interna',
+  'Consumidor de serviços',
+  'Consumidor de produtos',
 ]
 
 const disponibilidadeOptions = [
