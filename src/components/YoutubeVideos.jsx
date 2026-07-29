@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Play, X, Video } from 'lucide-react'
+import { Play, X, Video, Lock } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
+import { isPremium } from '../lib/isPremium'
+import { PremiumLockCorner } from './PremiumBadge'
 
 // Extrai o ID do vídeo de URLs no formato:
 // https://www.youtube.com/watch?v=XXXX
@@ -25,14 +27,21 @@ function thumb(id) {
   return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null
 }
 
-function VideoCard({ video, onPlay }) {
+function VideoCard({ video, onPlay, userIsPremium }) {
   const id = youtubeId(video.url)
+  const locked = video.is_premium && !userIsPremium
+  const handleClick = () => {
+    if (locked) window.open('https://api.whatsapp.com/message/EQIUEI67M7U2N1?autoload=1&app_absent=0', '_blank', 'noopener')
+    else onPlay(video)
+  }
   return (
-    <button onClick={() => onPlay(video)}
-      className="group text-left bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col hover:border-[#5B2A6E] dark:hover:border-magic-light transition-colors">
+    <button onClick={handleClick}
+      className="group text-left bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col hover:border-[#5B2A6E] dark:hover:border-magic-light transition-colors relative">
       <div className="aspect-video bg-black relative overflow-hidden">
+        {video.is_premium && <PremiumLockCorner />}
         {thumb(id) ? (
-          <img src={thumb(id)} alt={video.title} className="w-full h-full object-cover" />
+          <img src={thumb(id)} alt={video.title}
+            className={`w-full h-full object-cover ${locked ? 'grayscale opacity-70' : ''}`} />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-900">
             <Video size={40} className="text-white/40" />
@@ -40,7 +49,9 @@ function VideoCard({ video, onPlay }) {
         )}
         <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition-colors">
           <div className="w-12 h-12 rounded-full bg-white/95 flex items-center justify-center shadow-lg">
-            <Play size={20} className="text-[#5B2A6E] fill-current translate-x-0.5" />
+            {locked
+              ? <Lock size={20} className="text-[#5B2A6E]" />
+              : <Play size={20} className="text-[#5B2A6E] fill-current translate-x-0.5" />}
           </div>
         </div>
       </div>
@@ -95,10 +106,11 @@ function VideoModal({ video, onClose }) {
   )
 }
 
-export default function YoutubeVideos() {
+export default function YoutubeVideos({ profile }) {
   const [videos, setVideos] = useState([])
   const [loading, setLoading] = useState(true)
   const [playing, setPlaying] = useState(null)
+  const userIsPremium = isPremium(profile)
 
   useEffect(() => {
     supabase
@@ -133,7 +145,7 @@ export default function YoutubeVideos() {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {videos.map(v => <VideoCard key={v.id} video={v} onPlay={setPlaying} />)}
+        {videos.map(v => <VideoCard key={v.id} video={v} onPlay={setPlaying} userIsPremium={userIsPremium} />)}
       </div>
       {playing && <VideoModal video={playing} onClose={() => setPlaying(null)} />}
     </>

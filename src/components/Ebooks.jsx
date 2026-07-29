@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react'
-import { BookOpen, ExternalLink } from 'lucide-react'
+import { BookOpen, ExternalLink, Lock } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
+import { isPremium } from '../lib/isPremium'
+import { PremiumLockCorner } from './PremiumBadge'
 
-function EbookCard({ ebook }) {
+function EbookCard({ ebook, userIsPremium }) {
   const href = ebook.pdf_url || ebook.external_url
+  const locked = ebook.is_premium && !userIsPremium
+
   return (
-    <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
-      <div className="aspect-[3/4] bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+    <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col relative">
+      <div className="aspect-[3/4] bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden relative">
+        {ebook.is_premium && <PremiumLockCorner />}
         {ebook.cover_url ? (
-          <img src={ebook.cover_url} alt={`Capa de ${ebook.title}`} className="w-full h-full object-cover" />
+          <img src={ebook.cover_url} alt={`Capa de ${ebook.title}`}
+            className={`w-full h-full object-cover ${locked ? 'grayscale opacity-70' : ''}`} />
         ) : (
           <BookOpen size={40} className="text-gray-300 dark:text-gray-600" />
         )}
@@ -22,7 +28,17 @@ function EbookCard({ ebook }) {
             {ebook.description}
           </p>
         )}
-        {href ? (
+        {locked ? (
+          <a
+            href="https://api.whatsapp.com/message/EQIUEI67M7U2N1?autoload=1&app_absent=0"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1.5 text-xs font-semibold px-3 py-2 mt-auto text-white rounded-xl transition-opacity hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg, #5B2A6E 0%, #C2298A 60%, #F5B942 100%)' }}
+          >
+            <Lock size={12} /> Fazer upgrade
+          </a>
+        ) : href ? (
           <a
             href={href}
             target="_blank"
@@ -39,9 +55,10 @@ function EbookCard({ ebook }) {
   )
 }
 
-export default function Ebooks() {
+export default function Ebooks({ profile }) {
   const [ebooks, setEbooks] = useState([])
   const [loading, setLoading] = useState(true)
+  const userIsPremium = isPremium(profile)
 
   useEffect(() => {
     supabase
@@ -77,7 +94,7 @@ export default function Ebooks() {
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-      {ebooks.map(e => <EbookCard key={e.id} ebook={e} />)}
+      {ebooks.map(e => <EbookCard key={e.id} ebook={e} userIsPremium={userIsPremium} />)}
     </div>
   )
 }

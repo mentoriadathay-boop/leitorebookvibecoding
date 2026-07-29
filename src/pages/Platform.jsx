@@ -74,14 +74,14 @@ export default function Platform({ user, profile, onAdminClick }) {
         <div className={`hidden lg:flex flex-col shrink-0 fixed left-0 top-16 bottom-0 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A1A] transition-all duration-300 overflow-hidden ${
           leftPanelOpen ? 'w-56 xl:w-64' : 'w-0 border-r-0'
         }`}>
-          <NavSidebar activeTab={activeTab} onNavigate={handleNavigate} />
+          <NavSidebar activeTab={activeTab} onNavigate={handleNavigate} profile={profile} />
         </div>
 
         {/* Mobile drawer */}
         <div className={`fixed left-0 top-16 bottom-0 z-50 w-72 transition-transform duration-300 lg:hidden shadow-xl ${
           drawerOpen ? 'translate-x-0' : '-translate-x-full'
         }`}>
-          <NavSidebar activeTab={activeTab} onNavigate={handleNavigate} onClose={() => setDrawerOpen(false)} />
+          <NavSidebar activeTab={activeTab} onNavigate={handleNavigate} onClose={() => setDrawerOpen(false)} profile={profile} />
         </div>
 
         {/* Main content */}
@@ -119,7 +119,7 @@ export default function Platform({ user, profile, onAdminClick }) {
 
             {/* ── Content ── */}
 
-            {activeTab === 'studies' && <StudiesHub />}
+            {activeTab === 'studies' && <StudiesHub profile={profile} />}
 
             {activeTab === 'ideas' && (
               <IdeasSection
@@ -145,9 +145,9 @@ export default function Platform({ user, profile, onAdminClick }) {
 
             {activeTab === 'calculator' && <RevenueCalculator ideas={ideas} />}
 
-            {activeTab === 'vibe-lab' && <VibeLab userId={user?.id} />}
+            {activeTab === 'vibe-lab' && <VibeLab userId={user?.id} profile={profile} />}
 
-            {activeTab === 'platforms' && <SaasPlatforms />}
+            {activeTab === 'platforms' && <SaasPlatforms profile={profile} />}
 
             {activeTab === 'ai-support' && (
               <div className="max-w-2xl mx-auto space-y-4">

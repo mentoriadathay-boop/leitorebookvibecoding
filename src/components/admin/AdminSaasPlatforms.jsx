@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Rocket, Upload, Trash2, Loader, ExternalLink, Eye, EyeOff } from 'lucide-react'
+import { Rocket, Upload, Trash2, Loader, ExternalLink, Eye, EyeOff, Lock, Unlock } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 
 const BUCKET = 'platforms'
@@ -14,6 +14,7 @@ export default function AdminSaasPlatforms() {
   const [description, setDescription] = useState('')
   const [url, setUrl] = useState('')
   const [logoFile, setLogoFile] = useState(null)
+  const [isPremium, setIsPremium] = useState(false)
 
   const load = async () => {
     setLoading(true)
@@ -33,7 +34,7 @@ export default function AdminSaasPlatforms() {
   }
 
   const resetForm = () => {
-    setName(''); setDescription(''); setUrl(''); setLogoFile(null)
+    setName(''); setDescription(''); setUrl(''); setLogoFile(null); setIsPremium(false)
   }
 
   const submit = async (e) => {
@@ -53,6 +54,7 @@ export default function AdminSaasPlatforms() {
         url: url.trim(),
         logo_url,
         published: true,
+        is_premium: isPremium,
       })
       if (insertError) throw insertError
       resetForm()
@@ -66,6 +68,11 @@ export default function AdminSaasPlatforms() {
 
   const togglePublished = async (p) => {
     await supabase.from('saas_platforms').update({ published: !p.published }).eq('id', p.id)
+    load()
+  }
+
+  const togglePremium = async (p) => {
+    await supabase.from('saas_platforms').update({ is_premium: !p.is_premium }).eq('id', p.id)
     load()
   }
 
@@ -112,6 +119,14 @@ export default function AdminSaasPlatforms() {
           </div>
         </div>
 
+        <label className="flex items-center gap-2 cursor-pointer select-none">
+          <input type="checkbox" checked={isPremium} onChange={e => setIsPremium(e.target.checked)}
+            className="w-4 h-4 accent-[#5B2A6E]" />
+          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1">
+            <Lock size={12} className="text-[#5B2A6E]" /> Conteúdo Premium (só membros pagos acessam)
+          </span>
+        </label>
+
         {error && <p className="text-xs text-coral-600 dark:text-coral-400">{error}</p>}
 
         <button type="submit" disabled={saving}
@@ -146,7 +161,15 @@ export default function AdminSaasPlatforms() {
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{p.name}</p>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate flex items-center gap-1.5">
+                    {p.name}
+                    {p.is_premium && (
+                      <span className="inline-flex items-center gap-0.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full text-white shrink-0"
+                        style={{ background: 'linear-gradient(135deg, #5B2A6E 0%, #C2298A 100%)' }}>
+                        <Lock size={8} /> Premium
+                      </span>
+                    )}
+                  </p>
                   {p.url && (
                     <a href={p.url} target="_blank" rel="noopener noreferrer"
                       className="text-[10px] text-gray-400 hover:text-[#5B2A6E] flex items-center gap-1 truncate">
@@ -154,6 +177,10 @@ export default function AdminSaasPlatforms() {
                     </a>
                   )}
                 </div>
+                <button onClick={() => togglePremium(p)} title={p.is_premium ? 'Tornar gratuito' : 'Tornar Premium'}
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0">
+                  {p.is_premium ? <Lock size={14} className="text-[#5B2A6E]" /> : <Unlock size={14} />}
+                </button>
                 <button onClick={() => togglePublished(p)} title={p.published ? 'Ocultar' : 'Publicar'}
                   className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0">
                   {p.published ? <Eye size={14} /> : <EyeOff size={14} />}

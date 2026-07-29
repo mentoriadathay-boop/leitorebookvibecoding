@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Headphones, Upload, Trash2, Loader, ExternalLink, Eye, EyeOff } from 'lucide-react'
+import { Headphones, Upload, Trash2, Loader, ExternalLink, Eye, EyeOff, Lock, Unlock } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 
 const BUCKET = 'audiobooks'
@@ -15,6 +15,7 @@ export default function AdminAudiobooks() {
   const [externalUrl, setExternalUrl] = useState('')
   const [coverFile, setCoverFile] = useState(null)
   const [audioFile, setAudioFile] = useState(null)
+  const [isPremium, setIsPremium] = useState(false)
 
   const load = async () => {
     setLoading(true)
@@ -34,7 +35,7 @@ export default function AdminAudiobooks() {
   }
 
   const resetForm = () => {
-    setTitle(''); setDescription(''); setExternalUrl(''); setCoverFile(null); setAudioFile(null)
+    setTitle(''); setDescription(''); setExternalUrl(''); setCoverFile(null); setAudioFile(null); setIsPremium(false)
   }
 
   const submit = async (e) => {
@@ -57,6 +58,7 @@ export default function AdminAudiobooks() {
         audio_url,
         external_url: externalUrl.trim() || null,
         published: true,
+        is_premium: isPremium,
       })
       if (insertError) throw insertError
       resetForm()
@@ -70,6 +72,11 @@ export default function AdminAudiobooks() {
 
   const togglePublished = async (a) => {
     await supabase.from('audiobooks').update({ published: !a.published }).eq('id', a.id)
+    load()
+  }
+
+  const togglePremium = async (a) => {
+    await supabase.from('audiobooks').update({ is_premium: !a.is_premium }).eq('id', a.id)
     load()
   }
 
@@ -122,6 +129,14 @@ export default function AdminAudiobooks() {
             className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-[#5B2A6E]" />
         </div>
 
+        <label className="flex items-center gap-2 cursor-pointer select-none">
+          <input type="checkbox" checked={isPremium} onChange={e => setIsPremium(e.target.checked)}
+            className="w-4 h-4 accent-[#5B2A6E]" />
+          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1">
+            <Lock size={12} className="text-[#5B2A6E]" /> Conteúdo Premium (aparece com cadeado — só membros pagos acessam)
+          </span>
+        </label>
+
         {error && <p className="text-xs text-coral-600 dark:text-coral-400">{error}</p>}
 
         <button type="submit" disabled={saving}
@@ -154,7 +169,15 @@ export default function AdminAudiobooks() {
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{a.title}</p>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate flex items-center gap-1.5">
+                    {a.title}
+                    {a.is_premium && (
+                      <span className="inline-flex items-center gap-0.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full text-white shrink-0"
+                        style={{ background: 'linear-gradient(135deg, #5B2A6E 0%, #C2298A 100%)' }}>
+                        <Lock size={8} /> Premium
+                      </span>
+                    )}
+                  </p>
                   {(a.audio_url || a.external_url) && (
                     <a href={a.audio_url || a.external_url} target="_blank" rel="noopener noreferrer"
                       className="text-[10px] text-gray-400 hover:text-[#5B2A6E] flex items-center gap-1 truncate">
@@ -162,6 +185,10 @@ export default function AdminAudiobooks() {
                     </a>
                   )}
                 </div>
+                <button onClick={() => togglePremium(a)} title={a.is_premium ? 'Tornar gratuito' : 'Tornar Premium'}
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0">
+                  {a.is_premium ? <Lock size={14} className="text-[#5B2A6E]" /> : <Unlock size={14} />}
+                </button>
                 <button onClick={() => togglePublished(a)} title={a.published ? 'Ocultar' : 'Publicar'}
                   className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0">
                   {a.published ? <Eye size={14} /> : <EyeOff size={14} />}

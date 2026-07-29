@@ -1,18 +1,26 @@
 import { useState, useEffect } from 'react'
-import { Rocket, ExternalLink, HandCoins } from 'lucide-react'
+import { Rocket, ExternalLink, HandCoins, Lock } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
+import { isPremium } from '../lib/isPremium'
+import { PremiumLockCorner } from './PremiumBadge'
 
-function PlatformCard({ platform }) {
+function PlatformCard({ platform, userIsPremium }) {
+  const locked = platform.is_premium && !userIsPremium
+  const href = locked
+    ? 'https://api.whatsapp.com/message/EQIUEI67M7U2N1?autoload=1&app_absent=0'
+    : platform.url
   return (
     <a
-      href={platform.url}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:border-[#5B2A6E] dark:hover:border-magic-light transition-colors"
+      className="group flex flex-col bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:border-[#5B2A6E] dark:hover:border-magic-light transition-colors relative"
     >
-      <div className="aspect-video bg-gradient-to-br from-[#F2E4FA] to-[#FCE4F1] dark:from-[#3E1B4D]/40 dark:to-[#5B2A6E]/20 flex items-center justify-center overflow-hidden">
+      <div className="aspect-video bg-gradient-to-br from-[#F2E4FA] to-[#FCE4F1] dark:from-[#3E1B4D]/40 dark:to-[#5B2A6E]/20 flex items-center justify-center overflow-hidden relative">
+        {platform.is_premium && <PremiumLockCorner />}
         {platform.logo_url ? (
-          <img src={platform.logo_url} alt={`Logo ${platform.name}`} className="max-h-24 object-contain" />
+          <img src={platform.logo_url} alt={`Logo ${platform.name}`}
+            className={`max-h-24 object-contain ${locked ? 'grayscale opacity-70' : ''}`} />
         ) : (
           <Rocket size={42} className="text-[#5B2A6E] dark:text-magic-light opacity-40" />
         )}
@@ -26,15 +34,23 @@ function PlatformCard({ platform }) {
             {platform.description}
           </p>
         )}
-        <span className="mt-auto inline-flex items-center justify-center gap-1.5 text-xs font-semibold px-3 py-2 bg-[#5B2A6E] group-hover:bg-[#3E1B4D] text-white rounded-xl transition-colors">
-          Acessar <ExternalLink size={12} />
-        </span>
+        {locked ? (
+          <span className="mt-auto inline-flex items-center justify-center gap-1.5 text-xs font-semibold px-3 py-2 text-white rounded-xl"
+            style={{ background: 'linear-gradient(135deg, #5B2A6E 0%, #C2298A 60%, #F5B942 100%)' }}>
+            <Lock size={12} /> Fazer upgrade
+          </span>
+        ) : (
+          <span className="mt-auto inline-flex items-center justify-center gap-1.5 text-xs font-semibold px-3 py-2 bg-[#5B2A6E] group-hover:bg-[#3E1B4D] text-white rounded-xl transition-colors">
+            Acessar <ExternalLink size={12} />
+          </span>
+        )}
       </div>
     </a>
   )
 }
 
-export default function SaasPlatforms() {
+export default function SaasPlatforms({ profile }) {
+  const userIsPremium = isPremium(profile)
   const [platforms, setPlatforms] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -95,7 +111,7 @@ export default function SaasPlatforms() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {platforms.map(p => <PlatformCard key={p.id} platform={p} />)}
+          {platforms.map(p => <PlatformCard key={p.id} platform={p} userIsPremium={userIsPremium} />)}
         </div>
       )}
     </div>

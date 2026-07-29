@@ -1,4 +1,5 @@
-import { Lightbulb, Cpu, Map, Wrench, Calculator, Zap, MessageSquare, ExternalLink, FlaskConical, Rocket, GraduationCap } from 'lucide-react'
+import { Lightbulb, Cpu, Map, Wrench, Calculator, Zap, MessageSquare, ExternalLink, FlaskConical, Rocket, GraduationCap, Lock } from 'lucide-react'
+import { isPremium } from '../lib/isPremium'
 
 const WhatsAppIcon = ({ size = 14 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -14,12 +15,13 @@ const NAV_ITEMS = [
   { id: 'calculator',    label: 'Calculadora',         icon: Calculator },
   { id: 'ext-tools',     label: 'Ferramentas Vibe',    icon: Wrench },
   { id: 'prompts',       label: 'Prompts',             icon: Zap },
-  { id: 'vibe-lab',      label: 'Laboratório Vibe',    icon: FlaskConical },
+  { id: 'vibe-lab',      label: 'Laboratório Vibe',    icon: FlaskConical, premium: true },
   { id: 'platforms',     label: 'Plataformas SaaS',    icon: Rocket },
   { id: 'ai-support',    label: 'Suporte IA',          icon: MessageSquare },
 ]
 
-export default function NavSidebar({ activeTab, onNavigate, onClose }) {
+export default function NavSidebar({ activeTab, onNavigate, onClose, profile }) {
+  const userIsPremium = isPremium(profile)
   const handleClick = (id) => {
     onNavigate(id)
     onClose?.()
@@ -31,10 +33,12 @@ export default function NavSidebar({ activeTab, onNavigate, onClose }) {
         {NAV_ITEMS.map(item => {
           const Icon = item.icon
           const active = activeTab === item.id
+          const showLock = item.premium && !userIsPremium
           return (
             <button
               key={item.id}
               onClick={() => handleClick(item.id)}
+              title={showLock ? 'Exclusivo para membros' : undefined}
               className={`w-full flex items-center gap-3 px-3 py-2.5 text-left text-xs font-medium rounded-lg border transition-all ${
                 active
                   ? 'bg-[#5B2A6E] border-[#5B2A6E] text-white shadow-sm'
@@ -43,6 +47,9 @@ export default function NavSidebar({ activeTab, onNavigate, onClose }) {
             >
               <Icon size={15} className="shrink-0" />
               <span className="flex-1 truncate">{item.label}</span>
+              {showLock && (
+                <Lock size={11} className={`shrink-0 ${active ? 'text-white/80' : 'text-[#5B2A6E]'}`} />
+              )}
             </button>
           )
         })}
