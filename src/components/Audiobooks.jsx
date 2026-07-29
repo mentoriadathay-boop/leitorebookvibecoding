@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react'
-import { Headphones, Play, Pause, ExternalLink } from 'lucide-react'
+import { Headphones, Play, Pause, ExternalLink, Lock } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
+import { isPremium } from '../lib/isPremium'
+import { PremiumLockCorner } from './PremiumBadge'
 
-function AudiobookCard({ audiobook }) {
+function AudiobookCard({ audiobook, userIsPremium }) {
   const [playing, setPlaying] = useState(false)
   const [audio, setAudio] = useState(null)
+  const locked = audiobook.is_premium && !userIsPremium
 
   const toggle = () => {
-    if (!audiobook.audio_url) return
+    if (locked || !audiobook.audio_url) return
     if (playing && audio) {
       audio.pause()
       setPlaying(false)
@@ -27,10 +30,12 @@ function AudiobookCard({ audiobook }) {
   useEffect(() => () => { if (audio) audio.pause() }, [audio])
 
   return (
-    <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
-      <div className="aspect-square bg-gradient-to-br from-[#F2E4FA] to-[#FCE4F1] dark:from-[#3E1B4D]/40 dark:to-[#5B2A6E]/20 flex items-center justify-center overflow-hidden">
+    <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col relative">
+      <div className="aspect-square bg-gradient-to-br from-[#F2E4FA] to-[#FCE4F1] dark:from-[#3E1B4D]/40 dark:to-[#5B2A6E]/20 flex items-center justify-center overflow-hidden relative">
+        {audiobook.is_premium && <PremiumLockCorner />}
         {audiobook.cover_url ? (
-          <img src={audiobook.cover_url} alt={`Capa de ${audiobook.title}`} className="w-full h-full object-cover" />
+          <img src={audiobook.cover_url} alt={`Capa de ${audiobook.title}`}
+            className={`w-full h-full object-cover ${locked ? 'grayscale opacity-70' : ''}`} />
         ) : (
           <Headphones size={40} className="text-[#5B2A6E] dark:text-magic-light opacity-50" />
         )}
@@ -40,7 +45,13 @@ function AudiobookCard({ audiobook }) {
         {audiobook.description && (
           <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3 flex-1">{audiobook.description}</p>
         )}
-        {audiobook.audio_url ? (
+        {locked ? (
+          <a href="https://api.whatsapp.com/message/EQIUEI67M7U2N1?autoload=1&app_absent=0" target="_blank" rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1.5 text-xs font-semibold px-3 py-2 mt-auto text-white rounded-xl transition-opacity hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg, #5B2A6E 0%, #C2298A 60%, #F5B942 100%)' }}>
+            <Lock size={12} /> Fazer upgrade
+          </a>
+        ) : audiobook.audio_url ? (
           <button onClick={toggle}
             className="flex items-center justify-center gap-1.5 text-xs font-semibold px-3 py-2 mt-auto bg-[#5B2A6E] hover:bg-[#3E1B4D] text-white rounded-xl transition-colors">
             {playing ? <><Pause size={12} /> Pausar</> : <><Play size={12} /> Ouvir</>}
@@ -58,7 +69,8 @@ function AudiobookCard({ audiobook }) {
   )
 }
 
-export default function Audiobooks() {
+export default function Audiobooks({ profile }) {
+  const userIsPremium = isPremium(profile)
   const [audiobooks, setAudiobooks] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -94,7 +106,7 @@ export default function Audiobooks() {
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-      {audiobooks.map(a => <AudiobookCard key={a.id} audiobook={a} />)}
+      {audiobooks.map(a => <AudiobookCard key={a.id} audiobook={a} userIsPremium={userIsPremium} />)}
     </div>
   )
 }

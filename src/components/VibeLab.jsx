@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { FlaskConical, Plus, Sparkles, Trash2, Loader2, CheckCircle2, AlertTriangle, Lightbulb, ChevronDown, ChevronUp, X } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 import { callAIForJSON } from '../lib/aiToolsUtils'
+import { PremiumGate } from './PremiumBadge'
 
 const OUTCOME_TAGS = {
   acerto:  { label: 'Acerto',  color: 'bg-success-100 text-success-700 dark:bg-success-900/20 dark:text-success-300', icon: CheckCircle2 },
@@ -120,7 +121,7 @@ function EntryCard({ entry, onDelete, onAnalyze }) {
   )
 }
 
-export default function VibeLab({ userId }) {
+function VibeLabInner({ userId }) {
   const [entries, setEntries] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -274,5 +275,13 @@ export default function VibeLab({ userId }) {
         </div>
       )}
     </div>
+  )
+}
+
+export default function VibeLab({ userId, profile }) {
+  return (
+    <PremiumGate profile={profile} title="Laboratório Vibe é exclusivo para membros">
+      <VibeLabInner userId={userId} />
+    </PremiumGate>
   )
 }

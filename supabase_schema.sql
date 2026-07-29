@@ -299,6 +299,17 @@ alter table profiles add column if not exists profession text;
 alter table profiles add column if not exists age integer;
 alter table profiles add column if not exists whatsapp text;
 
+-- Coluna is_premium em cada catálogo — quando true, aparece um cadeado
+-- no card do usuário e o acesso só é liberado pra quem tem plano pago.
+alter table ebooks          add column if not exists is_premium boolean default false;
+alter table audiobooks      add column if not exists is_premium boolean default false;
+alter table youtube_videos  add column if not exists is_premium boolean default false;
+alter table saas_platforms  add column if not exists is_premium boolean default false;
+
+-- O ebook "20 Passos..." é o único pago por padrão.
+update ebooks set is_premium = true
+  where title ilike '20 Passos%';
+
 -- Vídeos do YouTube (armazena só o link + metadados; player é embed no front)
 create table if not exists youtube_videos (
   id            uuid primary key default gen_random_uuid(),

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Video, Plus, Trash2, Loader, ExternalLink, Eye, EyeOff } from 'lucide-react'
+import { Video, Plus, Trash2, Loader, ExternalLink, Eye, EyeOff, Lock, Unlock } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 
 function youtubeId(url) {
@@ -25,6 +25,7 @@ export default function AdminYoutubeVideos() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [url, setUrl] = useState('')
+  const [isPremium, setIsPremium] = useState(false)
 
   const load = async () => {
     setLoading(true)
@@ -35,7 +36,7 @@ export default function AdminYoutubeVideos() {
 
   useEffect(() => { load() }, [])
 
-  const resetForm = () => { setTitle(''); setDescription(''); setUrl('') }
+  const resetForm = () => { setTitle(''); setDescription(''); setUrl(''); setIsPremium(false) }
 
   const submit = async (e) => {
     e.preventDefault()
@@ -50,6 +51,7 @@ export default function AdminYoutubeVideos() {
         description: description.trim() || null,
         url: url.trim(),
         published: true,
+        is_premium: isPremium,
       })
       if (insertError) throw insertError
       resetForm()
@@ -63,6 +65,11 @@ export default function AdminYoutubeVideos() {
 
   const togglePublished = async (v) => {
     await supabase.from('youtube_videos').update({ published: !v.published }).eq('id', v.id)
+    load()
+  }
+
+  const togglePremium = async (v) => {
+    await supabase.from('youtube_videos').update({ is_premium: !v.is_premium }).eq('id', v.id)
     load()
   }
 
@@ -102,6 +109,14 @@ export default function AdminYoutubeVideos() {
             className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-[#111] text-gray-700 dark:text-gray-300 focus:outline-none focus:border-[#5B2A6E]" />
         </div>
 
+        <label className="flex items-center gap-2 cursor-pointer select-none">
+          <input type="checkbox" checked={isPremium} onChange={e => setIsPremium(e.target.checked)}
+            className="w-4 h-4 accent-[#5B2A6E]" />
+          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1">
+            <Lock size={12} className="text-[#5B2A6E]" /> Conteúdo Premium (só membros pagos acessam)
+          </span>
+        </label>
+
         {error && <p className="text-xs text-coral-600 dark:text-coral-400">{error}</p>}
 
         <button type="submit" disabled={saving}
@@ -136,12 +151,24 @@ export default function AdminYoutubeVideos() {
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{v.title}</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white truncate flex items-center gap-1.5">
+                      {v.title}
+                      {v.is_premium && (
+                        <span className="inline-flex items-center gap-0.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full text-white shrink-0"
+                          style={{ background: 'linear-gradient(135deg, #5B2A6E 0%, #C2298A 100%)' }}>
+                          <Lock size={8} /> Premium
+                        </span>
+                      )}
+                    </p>
                     <a href={v.url} target="_blank" rel="noopener noreferrer"
                       className="text-[10px] text-gray-400 hover:text-[#5B2A6E] flex items-center gap-1 truncate">
                       {v.url} <ExternalLink size={9} />
                     </a>
                   </div>
+                  <button onClick={() => togglePremium(v)} title={v.is_premium ? 'Tornar gratuito' : 'Tornar Premium'}
+                    className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0">
+                    {v.is_premium ? <Lock size={14} className="text-[#5B2A6E]" /> : <Unlock size={14} />}
+                  </button>
                   <button onClick={() => togglePublished(v)} title={v.published ? 'Ocultar' : 'Publicar'}
                     className="p-1.5 rounded-lg text-gray-400 hover:text-[#5B2A6E] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0">
                     {v.published ? <Eye size={14} /> : <EyeOff size={14} />}

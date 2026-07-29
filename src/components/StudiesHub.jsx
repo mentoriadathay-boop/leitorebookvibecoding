@@ -9,10 +9,10 @@ const TABS = [
   { id: 'ebooks',      label: 'Ebooks',       icon: BookOpen,   component: Ebooks },
   { id: 'audiobooks',  label: 'Audiobooks',   icon: Headphones, component: Audiobooks },
   { id: 'newsletters', label: 'Newsletters',  icon: Mail,       component: EmailMarketing },
-  { id: 'videos',      label: 'Vídeos',       icon: Video,    component: YoutubeVideos },
+  { id: 'videos',      label: 'Vídeos',       icon: Video,      component: YoutubeVideos },
 ]
 
-export default function StudiesHub() {
+export default function StudiesHub({ profile }) {
   const [tab, setTab] = useState('ebooks')
   const Active = TABS.find(t => t.id === tab)?.component || Ebooks
 
@@ -45,7 +45,7 @@ export default function StudiesHub() {
         })}
       </div>
 
-      <Active />
+      <Active profile={profile} />
     </div>
   )
 }
